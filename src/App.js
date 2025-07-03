@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import atbLogo from './atb.png';
 
 function App() {
   // État pour gérer l'utilisateur connecté
@@ -96,6 +97,7 @@ function App() {
         <div className="login-card">
           <div className="login-header">
             <div className="atb-logo">
+              <img src={atbLogo} alt="ATB Logo" className="atb-logo-image" />
               <h1>ATB</h1>
               <span>Arab Tunisian Bank</span>
             </div>
