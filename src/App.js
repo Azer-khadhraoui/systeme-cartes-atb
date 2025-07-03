@@ -8,7 +8,7 @@ function App() {
   
   // État pour les données du formulaire
   const [formData, setFormData] = useState({
-    username: '',
+    matricule: '',
     password: ''
   });
 
@@ -32,8 +32,8 @@ function App() {
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.username.trim()) {
-      newErrors.username = 'Nom d\'utilisateur requis';
+    if (!formData.matricule.trim()) {
+      newErrors.matricule = 'Matricule requis';
     }
     
     if (!formData.password) {
@@ -52,7 +52,7 @@ function App() {
     if (Object.keys(newErrors).length === 0) {
       // ici tu pourras faire appel à une API plus tard
       console.log('Tentative de connexion :', formData);
-      setUser({ username: formData.username });
+      setUser({ matricule: formData.matricule });
     } else {
       setErrors(newErrors);
     }
@@ -66,7 +66,7 @@ function App() {
           Arab Tunisian Bank
         </header>
         <main style={{ padding: "2rem", minHeight: "80vh", backgroundColor: "#f5f5f5" }}>
-          <h2>Bienvenue sur l'espace cartes ATB, {user.username} !</h2>
+          <h2>Bienvenue sur l'espace cartes ATB, {user.matricule} !</h2>
           <p>Vous êtes maintenant connecté à votre espace de gestion des cartes bancaires.</p>
           <button 
             onClick={() => setUser(null)} 
@@ -107,17 +107,17 @@ function App() {
           
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label htmlFor="username">Nom d'utilisateur</label>
+              <label htmlFor="matricule">Matricule</label>
               <input
                 type="text"
-                id="username"
-                name="username"
-                value={formData.username}
+                id="matricule"
+                name="matricule"
+                value={formData.matricule}
                 onChange={handleChange}
-                className={errors.username ? 'error' : ''}
-                placeholder="Entrez votre nom d'utilisateur"
+                className={errors.matricule ? 'error' : ''}
+                placeholder="Entrez votre matricule"
               />
-              {errors.username && <span className="error-message">{errors.username}</span>}
+              {errors.matricule && <span className="error-message">{errors.matricule}</span>}
             </div>
 
             <div className="form-group">
@@ -139,7 +139,7 @@ function App() {
                 <input type="checkbox" />
                 <span>Se souvenir de moi</span>
               </label>
-              <a href="#" className="forgot-password">Mot de passe oublié ?</a>
+              <a href="#" className="signup-link">Pas de compte ? S'inscrire</a>
             </div>
 
             <button type="submit" className="login-button">

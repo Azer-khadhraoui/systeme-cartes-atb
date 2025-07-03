@@ -2,7 +2,8 @@
 :root {
   --atb-bordeaux: #A51C30;
   --atb-bordeaux-dark: #8B1728;
-  --atb-bordeaux-light: #F5E8EA;
+  --atb-bordeaux-light: #E8D4D7;
+  --atb-bordeaux-medium: #D4A8B2;
   --atb-bordeaux-very-light: #FDFBFB;
   --atb-white: #FFFFFF;
   --atb-gray: #666666;
@@ -20,7 +21,10 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, var(--atb-bordeaux-light) 0%, var(--atb-white) 100%);
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(165, 28, 48, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(165, 28, 48, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, var(--atb-bordeaux-light) 0%, var(--atb-bordeaux-medium) 50%, var(--atb-bordeaux-light) 100%);
   min-height: 100vh;
 }
 
@@ -255,7 +259,7 @@ body {
   accent-color: var(--atb-bordeaux);
 }
 
-.forgot-password {
+.forgot-password, .signup-link {
   color: var(--atb-bordeaux);
   text-decoration: none;
   font-size: 14px;
@@ -263,7 +267,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.forgot-password:hover {
+.forgot-password:hover, .signup-link:hover {
   color: var(--atb-bordeaux-dark);
   text-decoration: underline;
 }
