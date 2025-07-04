@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/systeme-cartes-atb/static/css/main.e5dae449.css",
+    "main.js": "/systeme-cartes-atb/static/js/main.b4c27bc1.js",
+    "static/js/453.9be4f92d.chunk.js": "/systeme-cartes-atb/static/js/453.9be4f92d.chunk.js",
+    "static/media/atb.png": "/systeme-cartes-atb/static/media/atb.1188a4c5913f009d118d.png",
+    "index.html": "/systeme-cartes-atb/index.html",
+    "main.e5dae449.css.map": "/systeme-cartes-atb/static/css/main.e5dae449.css.map",
+    "main.b4c27bc1.js.map": "/systeme-cartes-atb/static/js/main.b4c27bc1.js.map",
+    "453.9be4f92d.chunk.js.map": "/systeme-cartes-atb/static/js/453.9be4f92d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e5dae449.css",
+    "static/js/main.b4c27bc1.js"
+  ]
+}
