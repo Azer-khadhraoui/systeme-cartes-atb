@@ -6,20 +6,39 @@ function App() {
   // État pour gérer l'utilisateur connecté
   const [user, setUser] = useState(null);
   
-  // État pour les données du formulaire
+  // État pour basculer entre connexion et inscription
+  const [isSignUp, setIsSignUp] = useState(false);
+  
+  // État pour les données du formulaire de connexion
   const [formData, setFormData] = useState({
     matricule: '',
     password: ''
+  });
+
+  // État pour les données du formulaire d'inscription
+  const [signUpData, setSignUpData] = useState({
+    nom: '',
+    prenom: '',
+    matricule: '',
+    password: '',
+    confirmPassword: ''
   });
 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    if (isSignUp) {
+      setSignUpData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -32,14 +51,42 @@ function App() {
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.matricule.trim()) {
-      newErrors.matricule = 'Matricule requis';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Mot de passe requis';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Le mot de passe doit contenir au moins 6 caractères';
+    if (isSignUp) {
+      // Validation pour l'inscription
+      if (!signUpData.nom.trim()) {
+        newErrors.nom = 'Nom requis';
+      }
+      
+      if (!signUpData.prenom.trim()) {
+        newErrors.prenom = 'Prénom requis';
+      }
+      
+      if (!signUpData.matricule.trim()) {
+        newErrors.matricule = 'Matricule requis';
+      }
+      
+      if (!signUpData.password) {
+        newErrors.password = 'Mot de passe requis';
+      } else if (signUpData.password.length < 6) {
+        newErrors.password = 'Le mot de passe doit contenir au moins 6 caractères';
+      }
+      
+      if (!signUpData.confirmPassword) {
+        newErrors.confirmPassword = 'Confirmation du mot de passe requise';
+      } else if (signUpData.password !== signUpData.confirmPassword) {
+        newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
+      }
+    } else {
+      // Validation pour la connexion
+      if (!formData.matricule.trim()) {
+        newErrors.matricule = 'Matricule requis';
+      }
+      
+      if (!formData.password) {
+        newErrors.password = 'Mot de passe requis';
+      } else if (formData.password.length < 6) {
+        newErrors.password = 'Le mot de passe doit contenir au moins 6 caractères';
+      }
     }
     
     return newErrors;
@@ -50,12 +97,54 @@ function App() {
     const newErrors = validateForm();
     
     if (Object.keys(newErrors).length === 0) {
-      // ici tu pourras faire appel à une API plus tard
-      console.log('Tentative de connexion :', formData);
-      setUser({ matricule: formData.matricule });
+      if (isSignUp) {
+        // Logique d'inscription
+        console.log('Tentative d\'inscription :', signUpData);
+        alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
+        setIsSignUp(false); // Retour à la page de connexion
+        // Reset form
+        setSignUpData({
+          nom: '',
+          prenom: '',
+          matricule: '',
+          password: '',
+          confirmPassword: ''
+        });
+      } else {
+        // Logique de connexion
+        console.log('Tentative de connexion :', formData);
+        setUser({ matricule: formData.matricule });
+      }
     } else {
       setErrors(newErrors);
     }
+  };
+
+  // Fonction pour évaluer la force du mot de passe
+  const getPasswordStrength = (password) => {
+    if (!password) return { score: 0, label: '', color: '#E0E0E0' };
+    
+    let score = 0;
+    const checks = {
+      length: password.length >= 8,
+      lowercase: /[a-z]/.test(password),
+      uppercase: /[A-Z]/.test(password),
+      numbers: /\d/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+    
+    score = Object.values(checks).filter(Boolean).length;
+    
+    const strengthLevels = [
+      { score: 0, label: '', color: '#E0E0E0' },
+      { score: 1, label: 'Très faible', color: '#D32F2F' },
+      { score: 2, label: 'Faible', color: '#F57C00' },
+      { score: 3, label: 'Moyen', color: '#FBC02D' },
+      { score: 4, label: 'Fort', color: '#689F38' },
+      { score: 5, label: 'Très fort', color: '#388E3C' }
+    ];
+    
+    return strengthLevels[score];
   };
 
   // Si l'utilisateur est connecté, afficher la page d'accueil
@@ -94,57 +183,178 @@ function App() {
   return (
     <div className="App">
       <div className="login-container">
-        <div className="login-card">
+        <div className={`login-card ${isSignUp ? 'signup-mode' : 'login-mode'}`}>
           <div className="login-header">
             <div className="atb-logo">
               <img src={atbLogo} alt="ATB Logo" className="atb-logo-image" />
               <h1>ATB</h1>
               <span>Arab Tunisian Bank</span>
             </div>
-            <h2>Espace Cartes ATB</h2>
-            <p>Connectez-vous à votre espace de gestion</p>
+            <h2>{isSignUp ? 'Inscription ATB' : 'Espace Cartes ATB'}</h2>
+            <p>{isSignUp ? 'Créez votre compte pour accéder à votre espace' : 'Connectez-vous à votre espace de gestion'}</p>
           </div>
           
           <form onSubmit={handleSubmit} className="login-form">
-            <div className="form-group">
-              <label htmlFor="matricule">Matricule</label>
-              <input
-                type="text"
-                id="matricule"
-                name="matricule"
-                value={formData.matricule}
-                onChange={handleChange}
-                className={errors.matricule ? 'error' : ''}
-                placeholder="Entrez votre matricule"
-              />
-              {errors.matricule && <span className="error-message">{errors.matricule}</span>}
-            </div>
+            {isSignUp ? (
+              // Formulaire d'inscription
+              <>
+                <div className="form-group">
+                  <label htmlFor="nom">Nom</label>
+                  <input
+                    type="text"
+                    id="nom"
+                    name="nom"
+                    value={signUpData.nom}
+                    onChange={handleChange}
+                    className={errors.nom ? 'error' : ''}
+                    placeholder="Entrez votre nom"
+                  />
+                  {errors.nom && <span className="error-message">{errors.nom}</span>}
+                </div>
 
-            <div className="form-group">
-              <label htmlFor="password">Mot de passe</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? 'error' : ''}
-                placeholder="Entrez votre mot de passe"
-              />
-              {errors.password && <span className="error-message">{errors.password}</span>}
-            </div>
+                <div className="form-group">
+                  <label htmlFor="prenom">Prénom</label>
+                  <input
+                    type="text"
+                    id="prenom"
+                    name="prenom"
+                    value={signUpData.prenom}
+                    onChange={handleChange}
+                    className={errors.prenom ? 'error' : ''}
+                    placeholder="Entrez votre prénom"
+                  />
+                  {errors.prenom && <span className="error-message">{errors.prenom}</span>}
+                </div>
 
-            <div className="form-options">
-              <label className="remember-me">
-                <input type="checkbox" />
-                <span>Se souvenir de moi</span>
-              </label>
-              <a href="#" className="signup-link">Pas de compte ? S'inscrire</a>
-            </div>
+                <div className="form-group">
+                  <label htmlFor="matricule">Matricule</label>
+                  <input
+                    type="text"
+                    id="matricule"
+                    name="matricule"
+                    value={signUpData.matricule}
+                    onChange={handleChange}
+                    className={errors.matricule ? 'error' : ''}
+                    placeholder="Entrez votre matricule"
+                  />
+                  {errors.matricule && <span className="error-message">{errors.matricule}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password">Mot de passe</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={signUpData.password}
+                    onChange={handleChange}
+                    className={errors.password ? 'error' : ''}
+                    placeholder="Entrez votre mot de passe"
+                  />
+                  {errors.password && <span className="error-message">{errors.password}</span>}
+                  
+                  {/* Indicateur de force du mot de passe */}
+                  {signUpData.password && (
+                    <div className="password-strength">
+                      <div className="strength-bar">
+                        <div 
+                          className="strength-fill"
+                          style={{
+                            width: `${(getPasswordStrength(signUpData.password).score / 5) * 100}%`,
+                            backgroundColor: getPasswordStrength(signUpData.password).color
+                          }}
+                        ></div>
+                      </div>
+                      <span 
+                        className="strength-label"
+                        style={{ color: getPasswordStrength(signUpData.password).color }}
+                      >
+                        {getPasswordStrength(signUpData.password).label}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={signUpData.confirmPassword}
+                    onChange={handleChange}
+                    className={errors.confirmPassword ? 'error' : ''}
+                    placeholder="Confirmez votre mot de passe"
+                  />
+                  {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                </div>
+              </>
+            ) : (
+              // Formulaire de connexion
+              <>
+                <div className="form-group">
+                  <label htmlFor="matricule">Matricule</label>
+                  <input
+                    type="text"
+                    id="matricule"
+                    name="matricule"
+                    value={formData.matricule}
+                    onChange={handleChange}
+                    className={errors.matricule ? 'error' : ''}
+                    placeholder="Entrez votre matricule"
+                  />
+                  {errors.matricule && <span className="error-message">{errors.matricule}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password">Mot de passe</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={errors.password ? 'error' : ''}
+                    placeholder="Entrez votre mot de passe"
+                  />
+                  {errors.password && <span className="error-message">{errors.password}</span>}
+                </div>
+              </>
+            )}
+
+            {!isSignUp && (
+              <div className="form-options">
+                <label className="remember-me">
+                  <input type="checkbox" />
+                  <span>Se souvenir de moi</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(true)}
+                  className="signup-link"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  Pas de compte ? S'inscrire
+                </button>
+              </div>
+            )}
 
             <button type="submit" className="login-button">
-              Se connecter
+              {isSignUp ? 'S\'inscrire' : 'Se connecter'}
             </button>
+
+            {isSignUp && (
+              <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(false)}
+                  className="signup-link"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  Déjà un compte ? Se connecter
+                </button>
+              </div>
+            )}
           </form>
 
           <div className="login-footer">
