@@ -68,7 +68,8 @@ body {
 }
 
 .login-card {
-  background: var(--atb-white);
+  background: var(--atb-white); /* Fond blanc comme demandé par le professeur */
+  border: 2px solid var(--atb-bordeaux); /* Bordure rouge bordeaux ATB */
   border-radius: 20px;
   box-shadow: 
     0 20px 60px rgba(165, 28, 48, 0.15),
@@ -112,25 +113,26 @@ body {
     0 30px 80px rgba(165, 28, 48, 0.25),
     0 15px 40px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  background: linear-gradient(145deg, #ffffff, #fefefe); /* Dégradé encore plus subtil */
+  border-color: var(--atb-bordeaux-dark); /* Bordure bordeaux foncé au survol */
 }
 
 .login-card:hover::before {
   height: 6px;
-  box-shadow: 0 0 20px rgba(165, 28, 48, 0.6);
+  box-shadow: 0 0 20px rgba(165, 28, 48, 0.3);
 }
 
 .login-card:hover::after {
-  opacity: 0.15;
+  opacity: 0.08;
 }
 
 .login-card:hover .atb-logo-image {
   transform: scale(1.1);
-  filter: drop-shadow(0 8px 16px rgba(165, 28, 48, 0.4));
+  filter: drop-shadow(0 8px 16px rgba(165, 28, 48, 0.2));
 }
 
 .login-card:hover .atb-logo h1 {
-  text-shadow: 0 4px 8px rgba(165, 28, 48, 0.3);
+  text-shadow: 0 4px 8px rgba(165, 28, 48, 0.15);
   transform: scale(1.05);
 }
 
@@ -546,4 +548,18 @@ body {
 
 .login-card {
   animation: fadeInUp 0.6s ease;
+}
+
+.login-footer {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #E0E0E0;
+  margin-top: 20px;
+}
+
+.login-footer p {
+  color: var(--atb-gray);
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
 }
