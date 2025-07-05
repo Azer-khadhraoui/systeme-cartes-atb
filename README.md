@@ -1,70 +1,165 @@
-# Getting Started with Create React App
+# 🏦 Système de Gestion des Cartes ATB
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Un système moderne de gestion des cartes bancaires pour l'Arab Tunisian Bank (ATB), développé avec React et déployé sur GitHub Pages.
 
-## Available Scripts
+## 🚀 Démonstration en ligne
 
-In the project directory, you can run:
+**[🔗 Voir la démo](https://azer-khadhraoui.github.io/systeme-cartes-atb/)**
 
-### `npm start`
+## 📋 Description
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Ce projet est une application web moderne qui permet aux employés de l'ATB de gérer efficacement les demandes de cartes bancaires et de consulter le stock disponible. L'interface respecte l'identité visuelle de la banque avec les couleurs officielles bordeaux et blanc.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ✨ Fonctionnalités
 
-### `npm test`
+### 🔐 Authentification
+- **Connexion sécurisée** avec matricule et mot de passe
+- **Inscription** avec validation complète des données
+- **Indicateur de force du mot de passe** en temps réel
+- **Validation des formulaires** avec messages d'erreur personnalisés
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🎨 Interface Utilisateur
+- **Design moderne** respectant l'identité visuelle ATB
+- **Animations fluides** et effets visuels attractifs
+- **Interface responsive** adaptée à tous les écrans
+- **Dashboard spectaculaire** après connexion
 
-### `npm run build`
+### 📊 Fonctionnalités Métier
+- **Nouvelle demande de cartes** avec attribution d'emplacement physique
+- **Consultation du stock** avec statistiques détaillées
+- **Suivi des demandes traitées** en temps réel
+- **Alertes de stock** automatiques
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Technologies Utilisées
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Frontend** : React 18, CSS3, HTML5
+- **Deployment** : GitHub Pages
+- **Build Tool** : Create React App
+- **Version Control** : Git & GitHub
+- **Package Manager** : npm
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🎨 Design & UX
 
-### `npm run eject`
+- **Couleurs ATB** : Bordeaux (#A51C30), Blanc, Gris
+- **Typographie** : Segoe UI (système)
+- **Animations** : CSS Animations & Transitions
+- **Icons** : SVG personnalisés
+- **Responsive** : Mobile-first approach
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 📦 Installation & Développement
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Prérequis
+- Node.js (version 14 ou supérieure)
+- npm ou yarn
+- Git
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Installation locale
+```bash
+# Cloner le repository
+git clone https://github.com/Azer-khadhraoui/systeme-cartes-atb.git
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Accéder au dossier
+cd systeme-cartes-atb
 
-## Learn More
+# Installer les dépendances
+npm install
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Lancer en mode développement
+npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+L'application sera accessible sur `http://localhost:3000`
 
-### Code Splitting
+### Build de production
+```bash
+# Créer un build optimisé
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🚀 Déploiement
 
-### Analyzing the Bundle Size
+Le projet est automatiquement déployé sur GitHub Pages. Pour déployer une nouvelle version :
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+# Méthode recommandée
+npm run build
+npx gh-pages -d build --dotfiles
 
-### Making a Progressive Web App
+# Ou utiliser le script npm
+npm run deploy
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 📱 Captures d'écran
 
-### Advanced Configuration
+### Page de Connexion
+- Interface de connexion moderne avec logo ATB
+- Formulaire d'inscription avec validation avancée
+- Indicateur de force du mot de passe
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Dashboard Principal
+- En-tête personnalisé avec informations utilisateur
+- Deux actions principales : Nouvelle demande et Stock
+- Section statistiques avec données en temps réel
+- Footer avec informations système
 
-### Deployment
+## 🏗️ Structure du Projet
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```
+systeme-cartes-atb/
+├── public/
+│   ├── index.html
+│   ├── manifest.json
+│   └── .nojekyll
+├── src/
+│   ├── App.js          # Composant principal
+│   ├── App.css         # Styles globaux
+│   ├── atb.png         # Logo ATB
+│   └── index.js        # Point d'entrée
+├── build/              # Build de production
+└── README.md
+```
 
-### `npm run build` fails to minify
+## 🎯 Fonctionnalités Futures
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [ ] Intégration avec une API backend
+- [ ] Système de notifications en temps réel
+- [ ] Génération de rapports PDF
+- [ ] Module d'administration avancé
+- [ ] Support multilingue (Français/Arabe)
+- [ ] Authentification à deux facteurs
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! Pour contribuer :
+
+1. Fork le projet
+2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
+3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
+
+## 📄 Licence
+
+Ce projet est développé pour l'Arab Tunisian Bank. Tous droits réservés.
+
+## 👥 Équipe
+
+- **Développeur Principal** : Azer Khadhraoui
+- **Organisation** : Arab Tunisian Bank (ATB)
+
+## 📞 Contact
+
+Pour toute question ou suggestion concernant ce projet :
+
+- **Email** : azerronaldo2004@gmail.com
+- **GitHub** : [@Azer-khadhraoui](https://github.com/Azer-khadhraoui)
+
+---
+
+<div align="center">
+  <img src="src/atb.png" alt="ATB Logo" width="60">
+  <br>
+  <strong>Arab Tunisian Bank - Système de Gestion des Cartes</strong>
+  <br>
+  <em>© 2025 Arab Tunisian Bank. Tous droits réservés.</em>
+</div>
