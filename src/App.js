@@ -35,9 +35,25 @@ function App() {
     prenomClient: '',
     cin: '',
     numCompte: '',
-    typeCarte: 'visa-classic',
+    typeCarte: 'visa-electron-debit',
     dateDemande: new Date().toISOString().split('T')[0] // Date actuelle automatique
   });
+
+  // État pour les données du stock des cartes
+  const [stockData] = useState([
+    { id: 1, nom: 'Visa Electron Debit', stock: 245, seuil: 50, statut: 'ok' },
+    { id: 2, nom: 'C\'Jeune (13-25 ans)', stock: 89, seuil: 30, statut: 'ok' },
+    { id: 3, nom: 'Visa Classique Nationale', stock: 156, seuil: 40, statut: 'ok' },
+    { id: 4, nom: 'Mastercard', stock: 198, seuil: 45, statut: 'ok' },
+    { id: 5, nom: 'Virtuelle E‑pay', stock: 312, seuil: 20, statut: 'ok' },
+    { id: 6, nom: 'Technologique (CTI)', stock: 78, seuil: 25, statut: 'ok' },
+    { id: 7, nom: 'VISA Gold', stock: 34, seuil: 20, statut: 'attention' },
+    { id: 8, nom: 'Mastercard World', stock: 67, seuil: 25, statut: 'ok' },
+    { id: 9, nom: 'Moussafer Platinum', stock: 15, seuil: 20, statut: 'critique' },
+    { id: 10, nom: 'American Express', stock: 12, seuil: 15, statut: 'critique' },
+    { id: 11, nom: 'Lella', stock: 45, seuil: 30, statut: 'ok' },
+    { id: 12, nom: 'El Khir', stock: 28, seuil: 25, statut: 'attention' }
+  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -179,7 +195,7 @@ function App() {
         prenomClient: '',
         cin: '',
         numCompte: '',
-        typeCarte: 'visa-classic',
+        typeCarte: 'visa-electron-debit',
         dateDemande: new Date().toISOString().split('T')[0]
       });
       setCurrentPage('dashboard');
@@ -331,12 +347,18 @@ function App() {
                       className="select-field"
                       required
                     >
-                      <option value="visa-classic">Visa Classic</option>
-                      <option value="visa-gold">Visa Gold</option>
-                      <option value="visa-platinum">Visa Platinum</option>
-                      <option value="mastercard-standard">MasterCard Standard</option>
-                      <option value="mastercard-gold">MasterCard Gold</option>
-                      <option value="maestro">Maestro</option>
+                      <option value="visa-electron-debit">Visa Electron Debit - Paiements/retraits classiques (Grand public)</option>
+                      <option value="c-jeune">C'Jeune - Paiements jeunes (13-25 ans)</option>
+                      <option value="visa-classique-nationale">Visa Classique Nationale - Usage quotidien (Grand public)</option>
+                      <option value="mastercard">Mastercard - Usage quotidien (Grand public)</option>
+                      <option value="virtuelle-e-pay">Virtuelle E-pay - Achats en ligne sécurisés</option>
+                      <option value="technologique-cti">Technologique (CTI) - Achats internationaux en ligne</option>
+                      <option value="visa-gold">VISA Gold - Confort et plafonds supérieurs</option>
+                      <option value="mastercard-world">Mastercard World - Services premium</option>
+                      <option value="moussafer-platinum">Moussafer Platinum - Tourisme, voyages</option>
+                      <option value="american-express">American Express (Amex) - Usage premium</option>
+                      <option value="lella">Lella - Avantages féminins</option>
+                      <option value="el-khir">El Khir - Carte spéciale ATB</option>
                     </select>
                   </div>
 
@@ -375,6 +397,165 @@ function App() {
               <div className="footer-left">
                 <img src={atbLogo} alt="ATB Logo" className="footer-logo" />
                 <span>&copy; {new Date().getFullYear()} Arab Tunisian Bank. Tous droits réservés.</span>
+              </div>
+              <div className="footer-right">
+                <span>Système de gestion des cartes v2.0</span>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    // Page de consultation du stock
+    if (currentPage === 'stock') {
+      const stockTotal = stockData.reduce((total, carte) => total + carte.stock, 0);
+      const cartesEnRupture = stockData.filter(carte => carte.statut === 'critique').length;
+      const cartesAttention = stockData.filter(carte => carte.statut === 'attention').length;
+      const cartesOk = stockData.filter(carte => carte.statut === 'ok').length;
+
+      return (
+        <div className="dashboard">
+          <header className="dashboard-header">
+            <div className="header-content">
+              <div className="logo-section">
+                <img src={atbLogo} alt="ATB Logo" className="header-logo" />
+                <span className="bank-name">Arab Tunisian Bank</span>
+              </div>
+              <div className="user-section">
+                <span className="welcome-text">Bienvenue, {user.matricule}</span>
+                <button 
+                  onClick={() => setUser(null)} 
+                  className="logout-btn"
+                >
+                  <span>Se déconnecter</span>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <main className="dashboard-main">
+            <div className="page-header">
+              <h1>Consultation du Stock</h1>
+              <p>État des cartes bancaires disponibles</p>
+            </div>
+
+            <div className="stock-summary">
+              <div className="summary-card total">
+                <div className="summary-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                    <line x1="1" y1="10" x2="23" y2="10"/>
+                  </svg>
+                </div>
+                <div className="summary-content">
+                  <h3>Total Stock</h3>
+                  <div className="summary-value">{stockTotal}</div>
+                  <div className="summary-label">cartes disponibles</div>
+                </div>
+              </div>
+
+              <div className="summary-card ok">
+                <div className="summary-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                </div>
+                <div className="summary-content">
+                  <h3>Stock Normal</h3>
+                  <div className="summary-value">{cartesOk}</div>
+                  <div className="summary-label">types de cartes</div>
+                </div>
+              </div>
+
+              <div className="summary-card attention">
+                <div className="summary-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
+                <div className="summary-content">
+                  <h3>Stock Faible</h3>
+                  <div className="summary-value">{cartesAttention}</div>
+                  <div className="summary-label">types de cartes</div>
+                </div>
+              </div>
+
+              <div className="summary-card critique">
+                <div className="summary-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                </div>
+                <div className="summary-content">
+                  <h3>Stock Critique</h3>
+                  <div className="summary-value">{cartesEnRupture}</div>
+                  <div className="summary-label">types de cartes</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="stock-table-container">
+              <table className="stock-table">
+                <thead>
+                  <tr>
+                    <th>Type de carte</th>
+                    <th>Stock actuel</th>
+                    <th>Seuil d'alerte</th>
+                    <th>État</th>
+                    <th>Pourcentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stockData.map((carte) => {
+                    const pourcentage = Math.round((carte.stock / carte.seuil) * 100);
+                    return (
+                      <tr key={carte.id} className={`row-${carte.statut}`}>
+                        <td className="carte-nom">{carte.nom}</td>
+                        <td className="stock-value">{carte.stock}</td>
+                        <td className="seuil-value">{carte.seuil}</td>
+                        <td>
+                          <span className={`status-badge ${carte.statut}`}>
+                            {carte.statut === 'ok' ? 'Normal' : 
+                             carte.statut === 'attention' ? 'Faible' : 'Critique'}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="progress-container">
+                            <div 
+                              className={`progress-bar ${carte.statut}`}
+                              style={{ width: `${Math.min(pourcentage, 100)}%` }}
+                            ></div>
+                            <span className="progress-text">{pourcentage}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="form-actions">
+              <button 
+                type="button" 
+                onClick={() => setCurrentPage('dashboard')}
+                className="btn-secondary"
+              >
+                Retour au dashboard
+              </button>
+            </div>
+          </main>
+
+          <footer className="dashboard-footer">
+            <div className="footer-content">
+              <div className="footer-left">
+                <img src={atbLogo} alt="ATB Logo" className="footer-logo" />
+                <span>Arab Tunisian Bank</span>
               </div>
               <div className="footer-right">
                 <span>Système de gestion des cartes v2.0</span>
