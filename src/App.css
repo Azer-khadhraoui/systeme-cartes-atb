@@ -1402,7 +1402,7 @@ body {
 }
 
 .summary-card.critique .summary-value {
-  color: #F44336;
+  color: #2196F3;
 }
 
 .summary-label {
@@ -1510,39 +1510,22 @@ body {
   border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
-/* Barres de progression */
-.progress-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative;
+.status-badge.délivré {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
-.progress-bar {
-  height: 8px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  min-width: 2px;
-  position: relative;
+.status-badge.en-stock {
+  background: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+  border: 1px solid rgba(33, 150, 243, 0.3);
 }
 
-.progress-bar.ok {
-  background: linear-gradient(90deg, #4CAF50, #45A049);
-}
-
-.progress-bar.attention {
-  background: linear-gradient(90deg, #FF9800, #F57C00);
-}
-
-.progress-bar.critique {
-  background: linear-gradient(90deg, #F44336, #D32F2F);
-}
-
-.progress-text {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--atb-gray);
-  min-width: 40px;
+.status-badge.en-cours {
+  background: rgba(255, 152, 0, 0.1);
+  color: #FF9800;
+  border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
 /* Lignes colorées selon le statut */
@@ -1558,62 +1541,37 @@ body {
   border-left: 4px solid #F44336;
 }
 
-/* Responsive pour la page de stock */
-@media (max-width: 768px) {
-  .stock-summary {
-    grid-template-columns: 1fr;
-  }
-  
-  .summary-card {
-    padding: 20px;
-  }
-  
-  .summary-value {
-    font-size: 2rem;
-  }
-  
-  .page-header h1 {
-    font-size: 2rem;
-  }
-  
-  .stock-table-container {
-    padding: 15px;
-  }
-  
-  .stock-table {
-    font-size: 0.85rem;
-  }
-  
-  .stock-table th,
-  .stock-table td {
-    padding: 12px 8px;
-  }
-  
-  .progress-container {
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .progress-bar {
-    width: 100%;
-  }
+.row-délivré {
+  border-left: 4px solid #4CAF50;
 }
 
-@media (max-width: 480px) {
-  .stock-table th,
-  .stock-table td {
-    padding: 10px 6px;
-  }
-  
-  .stock-table {
-    font-size: 0.8rem;
-  }
-  
-  .summary-card {
-    padding: 15px;
-  }
-  
-  .summary-value {
-    font-size: 1.8rem;
-  }
+.row-en-stock {
+  border-left: 4px solid #2196F3;
+}
+
+.row-en-cours {
+  border-left: 4px solid #FF9800;
+}
+
+/* Styles pour les nouvelles colonnes */
+.user-nom, .user-prenom {
+  font-weight: 500;
+  color: var(--atb-dark-gray);
+}
+
+.user-cin {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--atb-bordeaux);
+  font-size: 0.9rem;
+}
+
+/* Mise à jour des cartes de résumé */
+.summary-card.critique .summary-icon {
+  background: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+}
+
+.summary-card.critique .summary-value {
+  color: #2196F3;
 }

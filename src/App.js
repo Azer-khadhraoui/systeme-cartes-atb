@@ -41,18 +41,18 @@ function App() {
 
   // État pour les données du stock des cartes
   const [stockData] = useState([
-    { id: 1, nom: 'Visa Electron Debit', stock: 245, seuil: 50, statut: 'ok' },
-    { id: 2, nom: 'C\'Jeune (13-25 ans)', stock: 89, seuil: 30, statut: 'ok' },
-    { id: 3, nom: 'Visa Classique Nationale', stock: 156, seuil: 40, statut: 'ok' },
-    { id: 4, nom: 'Mastercard', stock: 198, seuil: 45, statut: 'ok' },
-    { id: 5, nom: 'Virtuelle E‑pay', stock: 312, seuil: 20, statut: 'ok' },
-    { id: 6, nom: 'Technologique (CTI)', stock: 78, seuil: 25, statut: 'ok' },
-    { id: 7, nom: 'VISA Gold', stock: 34, seuil: 20, statut: 'attention' },
-    { id: 8, nom: 'Mastercard World', stock: 67, seuil: 25, statut: 'ok' },
-    { id: 9, nom: 'Moussafer Platinum', stock: 15, seuil: 20, statut: 'critique' },
-    { id: 10, nom: 'American Express', stock: 12, seuil: 15, statut: 'critique' },
-    { id: 11, nom: 'Lella', stock: 45, seuil: 30, statut: 'ok' },
-    { id: 12, nom: 'El Khir', stock: 28, seuil: 25, statut: 'attention' }
+    { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivré' },
+    { id: 2, typeCarte: 'C\'Jeune', nom: 'Trabelsi', prenom: 'Fatma', cin: '23456789', etat: 'en stock' },
+    { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours' },
+    { id: 4, typeCarte: 'Mastercard', nom: 'Sassi', prenom: 'Amina', cin: '45678901', etat: 'délivré' },
+    { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Mzoughi', prenom: 'Rami', cin: '56789012', etat: 'en stock' },
+    { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours' },
+    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivré' },
+    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock' },
+    { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours' },
+    { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivré' },
+    { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock' },
+    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours' }
   ]);
 
   const handleChange = (e) => {
@@ -347,18 +347,18 @@ function App() {
                       className="select-field"
                       required
                     >
-                      <option value="visa-electron-debit">Visa Electron Debit - Paiements/retraits classiques (Grand public)</option>
-                      <option value="c-jeune">C'Jeune - Paiements jeunes (13-25 ans)</option>
-                      <option value="visa-classique-nationale">Visa Classique Nationale - Usage quotidien (Grand public)</option>
-                      <option value="mastercard">Mastercard - Usage quotidien (Grand public)</option>
-                      <option value="virtuelle-e-pay">Virtuelle E-pay - Achats en ligne sécurisés</option>
-                      <option value="technologique-cti">Technologique (CTI) - Achats internationaux en ligne</option>
-                      <option value="visa-gold">VISA Gold - Confort et plafonds supérieurs</option>
-                      <option value="mastercard-world">Mastercard World - Services premium</option>
-                      <option value="moussafer-platinum">Moussafer Platinum - Tourisme, voyages</option>
-                      <option value="american-express">American Express (Amex) - Usage premium</option>
-                      <option value="lella">Lella - Avantages féminins</option>
-                      <option value="el-khir">El Khir - Carte spéciale ATB</option>
+                      <option value="visa-electron-debit">Visa Electron Debit</option>
+                      <option value="c-jeune">C'Jeune</option>
+                      <option value="visa-classique-nationale">Visa Classique Nationale</option>
+                      <option value="mastercard">Mastercard</option>
+                      <option value="virtuelle-e-pay">Virtuelle E‑pay</option>
+                      <option value="technologique-cti">Technologique (CTI)</option>
+                      <option value="visa-gold">VISA Gold</option>
+                      <option value="mastercard-world">Mastercard World</option>
+                      <option value="moussafer-platinum">Moussafer Platinum</option>
+                      <option value="american-express">American Express</option>
+                      <option value="lella">Lella</option>
+                      <option value="el-khir">El Khir</option>
                     </select>
                   </div>
 
@@ -409,10 +409,10 @@ function App() {
 
     // Page de consultation du stock
     if (currentPage === 'stock') {
-      const stockTotal = stockData.reduce((total, carte) => total + carte.stock, 0);
-      const cartesEnRupture = stockData.filter(carte => carte.statut === 'critique').length;
-      const cartesAttention = stockData.filter(carte => carte.statut === 'attention').length;
-      const cartesOk = stockData.filter(carte => carte.statut === 'ok').length;
+      const totalCartes = stockData.length;
+      const cartesDelivrees = stockData.filter(carte => carte.etat === 'délivré').length;
+      const cartesEnStock = stockData.filter(carte => carte.etat === 'en stock').length;
+      const cartesEnCours = stockData.filter(carte => carte.etat === 'en cours').length;
 
       return (
         <div className="dashboard">
@@ -423,6 +423,12 @@ function App() {
                 <span className="bank-name">Arab Tunisian Bank</span>
               </div>
               <div className="user-section">
+                <button 
+                  onClick={() => setCurrentPage('dashboard')} 
+                  className="back-btn"
+                >
+                  ← Retour au dashboard
+                </button>
                 <span className="welcome-text">Bienvenue, {user.matricule}</span>
                 <button 
                   onClick={() => setUser(null)} 
@@ -436,8 +442,8 @@ function App() {
 
           <main className="dashboard-main">
             <div className="page-header">
-              <h1>Consultation du Stock</h1>
-              <p>État des cartes bancaires disponibles</p>
+              <h1>Consultation des Cartes</h1>
+              <p>État des cartes bancaires et des clients</p>
             </div>
 
             <div className="stock-summary">
@@ -449,9 +455,9 @@ function App() {
                   </svg>
                 </div>
                 <div className="summary-content">
-                  <h3>Total Stock</h3>
-                  <div className="summary-value">{stockTotal}</div>
-                  <div className="summary-label">cartes disponibles</div>
+                  <h3>Total Cartes</h3>
+                  <div className="summary-value">{totalCartes}</div>
+                  <div className="summary-label">cartes gérées</div>
                 </div>
               </div>
 
@@ -462,9 +468,9 @@ function App() {
                   </svg>
                 </div>
                 <div className="summary-content">
-                  <h3>Stock Normal</h3>
-                  <div className="summary-value">{cartesOk}</div>
-                  <div className="summary-label">types de cartes</div>
+                  <h3>Délivrées</h3>
+                  <div className="summary-value">{cartesDelivrees}</div>
+                  <div className="summary-label">cartes délivrées</div>
                 </div>
               </div>
 
@@ -477,9 +483,9 @@ function App() {
                   </svg>
                 </div>
                 <div className="summary-content">
-                  <h3>Stock Faible</h3>
-                  <div className="summary-value">{cartesAttention}</div>
-                  <div className="summary-label">types de cartes</div>
+                  <h3>En Cours</h3>
+                  <div className="summary-value">{cartesEnCours}</div>
+                  <div className="summary-label">cartes en cours</div>
                 </div>
               </div>
 
@@ -487,14 +493,14 @@ function App() {
                 <div className="summary-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <circle cx="12" cy="12" r="10"/>
-                    <line x1="15" y1="9" x2="9" y2="15"/>
-                    <line x1="9" y1="9" x2="15" y2="15"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
                 </div>
                 <div className="summary-content">
-                  <h3>Stock Critique</h3>
-                  <div className="summary-value">{cartesEnRupture}</div>
-                  <div className="summary-label">types de cartes</div>
+                  <h3>En Stock</h3>
+                  <div className="summary-value">{cartesEnStock}</div>
+                  <div className="summary-label">cartes en stock</div>
                 </div>
               </div>
             </div>
@@ -504,50 +510,30 @@ function App() {
                 <thead>
                   <tr>
                     <th>Type de carte</th>
-                    <th>Stock actuel</th>
-                    <th>Seuil d'alerte</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>CIN</th>
                     <th>État</th>
-                    <th>Pourcentage</th>
                   </tr>
                 </thead>
                 <tbody>
                   {stockData.map((carte) => {
-                    const pourcentage = Math.round((carte.stock / carte.seuil) * 100);
                     return (
-                      <tr key={carte.id} className={`row-${carte.statut}`}>
-                        <td className="carte-nom">{carte.nom}</td>
-                        <td className="stock-value">{carte.stock}</td>
-                        <td className="seuil-value">{carte.seuil}</td>
+                      <tr key={carte.id} className={`row-${carte.etat.replace(' ', '-')}`}>
+                        <td className="carte-nom">{carte.typeCarte}</td>
+                        <td className="user-nom">{carte.nom}</td>
+                        <td className="user-prenom">{carte.prenom}</td>
+                        <td className="user-cin">{carte.cin}</td>
                         <td>
-                          <span className={`status-badge ${carte.statut}`}>
-                            {carte.statut === 'ok' ? 'Normal' : 
-                             carte.statut === 'attention' ? 'Faible' : 'Critique'}
+                          <span className={`status-badge ${carte.etat.replace(' ', '-')}`}>
+                            {carte.etat.charAt(0).toUpperCase() + carte.etat.slice(1)}
                           </span>
-                        </td>
-                        <td>
-                          <div className="progress-container">
-                            <div 
-                              className={`progress-bar ${carte.statut}`}
-                              style={{ width: `${Math.min(pourcentage, 100)}%` }}
-                            ></div>
-                            <span className="progress-text">{pourcentage}%</span>
-                          </div>
                         </td>
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
-            </div>
-
-            <div className="form-actions">
-              <button 
-                type="button" 
-                onClick={() => setCurrentPage('dashboard')}
-                className="btn-secondary"
-              >
-                Retour au dashboard
-              </button>
             </div>
           </main>
 
