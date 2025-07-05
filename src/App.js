@@ -150,30 +150,117 @@ function App() {
   // Si l'utilisateur est connecté, afficher la page d'accueil
   if (user) {
     return (
-      <div>
-        <header style={styles.header}>
-          Arab Tunisian Bank
+      <div className="dashboard">
+        <header className="dashboard-header">
+          <div className="header-content">
+            <div className="logo-section">
+              <img src={atbLogo} alt="ATB Logo" className="header-logo" />
+              <span className="bank-name">Arab Tunisian Bank</span>
+            </div>
+            <div className="user-section">
+              <span className="welcome-text">Bienvenue, {user.matricule}</span>
+              <button 
+                onClick={() => setUser(null)} 
+                className="logout-btn"
+              >
+                <span>Se déconnecter</span>
+              </button>
+            </div>
+          </div>
         </header>
-        <main style={{ padding: "2rem", minHeight: "80vh", backgroundColor: "#f5f5f5" }}>
-          <h2>Bienvenue sur l'espace cartes ATB, {user.matricule} !</h2>
-          <p>Vous êtes maintenant connecté à votre espace de gestion des cartes bancaires.</p>
-          <button 
-            onClick={() => setUser(null)} 
-            style={{
-              marginTop: "20px",
-              padding: "10px 20px",
-              backgroundColor: "#A51C30",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer"
-            }}
-          >
-            Se déconnecter
-          </button>
+
+        <main className="dashboard-main">
+          <div className="hero-section">
+            <div className="hero-content">
+              <h1 className="hero-title">
+                Espace Gestion des Cartes
+                <span className="hero-subtitle">ATB</span>
+              </h1>
+              <p className="hero-description">
+                Gérez facilement vos demandes de cartes bancaires et consultez le stock disponible
+              </p>
+            </div>
+            <div className="hero-graphic">
+              <div className="floating-card card-1"></div>
+              <div className="floating-card card-2"></div>
+              <div className="floating-card card-3"></div>
+            </div>
+          </div>
+
+          <div className="actions-container">
+            <div className="action-card add-card">
+              <div className="card-icon">
+                <div className="icon-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 5v14M5 12h14" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+              </div>
+              <div className="card-content">
+                <h3>Nouvelle Demande</h3>
+                <p>Ajoutez une nouvelle demande de carte bancaire</p>
+                <div className="card-features">
+                  <span>• Demande rapide</span>
+                  <span>• Attribution d’un emplacement physique de la carte</span>
+                  <span>• Processus rapide et sécurisé</span>
+                </div>
+              </div>
+              <button className="action-button add-button">
+                <span>Ajouter une demande</span>
+                <div className="button-arrow">→</div>
+              </button>
+              <div className="card-glow add-glow"></div>
+            </div>
+
+            <div className="action-card stock-card">
+              <div className="card-icon">
+                <div className="icon-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4" strokeWidth="2"/>
+                    <path d="M9 11V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6" strokeWidth="2"/>
+                    <path d="M9 19v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6" strokeWidth="2"/>
+                  </svg>
+                </div>
+              </div>
+              <div className="card-content">
+                <h3>Stock des Cartes</h3>
+                <p>Consultez le stock disponible et les statistiques</p>
+                <div className="card-features">
+                  <span>• Vue d'ensemble</span>
+                  <span>• Statistiques détaillées</span>
+                  <span>• Alertes de stock</span>
+                </div>
+              </div>
+              <button className="action-button stock-button">
+                <span>Consulter le stock</span>
+                <div className="button-arrow">→</div>
+              </button>
+              <div className="card-glow stock-glow"></div>
+            </div>
+          </div>
+
+          <div className="stats-section">
+            <div className="stat-item">
+              <div className="stat-number">247</div>
+              <div className="stat-label">Demandes traitées</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">1,350</div>
+              <div className="stat-label">Cartes en stock</div>
+            </div>
+          </div>
         </main>
-        <footer style={styles.footer}>
-          &copy; {new Date().getFullYear()} Arab Tunisian Bank. Tous droits réservés.
+
+        <footer className="dashboard-footer">
+          <div className="footer-content">
+            <div className="footer-left">
+              <img src={atbLogo} alt="ATB Logo" className="footer-logo" />
+              <span>&copy; {new Date().getFullYear()} Arab Tunisian Bank. Tous droits réservés.</span>
+            </div>
+            <div className="footer-right">
+              <span>Système de gestion des cartes v2.0</span>
+            </div>
+          </div>
         </footer>
       </div>
     );
