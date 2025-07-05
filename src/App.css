@@ -1089,3 +1089,239 @@ body {
 .stat-item:nth-child(3) {
   animation-delay: 0.2s;
 }
+
+/* ===== FORMULAIRE DE DEMANDE STYLES ===== */
+
+/* Container du formulaire */
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--atb-white);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInScale 0.6s ease;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.form-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--atb-bordeaux);
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--atb-bordeaux) 0%, var(--atb-bordeaux-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.form-description {
+  font-size: 16px;
+  color: var(--atb-gray);
+  margin: 0;
+}
+
+/* Formulaire de demande */
+.demande-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--atb-bordeaux);
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px 16px;
+  border: 2px solid #E0E0E0;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: var(--atb-white);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--atb-bordeaux);
+  box-shadow: 0 0 0 3px rgba(165, 28, 48, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-group input.error {
+  border-color: var(--atb-red);
+  background-color: #FFF5F5;
+}
+
+.select-field {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23A51C30' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+  appearance: none;
+}
+
+.date-field {
+  color: var(--atb-gray);
+  background-color: #F8F9FA;
+  cursor: not-allowed;
+}
+
+.form-help {
+  font-size: 12px;
+  color: var(--atb-gray);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.error-message {
+  color: var(--atb-red);
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.error-message::before {
+  content: "⚠";
+  font-size: 14px;
+}
+
+/* Boutons d'action */
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #E0E0E0;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 14px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  min-width: 150px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--atb-bordeaux) 0%, var(--atb-bordeaux-dark) 100%);
+  color: var(--atb-white);
+  box-shadow: 0 4px 15px rgba(165, 28, 48, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(165, 28, 48, 0.4);
+}
+
+.btn-secondary {
+  background: var(--atb-white);
+  color: var(--atb-bordeaux);
+  border: 2px solid var(--atb-bordeaux);
+}
+
+.btn-secondary:hover {
+  background: var(--atb-bordeaux);
+  color: var(--atb-white);
+  transform: translateY(-2px);
+}
+
+/* Bouton de retour */
+.back-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--atb-white);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Responsive pour le formulaire */
+@media (max-width: 768px) {
+  .form-container {
+    margin: 20px;
+    padding: 25px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .form-title {
+    font-size: 26px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    margin: 10px;
+    padding: 20px;
+  }
+  
+  .form-title {
+    font-size: 22px;
+  }
+}
+
+/* Animation pour les champs avec erreur */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.form-group input.error {
+  animation: shake 0.5s ease;
+}

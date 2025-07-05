@@ -9,6 +9,9 @@ function App() {
   // État pour basculer entre connexion et inscription
   const [isSignUp, setIsSignUp] = useState(false);
   
+  // État pour gérer la navigation dans le dashboard
+  const [currentPage, setCurrentPage] = useState('dashboard'); // 'dashboard', 'nouvelle-demande', 'stock'
+  
   // État pour les données du formulaire de connexion
   const [formData, setFormData] = useState({
     matricule: '',
@@ -26,10 +29,25 @@ function App() {
 
   const [errors, setErrors] = useState({});
 
+  // État pour le formulaire de demande de carte
+  const [demandeData, setDemandeData] = useState({
+    nomClient: '',
+    prenomClient: '',
+    cin: '',
+    numCompte: '',
+    typeCarte: 'visa-classic',
+    dateDemande: new Date().toISOString().split('T')[0] // Date actuelle automatique
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (isSignUp) {
       setSignUpData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    } else if (currentPage === 'nouvelle-demande') {
+      setDemandeData(prev => ({
         ...prev,
         [name]: value
       }));
@@ -92,6 +110,32 @@ function App() {
     return newErrors;
   };
 
+  const validateDemandeForm = () => {
+    const newErrors = {};
+    
+    if (!demandeData.nomClient.trim()) {
+      newErrors.nomClient = 'Nom du client requis';
+    }
+    
+    if (!demandeData.prenomClient.trim()) {
+      newErrors.prenomClient = 'Prénom du client requis';
+    }
+    
+    if (!demandeData.cin.trim()) {
+      newErrors.cin = 'CIN requis';
+    } else if (demandeData.cin.length !== 8) {
+      newErrors.cin = 'Le CIN doit contenir 8 chiffres';
+    }
+    
+    if (!demandeData.numCompte.trim()) {
+      newErrors.numCompte = 'Numéro de compte requis';
+    } else if (demandeData.numCompte.length < 10) {
+      newErrors.numCompte = 'Le numéro de compte doit contenir au moins 10 chiffres';
+    }
+    
+    return newErrors;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = validateForm();
@@ -115,6 +159,31 @@ function App() {
         console.log('Tentative de connexion :', formData);
         setUser({ matricule: formData.matricule });
       }
+    } else {
+      setErrors(newErrors);
+    }
+  };
+
+  // Fonction pour soumettre la demande de carte
+  const handleDemandeSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = validateDemandeForm();
+    
+    if (Object.keys(newErrors).length === 0) {
+      console.log('Nouvelle demande de carte :', demandeData);
+      alert(`Demande de carte soumise avec succès !\n\nClient: ${demandeData.prenomClient} ${demandeData.nomClient}\nCIN: ${demandeData.cin}\nCompte: ${demandeData.numCompte}\nType: ${demandeData.typeCarte}\nDate: ${demandeData.dateDemande}`);
+      
+      // Reset form et retour au dashboard
+      setDemandeData({
+        nomClient: '',
+        prenomClient: '',
+        cin: '',
+        numCompte: '',
+        typeCarte: 'visa-classic',
+        dateDemande: new Date().toISOString().split('T')[0]
+      });
+      setCurrentPage('dashboard');
+      setErrors({});
     } else {
       setErrors(newErrors);
     }
@@ -147,8 +216,176 @@ function App() {
     return strengthLevels[score];
   };
 
-  // Si l'utilisateur est connecté, afficher la page d'accueil
+  // Si l'utilisateur est connecté, afficher la page appropriée
   if (user) {
+    if (currentPage === 'nouvelle-demande') {
+      return (
+        <div className="dashboard">
+          <header className="dashboard-header">
+            <div className="header-content">
+              <div className="logo-section">
+                <img src={atbLogo} alt="ATB Logo" className="header-logo" />
+                <span className="bank-name">Arab Tunisian Bank</span>
+              </div>
+              <div className="user-section">
+                <button 
+                  onClick={() => setCurrentPage('dashboard')} 
+                  className="back-btn"
+                >
+                  ← Retour au dashboard
+                </button>
+                <span className="welcome-text">Bienvenue, {user.matricule}</span>
+                <button 
+                  onClick={() => setUser(null)} 
+                  className="logout-btn"
+                >
+                  <span>Se déconnecter</span>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <main className="dashboard-main">
+            <div className="form-container">
+              <div className="form-header">
+                <h1 className="form-title">Nouvelle Demande de Carte</h1>
+                <p className="form-description">Remplissez les informations du client pour créer une nouvelle demande</p>
+              </div>
+
+              <form onSubmit={handleDemandeSubmit} className="demande-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="nomClient">Nom du client *</label>
+                    <input
+                      type="text"
+                      id="nomClient"
+                      name="nomClient"
+                      value={demandeData.nomClient}
+                      onChange={handleChange}
+                      className={errors.nomClient ? 'error' : ''}
+                      placeholder="Entrez le nom du client"
+                      required
+                    />
+                    {errors.nomClient && <span className="error-message">{errors.nomClient}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="prenomClient">Prénom du client *</label>
+                    <input
+                      type="text"
+                      id="prenomClient"
+                      name="prenomClient"
+                      value={demandeData.prenomClient}
+                      onChange={handleChange}
+                      className={errors.prenomClient ? 'error' : ''}
+                      placeholder="Entrez le prénom du client"
+                      required
+                    />
+                    {errors.prenomClient && <span className="error-message">{errors.prenomClient}</span>}
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="cin">CIN *</label>
+                    <input
+                      type="text"
+                      id="cin"
+                      name="cin"
+                      value={demandeData.cin}
+                      onChange={handleChange}
+                      className={errors.cin ? 'error' : ''}
+                      placeholder="12345678"
+                      maxLength="8"
+                      pattern="[0-9]{8}"
+                      required
+                    />
+                    {errors.cin && <span className="error-message">{errors.cin}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="numCompte">Numéro de compte *</label>
+                    <input
+                      type="text"
+                      id="numCompte"
+                      name="numCompte"
+                      value={demandeData.numCompte}
+                      onChange={handleChange}
+                      className={errors.numCompte ? 'error' : ''}
+                      placeholder="1234567890123"
+                      minLength="10"
+                      required
+                    />
+                    {errors.numCompte && <span className="error-message">{errors.numCompte}</span>}
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="typeCarte">Type de carte *</label>
+                    <select
+                      id="typeCarte"
+                      name="typeCarte"
+                      value={demandeData.typeCarte}
+                      onChange={handleChange}
+                      className="select-field"
+                      required
+                    >
+                      <option value="visa-classic">Visa Classic</option>
+                      <option value="visa-gold">Visa Gold</option>
+                      <option value="visa-platinum">Visa Platinum</option>
+                      <option value="mastercard-standard">MasterCard Standard</option>
+                      <option value="mastercard-gold">MasterCard Gold</option>
+                      <option value="maestro">Maestro</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="dateDemande">Date de demande</label>
+                    <input
+                      type="date"
+                      id="dateDemande"
+                      name="dateDemande"
+                      value={demandeData.dateDemande}
+                      className="date-field"
+                      readOnly
+                    />
+                    <small className="form-help">Date automatiquement générée</small>
+                  </div>
+                </div>
+
+                <div className="form-actions">
+                  <button 
+                    type="button" 
+                    onClick={() => setCurrentPage('dashboard')}
+                    className="btn-secondary"
+                  >
+                    Annuler
+                  </button>
+                  <button type="submit" className="btn-primary">
+                    Soumettre la demande
+                  </button>
+                </div>
+              </form>
+            </div>
+          </main>
+
+          <footer className="dashboard-footer">
+            <div className="footer-content">
+              <div className="footer-left">
+                <img src={atbLogo} alt="ATB Logo" className="footer-logo" />
+                <span>&copy; {new Date().getFullYear()} Arab Tunisian Bank. Tous droits réservés.</span>
+              </div>
+              <div className="footer-right">
+                <span>Système de gestion des cartes v2.0</span>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    // Dashboard principal
     return (
       <div className="dashboard">
         <header className="dashboard-header">
@@ -200,12 +437,12 @@ function App() {
                 <h3>Nouvelle Demande</h3>
                 <p>Ajoutez une nouvelle demande de carte bancaire</p>
                 <div className="card-features">
-                  <span>• Demande rapide</span>
+                  <span>• saisie de la demande</span>
                   <span>• Attribution d’un emplacement physique de la carte</span>
                   <span>• Processus rapide et sécurisé</span>
                 </div>
               </div>
-              <button className="action-button add-button">
+              <button className="action-button add-button" onClick={() => setCurrentPage('nouvelle-demande')}>
                 <span>Ajouter une demande</span>
                 <div className="button-arrow">→</div>
               </button>
@@ -223,15 +460,15 @@ function App() {
                 </div>
               </div>
               <div className="card-content">
-                <h3>Stock des Cartes</h3>
+                <h3>Cartes en Stock</h3>
                 <p>Consultez le stock disponible et les statistiques</p>
                 <div className="card-features">
                   <span>• Vue d'ensemble</span>
                   <span>• Statistiques détaillées</span>
-                  <span>• Alertes de stock</span>
+                  <span>• status des cartes</span>
                 </div>
               </div>
-              <button className="action-button stock-button">
+              <button className="action-button stock-button" onClick={() => setCurrentPage('stock')}>
                 <span>Consulter le stock</span>
                 <div className="button-arrow">→</div>
               </button>
