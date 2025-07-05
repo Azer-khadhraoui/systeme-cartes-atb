@@ -453,25 +453,4 @@ function App() {
   );
 }
 
-// Styles inline pour les éléments après connexion
-const styles = {
-  header: {
-    backgroundColor: "#A51C30",
-    color: "#fff",
-    padding: "1rem",
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: "1.5rem",
-  },
-  footer: {
-    backgroundColor: "#A51C30",
-    color: "#fff",
-    textAlign: "center",
-    padding: "0.8rem",
-    position: "fixed",
-    bottom: 0,
-    width: "100%",
-  },
-};
-
 export default App;
