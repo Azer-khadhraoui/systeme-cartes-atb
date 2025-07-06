@@ -43,16 +43,16 @@ function App() {
 
   // État pour les données du stock des cartes
   const [stockData] = useState([
-    { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivré', numCompte: '0123456789012', dateDemande: '2024-12-15', emplacement: 'A1' },
+    { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivrée', numCompte: '0123456789012', dateDemande: '2024-12-15', emplacement: 'A1' },
     { id: 2, typeCarte: 'C\'Jeune', nom: 'Trabelsi', prenom: 'Fatma', cin: '23456789', etat: 'en stock', numCompte: '1234567890123', dateDemande: '2024-12-10', emplacement: 'B2' },
     { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours', numCompte: '2345678901234', dateDemande: '2024-12-20', emplacement: 'C1' },
-    { id: 4, typeCarte: 'Mastercard', nom: 'Sassi', prenom: 'Amina', cin: '45678901', etat: 'délivré', numCompte: '3456789012345', dateDemande: '2024-12-05', emplacement: 'A3' },
+    { id: 4, typeCarte: 'Mastercard', nom: 'Sassi', prenom: 'Amina', cin: '45678901', etat: 'délivrée', numCompte: '3456789012345', dateDemande: '2024-12-05', emplacement: 'A3' },
     { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Mzoughi', prenom: 'Rami', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18', emplacement: 'B1' },
     { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours', numCompte: '5678901234567', dateDemande: '2024-12-12', emplacement: 'C3' },
-    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivré', numCompte: '6789012345678', dateDemande: '2024-12-08', emplacement: 'A2' },
+    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivrée', numCompte: '6789012345678', dateDemande: '2024-12-08', emplacement: 'A2' },
     { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2024-12-22', emplacement: 'B3' },
     { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours', numCompte: '8901234567890', dateDemande: '2024-12-03', emplacement: 'C2' },
-    { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivré', numCompte: '9012345678901', dateDemande: '2024-12-14', emplacement: 'A4' },
+    { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivrée', numCompte: '9012345678901', dateDemande: '2024-12-14', emplacement: 'A4' },
     { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock', numCompte: '0123456789013', dateDemande: '2024-12-25', emplacement: 'B4' },
     { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2024-12-17', emplacement: 'C4' }
   ]);
@@ -126,6 +126,7 @@ function App() {
         const atbRouge = [165, 28, 48];
         const atbGris = [102, 102, 102];
         const atbBleu = [0, 51, 102];
+        const atbVert = [46, 125, 50]; // Vert professionnel ATB
         const noir = [0, 0, 0];
         const blanc = [255, 255, 255];
         const grisClaire = [245, 245, 245];
@@ -197,9 +198,9 @@ function App() {
         
         // Couleur selon l'état avec badge
         let etatColor, etatBg;
-        if (selectedCarte.etat === 'délivré') {
-          etatColor = [76, 175, 80];
-          etatBg = [200, 230, 201];
+        if (selectedCarte.etat === 'délivrée') {
+          etatColor = atbVert; // Utilisation de la couleur verte ATB
+          etatBg = [232, 245, 233]; // Arrière-plan vert plus clair et moderne
         } else if (selectedCarte.etat === 'en cours') {
           etatColor = [255, 152, 0];
           etatBg = [255, 224, 178];
@@ -309,6 +310,11 @@ function App() {
         doc.setFont('helvetica', 'normal');
         doc.text(' Le client certifie avoir reçu sa carte bancaire en bon état et fonctionnelle.', 20, yPos);
         doc.text(' Le client s\'engage à respecter les conditions d\'utilisation de la carte.', 20, yPos + 7);
+        
+        // Ajouter une mention de validation avec couleur verte
+        doc.setFontSize(9);
+        doc.setTextColor(atbVert[0], atbVert[1], atbVert[2]); // Vert professionnel ATB
+        doc.text('✓ Document certifié conforme - ATB 2025', 20, yPos + 17);
         
         // ======= PIED DE PAGE PROFESSIONNEL =======
         yPos = 270;
@@ -849,7 +855,7 @@ function App() {
     // Page de consultation du stock
     if (currentPage === 'stock') {
       const totalCartes = stockData.length;
-      const cartesDelivrees = stockData.filter(carte => carte.etat === 'délivré').length;
+      const cartesDelivrees = stockData.filter(carte => carte.etat === 'délivrée').length;
       const cartesEnStock = stockData.filter(carte => carte.etat === 'en stock').length;
       const cartesEnCours = stockData.filter(carte => carte.etat === 'en cours').length;
 
@@ -972,7 +978,7 @@ function App() {
                     className="filter-select"
                   >
                     <option value="tous">Tous les états</option>
-                    <option value="délivré">Délivré</option>
+                    <option value="délivrée">Délivrée</option>
                     <option value="en stock">En stock</option>
                     <option value="en cours">En cours</option>
                   </select>
@@ -1487,7 +1493,7 @@ function App() {
                     >
                       <option value="en cours">En cours</option>
                       <option value="en stock">En stock</option>
-                      <option value="délivré">Délivré</option>
+                      <option value="délivrée">Délivrée</option>
                     </select>
                   </div>
                 </div>
