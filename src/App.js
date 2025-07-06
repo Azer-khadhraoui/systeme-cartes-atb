@@ -442,6 +442,10 @@ function App() {
 
           <main className="dashboard-main">
             <div className="form-container">
+              <div className="atb-logo-form">
+                <img src={atbLogo} alt="ATB Logo" className="form-logo" />
+                <h2>Arab Tunisian Bank</h2>
+              </div>
               <div className="form-header">
                 <h1 className="form-title">Nouvelle Demande de Carte</h1>
                 <p className="form-description">Remplissez les informations du client pour créer une nouvelle demande</p>
@@ -883,6 +887,12 @@ function App() {
                 <span className="bank-name">Arab Tunisian Bank</span>
               </div>
               <div className="user-section">
+                <button 
+                  onClick={() => setCurrentPage('stock')} 
+                  className="back-btn"
+                >
+                  ← Retour au stock
+                </button>
                 <span className="welcome-text">Bienvenue, {user.matricule}</span>
                 <button 
                   onClick={() => setUser(null)} 
@@ -896,16 +906,6 @@ function App() {
 
           <main className="dashboard-main">
             <div className="page-header">
-              <button 
-                onClick={() => setCurrentPage('stock')} 
-                className="back-btn"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M19 12H5"/>
-                  <path d="m12 19-7-7 7-7"/>
-                </svg>
-                Retour au stock
-              </button>
               <h1 className="page-title">Détails de la carte bancaire</h1>
             </div>
 
@@ -1082,6 +1082,12 @@ function App() {
                 <span className="bank-name">Arab Tunisian Bank</span>
               </div>
               <div className="user-section">
+                <button 
+                  onClick={() => setCurrentPage('stock')} 
+                  className="back-btn"
+                >
+                  ← Retour au stock
+                </button>
                 <span className="welcome-text">Bienvenue, {user.matricule}</span>
                 <button 
                   onClick={() => setUser(null)} 
@@ -1095,21 +1101,15 @@ function App() {
 
           <main className="dashboard-main">
             <div className="page-header">
-              <button 
-                onClick={() => setCurrentPage('stock')} 
-                className="back-btn"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M19 12H5"/>
-                  <path d="m12 19-7-7 7-7"/>
-                </svg>
-                Retour au stock
-              </button>
               <h1 className="page-title">Modifier la carte bancaire</h1>
               <p>Modifiez les informations de la carte de {carteToEdit.prenom} {carteToEdit.nom}</p>
             </div>
 
             <div className="form-container">
+              <div className="atb-logo-form">
+                <img src={atbLogo} alt="ATB Logo" className="form-logo" />
+                <h2>Arab Tunisian Bank</h2>
+              </div>
               <div className="form-header">
                 <h1 className="form-title">Modification de Carte</h1>
                 <p className="form-description">Modifiez les informations nécessaires</p>
