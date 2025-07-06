@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import atbLogo from './atb.png';
+import jsPDF from 'jspdf';
 
 function App() {
   // État pour gérer l'utilisateur connecté
@@ -78,8 +79,247 @@ function App() {
 
   const handleTelechargerPDF = () => {
     if (selectedCarte) {
-      alert(`Téléchargement du PDF pour ${selectedCarte.prenom} ${selectedCarte.nom}`);
-      // Ici vous pouvez ajouter la logique de génération PDF
+      try {
+        // Créer un nouveau document PDF
+        const doc = new jsPDF();
+        
+        // Configuration des couleurs ATB
+        const atbRouge = [165, 28, 48];
+        const atbRougeClair = [232, 212, 215];
+        const atbGris = [102, 102, 102];
+        const noir = [0, 0, 0];
+        const blanc = [255, 255, 255];
+        const vertSucces = [40, 167, 69];
+        const bleuInfo = [0, 123, 255];
+        const orangeAttention = [255, 193, 7];
+        
+        // En-tête élégant avec dégradé simulé
+        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.rect(0, 0, 210, 35, 'F');
+        
+        // Bande décorative
+        doc.setFillColor(atbRougeClair[0], atbRougeClair[1], atbRougeClair[2]);
+        doc.rect(0, 35, 210, 5, 'F');
+        
+        // Logo stylisé ATB
+        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.text('ATB', 20, 22);
+        
+        // Nom complet de la banque
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'normal');
+        doc.text('ARAB TUNISIAN BANK', 50, 22);
+        
+        // Sous-titre élégant
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'italic');
+        doc.text('Excellence bancaire - Innovation digitale', 20, 30);
+        
+        // Titre principal avec style
+        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setFontSize(20);
+        doc.setFont('helvetica', 'bold');
+        doc.text('FICHE DE DEMANDE DE CARTE BANCAIRE', 20, 55);
+        
+        // Ligne de séparation décorative
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(2);
+        doc.line(20, 60, 190, 60);
+        
+        // Petite ligne décorative
+        doc.setDrawColor(atbRougeClair[0], atbRougeClair[1], atbRougeClair[2]);
+        doc.setLineWidth(1);
+        doc.line(20, 63, 100, 63);
+        
+        // Informations de la carte avec style
+        let yPosition = 80;
+        
+        // ID de la demande avec encadré
+        doc.setFillColor(atbRougeClair[0], atbRougeClair[1], atbRougeClair[2]);
+        doc.roundedRect(20, yPosition - 5, 60, 12, 2, 2, 'F');
+        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`DEMANDE #${selectedCarte.id}`, 25, yPosition + 2);
+        
+        // Date et heure de génération stylisée
+        const maintenant = new Date();
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.text(`Généré le: ${maintenant.toLocaleDateString('fr-FR')} à ${maintenant.toLocaleTimeString('fr-FR')}`, 90, yPosition + 2);
+        yPosition += 25;
+        
+        // Section Informations personnelles avec style moderne
+        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.rect(20, yPosition, 170, 8, 'F');
+        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text(' INFORMATIONS PERSONNELLES', 25, yPosition + 6);
+        yPosition += 15;
+        
+        // Cadre élégant pour les informations personnelles
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(1);
+        doc.setFillColor(250, 250, 250);
+        doc.roundedRect(20, yPosition, 170, 45, 3, 3, 'FD');
+        yPosition += 12;
+        
+        doc.setTextColor(noir[0], noir[1], noir[2]);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        
+        // Informations avec icônes et style
+        doc.setFont('helvetica', 'bold');
+        doc.text('Nom complet:', 25, yPosition);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`${selectedCarte.prenom} ${selectedCarte.nom}`, 70, yPosition);
+        yPosition += 10;
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('CIN:', 25, yPosition);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`${selectedCarte.cin}`, 70, yPosition);
+        yPosition += 10;
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('Statut:', 25, yPosition);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Client ATB', 70, yPosition);
+        yPosition += 25;
+        
+        // Section Informations bancaires avec style moderne
+        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.rect(20, yPosition, 170, 8, 'F');
+        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text(' INFORMATIONS BANCAIRES', 25, yPosition + 6);
+        yPosition += 15;
+        
+        // Cadre élégant pour les informations bancaires
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(1);
+        doc.setFillColor(250, 250, 250);
+        doc.roundedRect(20, yPosition, 170, 45, 3, 3, 'FD');
+        yPosition += 12;
+        
+        doc.setTextColor(noir[0], noir[1], noir[2]);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('Numéro de compte:', 25, yPosition);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`${selectedCarte.numCompte}`, 80, yPosition);
+        yPosition += 10;
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('Type de carte:', 25, yPosition);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`${selectedCarte.typeCarte}`, 80, yPosition);
+        yPosition += 10;
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('Date de demande:', 25, yPosition);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`${new Date(selectedCarte.dateDemande).toLocaleDateString('fr-FR')}`, 80, yPosition);
+        yPosition += 25;
+        
+        // Section État avec badge coloré
+        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.rect(20, yPosition, 170, 8, 'F');
+        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text(' ÉTAT DE LA DEMANDE', 25, yPosition + 6);
+        yPosition += 15;
+        
+        // Badge d'état coloré
+        let couleurEtat, texteEtat;
+        if (selectedCarte.etat === 'délivré') {
+          couleurEtat = vertSucces;
+          texteEtat = ' DÉLIVRÉ';
+        } else if (selectedCarte.etat === 'en cours') {
+          couleurEtat = bleuInfo;
+          texteEtat = ' EN COURS';
+        } else {
+          couleurEtat = orangeAttention;
+          texteEtat = ' EN STOCK';
+        }
+        
+        doc.setFillColor(couleurEtat[0], couleurEtat[1], couleurEtat[2]);
+        doc.roundedRect(20, yPosition, 80, 15, 3, 3, 'F');
+        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(texteEtat, 25, yPosition + 10);
+        yPosition += 25;
+        
+        // Section signature élégante
+        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.rect(20, yPosition, 170, 8, 'F');
+        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text(' SIGNATURE DU CLIENT', 25, yPosition + 6);
+        yPosition += 15;
+        
+        // Cadre élégant pour la signature
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(1);
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(20, yPosition, 170, 35, 3, 3, 'FD');
+        
+        // Lignes de signature
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.5);
+        doc.line(30, yPosition + 20, 180, yPosition + 20);
+        doc.line(30, yPosition + 25, 180, yPosition + 25);
+        
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'italic');
+        doc.text('Signature du client et date:', 30, yPosition + 15);
+        yPosition += 45;
+        
+        // Pied de page élégant
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(2);
+        doc.line(20, yPosition, 190, yPosition);
+        
+        // Bande de pied de page
+        doc.setFillColor(atbRougeClair[0], atbRougeClair[1], atbRougeClair[2]);
+        doc.rect(0, yPosition + 5, 210, 20, 'F');
+        
+        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Arab Tunisian Bank', 20, yPosition + 15);
+        
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text('Système de gestion des cartes bancaires', 20, yPosition + 20);
+        
+        // Informations de génération à droite
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.text(`Document généré le ${maintenant.toLocaleDateString('fr-FR')}`, 130, yPosition + 15);
+        doc.text('Document confidentiel - Usage interne uniquement', 130, yPosition + 20);
+        
+        // Sauvegarder le PDF
+        const nomFichier = `ATB_Demande_Carte_${selectedCarte.nom}_${selectedCarte.prenom}_${selectedCarte.id}.pdf`;
+        doc.save(nomFichier);
+        
+        // Message de succès stylisé
+        alert(`🎉 PDF généré avec succès !\n\n📁 Fichier: ${nomFichier}\n📊 Contenu: Fiche complète de demande de carte\n🔐 Sécurisé et prêt pour signature`);
+        
+      } catch (error) {
+        console.error('Erreur lors de la génération du PDF:', error);
+        alert('❌ Erreur lors de la génération du PDF. Veuillez réessayer.');
+      }
     }
   };
 
