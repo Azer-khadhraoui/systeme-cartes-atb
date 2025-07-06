@@ -115,11 +115,234 @@ function App() {
   const handleTelechargerPDF = () => {
     if (selectedCarte) {
       try {
-        // ...existing code...
+        // Créer une nouvelle instance jsPDF
+        const doc = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4'
+        });
+        
+        // Configuration des couleurs ATB
+        const atbRouge = [165, 28, 48];
+        const atbGris = [102, 102, 102];
+        const atbBleu = [0, 51, 102];
+        const noir = [0, 0, 0];
+        const blanc = [255, 255, 255];
+        const grisClaire = [245, 245, 245];
+        
+        // ======= HEADER PROFESSIONNEL =======
+        // Arrière-plan header
+        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.rect(0, 0, 210, 50, 'F');
+        
+        // Logo ATB (simulation avec texte stylisé)
+        doc.setFontSize(28);
+        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text('ATB', 20, 25);
+        
+        // Nom de la banque
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'normal');
+        doc.text('ARAB TUNISIAN BANK', 20, 35);
+        
+        // Titre du document
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
+        doc.text('FICHE DE CARTE BANCAIRE', 210 - 20, 30, { align: 'right' });
+        
+        // Numéro de référence
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Réf: ATB-${selectedCarte.id}-${new Date().getFullYear()}`, 210 - 20, 40, { align: 'right' });
+        
+        // ======= INFORMATIONS DE LA CARTE =======
+        let yPos = 70;
+        
+        // Section avec arrière-plan
+        doc.setFillColor(grisClaire[0], grisClaire[1], grisClaire[2]);
+        doc.rect(15, yPos - 5, 180, 8, 'F');
+        
+        doc.setFontSize(14);
+        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text(' INFORMATIONS DE LA CARTE', 20, yPos);
+        
+        yPos += 15;
+        
+        // Cadre pour les informations
+        doc.setDrawColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setLineWidth(0.5);
+        doc.rect(15, yPos, 180, 45);
+        
+        yPos += 10;
+        doc.setFontSize(11);
+        doc.setTextColor(noir[0], noir[1], noir[2]);
+        doc.setFont('helvetica', 'bold');
+        
+        // Première ligne
+        doc.text('Type de carte:', 20, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(selectedCarte.typeCarte, 65, yPos);
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('ID Carte:', 120, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`#${selectedCarte.id}`, 145, yPos);
+        
+        yPos += 10;
+        doc.setFont('helvetica', 'bold');
+        doc.text('État:', 20, yPos);
+        
+        // Couleur selon l'état avec badge
+        let etatColor, etatBg;
+        if (selectedCarte.etat === 'délivré') {
+          etatColor = [76, 175, 80];
+          etatBg = [200, 230, 201];
+        } else if (selectedCarte.etat === 'en cours') {
+          etatColor = [255, 152, 0];
+          etatBg = [255, 224, 178];
+        } else {
+          etatColor = [33, 150, 243];
+          etatBg = [187, 222, 251];
+        }
+        
+        // Badge pour l'état
+        doc.setFillColor(etatBg[0], etatBg[1], etatBg[2]);
+        doc.roundedRect(63, yPos - 4, 35, 7, 2, 2, 'F');
+        doc.setTextColor(etatColor[0], etatColor[1], etatColor[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text(selectedCarte.etat.toUpperCase(), 65, yPos);
+        
+        doc.setTextColor(noir[0], noir[1], noir[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Emplacement:', 120, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(selectedCarte.emplacement || 'Non défini', 160, yPos);
+        
+        yPos += 10;
+        doc.setFont('helvetica', 'bold');
+        doc.text('Date de demande:', 20, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(new Date(selectedCarte.dateDemande).toLocaleDateString('fr-FR'), 65, yPos);
+        
+        // ======= INFORMATIONS DU CLIENT =======
+        yPos += 25;
+        
+        // Section avec arrière-plan
+        doc.setFillColor(grisClaire[0], grisClaire[1], grisClaire[2]);
+        doc.rect(15, yPos - 5, 180, 8, 'F');
+        
+        doc.setFontSize(14);
+        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text(' INFORMATIONS DU CLIENT', 20, yPos);
+        
+        yPos += 15;
+        
+        // Cadre pour les informations client
+        doc.setDrawColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.rect(15, yPos, 180, 35);
+        
+        yPos += 10;
+        doc.setFontSize(11);
+        doc.setTextColor(noir[0], noir[1], noir[2]);
+        doc.setFont('helvetica', 'bold');
+        
+        // Informations client
+        doc.text('Nom complet:', 20, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`${selectedCarte.prenom} ${selectedCarte.nom}`, 65, yPos);
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('CIN:', 120, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(selectedCarte.cin, 140, yPos);
+        
+        yPos += 10;
+        doc.setFont('helvetica', 'bold');
+        doc.text('N° de compte:', 20, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(selectedCarte.numCompte, 65, yPos);
+        
+        // ======= SECTION SIGNATURE =======
+        yPos += 30;
+        
+        // Section avec arrière-plan
+        doc.setFillColor(grisClaire[0], grisClaire[1], grisClaire[2]);
+        doc.rect(15, yPos - 5, 180, 8, 'F');
+        
+        doc.setFontSize(14);
+        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text(' SIGNATURE ET VALIDATION', 20, yPos);
+        
+        yPos += 15;
+        
+        // Cadre signature avec design amélioré
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(1);
+        doc.rect(20, yPos, 170, 45);
+        
+        // Ligne pointillée pour la signature
+        doc.setLineDash([2, 2]);
+        doc.setDrawColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.line(30, yPos + 35, 180, yPos + 35);
+        doc.setLineDash([]);
+        
+        doc.setFontSize(10);
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setFont('helvetica', 'italic');
+        doc.text('Signature du client', 30, yPos + 15);
+        doc.text('(Obligatoire pour validation)', 30, yPos + 25);
+        
+        // Date de signature
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Date: ${new Date().toLocaleDateString('fr-FR')}`, 140, yPos + 15);
+        
+        yPos += 55;
+        
+        // Attestation
+        doc.setFontSize(10);
+        doc.setTextColor(noir[0], noir[1], noir[2]);
+        doc.setFont('helvetica', 'normal');
+        doc.text(' Le client certifie avoir reçu sa carte bancaire en bon état et fonctionnelle.', 20, yPos);
+        doc.text(' Le client s\'engage à respecter les conditions d\'utilisation de la carte.', 20, yPos + 7);
+        
+        // ======= PIED DE PAGE PROFESSIONNEL =======
+        yPos = 270;
+        
+        // Ligne de séparation
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(0.5);
+        doc.line(20, yPos, 190, yPos);
+        
+        yPos += 10;
+        
+        // Informations du pied de page
+        doc.setFontSize(8);
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Document généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 20, yPos);
+        doc.text('Arab Tunisian Bank - Système de gestion des cartes v2.0', 20, yPos + 5);
+        
+        // Contact et mentions légales
+        doc.text(' (+216) 71 000 000 |  contact@atb.com.tn |  www.atb.com.tn', 20, yPos + 12);
+        doc.text('© 2025 Arab Tunisian Bank - Tous droits réservés', 20, yPos + 17);
+        
+        // Télécharger le PDF
+        const fileName = `ATB_Carte_${selectedCarte.typeCarte.replace(/[^a-zA-Z0-9]/g, '_')}_${selectedCarte.nom}_${selectedCarte.prenom}_${new Date().toISOString().split('T')[0]}.pdf`;
+        doc.save(fileName);
+        
+        alert('✅ PDF généré avec succès !\n\n📄 Document professionnel créé avec:\n• Design ATB moderne\n• Informations complètes\n• Section signature\n• Références et contacts');
+        
       } catch (error) {
         console.error('Erreur lors de la génération du PDF:', error);
-        alert('❌ Erreur lors de la génération du PDF. Veuillez réessayer.');
+        alert(`❌ Erreur lors de la génération du PDF: ${error.message}`);
       }
+    } else {
+      alert('❌ Aucune carte sélectionnée pour générer le PDF.');
     }
   };
 
@@ -1467,7 +1690,7 @@ function App() {
 
   // Sinon, afficher le formulaire de connexion
   return (
-    <div className="App">
+    <div className="App" data-page={isSignUp ? 'signup' : 'login'}>
       <div className={`login-container ${isSignUp ? 'signup-container' : ''}`}>
         <div className={`login-card ${isSignUp ? 'signup-mode' : 'login-mode'}`}>
           <div className="login-header">
@@ -1517,7 +1740,7 @@ function App() {
                 </div>
 
                 <div className="form-row">
-                  <div className="form-group">
+                  <div className="form-group full-width">
                     <label htmlFor="matricule">Matricule *</label>
                     <input
                       type="text"
@@ -1530,10 +1753,6 @@ function App() {
                       required
                     />
                     {errors.matricule && <span className="error-message">{errors.matricule}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    {/* Champ vide pour maintenir l'alignement */}
                   </div>
                 </div>
 
