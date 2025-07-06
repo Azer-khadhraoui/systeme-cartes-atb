@@ -134,23 +134,15 @@ function App() {
         doc.line(20, 63, 100, 63);
         
         // Informations de la carte avec style
-        let yPosition = 80;
-        
-        // ID de la demande avec encadré
-        doc.setFillColor(atbRougeClair[0], atbRougeClair[1], atbRougeClair[2]);
-        doc.roundedRect(20, yPosition - 5, 60, 12, 2, 2, 'F');
-        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`DEMANDE #${selectedCarte.id}`, 25, yPosition + 2);
+        let yPosition = 75;
         
         // Date et heure de génération stylisée
         const maintenant = new Date();
         doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
-        doc.text(`Généré le: ${maintenant.toLocaleDateString('fr-FR')} à ${maintenant.toLocaleTimeString('fr-FR')}`, 90, yPosition + 2);
-        yPosition += 25;
+        doc.text(`Document généré le: ${maintenant.toLocaleDateString('fr-FR')} à ${maintenant.toLocaleTimeString('fr-FR')}`, 20, yPosition);
+        yPosition += 20;
         
         // Section Informations personnelles avec style moderne
         doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
@@ -165,11 +157,11 @@ function App() {
         doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
         doc.setLineWidth(1);
         doc.setFillColor(250, 250, 250);
-        doc.roundedRect(20, yPosition, 170, 45, 3, 3, 'FD');
-        yPosition += 12;
+        doc.roundedRect(20, yPosition, 170, 35, 3, 3, 'FD');
+        yPosition += 10;
         
         doc.setTextColor(noir[0], noir[1], noir[2]);
-        doc.setFontSize(12);
+        doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
         
         // Informations avec icônes et style
@@ -177,19 +169,19 @@ function App() {
         doc.text('Nom complet:', 25, yPosition);
         doc.setFont('helvetica', 'normal');
         doc.text(`${selectedCarte.prenom} ${selectedCarte.nom}`, 70, yPosition);
-        yPosition += 10;
+        yPosition += 8;
         
         doc.setFont('helvetica', 'bold');
         doc.text('CIN:', 25, yPosition);
         doc.setFont('helvetica', 'normal');
         doc.text(`${selectedCarte.cin}`, 70, yPosition);
-        yPosition += 10;
+        yPosition += 8;
         
         doc.setFont('helvetica', 'bold');
         doc.text('Statut:', 25, yPosition);
         doc.setFont('helvetica', 'normal');
         doc.text('Client ATB', 70, yPosition);
-        yPosition += 25;
+        yPosition += 20;
         
         // Section Informations bancaires avec style moderne
         doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
@@ -204,30 +196,30 @@ function App() {
         doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
         doc.setLineWidth(1);
         doc.setFillColor(250, 250, 250);
-        doc.roundedRect(20, yPosition, 170, 45, 3, 3, 'FD');
-        yPosition += 12;
+        doc.roundedRect(20, yPosition, 170, 35, 3, 3, 'FD');
+        yPosition += 10;
         
         doc.setTextColor(noir[0], noir[1], noir[2]);
-        doc.setFontSize(12);
+        doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
         
         doc.setFont('helvetica', 'bold');
         doc.text('Numéro de compte:', 25, yPosition);
         doc.setFont('helvetica', 'normal');
         doc.text(`${selectedCarte.numCompte}`, 80, yPosition);
-        yPosition += 10;
+        yPosition += 8;
         
         doc.setFont('helvetica', 'bold');
         doc.text('Type de carte:', 25, yPosition);
         doc.setFont('helvetica', 'normal');
         doc.text(`${selectedCarte.typeCarte}`, 80, yPosition);
-        yPosition += 10;
+        yPosition += 8;
         
         doc.setFont('helvetica', 'bold');
         doc.text('Date de demande:', 25, yPosition);
         doc.setFont('helvetica', 'normal');
         doc.text(`${new Date(selectedCarte.dateDemande).toLocaleDateString('fr-FR')}`, 80, yPosition);
-        yPosition += 25;
+        yPosition += 20;
         
         // Section État avec badge coloré
         doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
@@ -252,12 +244,12 @@ function App() {
         }
         
         doc.setFillColor(couleurEtat[0], couleurEtat[1], couleurEtat[2]);
-        doc.roundedRect(20, yPosition, 80, 15, 3, 3, 'F');
+        doc.roundedRect(20, yPosition, 80, 12, 3, 3, 'F');
         doc.setTextColor(blanc[0], blanc[1], blanc[2]);
-        doc.setFontSize(12);
+        doc.setFontSize(11);
         doc.setFont('helvetica', 'bold');
-        doc.text(texteEtat, 25, yPosition + 10);
-        yPosition += 25;
+        doc.text(texteEtat, 25, yPosition + 8);
+        yPosition += 20;
         
         // Section signature élégante
         doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
@@ -268,23 +260,71 @@ function App() {
         doc.text(' SIGNATURE DU CLIENT', 25, yPosition + 6);
         yPosition += 15;
         
-        // Cadre élégant pour la signature
+        // Cadre pour la signature avec dimensions optimisées
         doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setLineWidth(1);
+        doc.setLineWidth(2);
         doc.setFillColor(255, 255, 255);
         doc.roundedRect(20, yPosition, 170, 35, 3, 3, 'FD');
         
-        // Lignes de signature
-        doc.setDrawColor(200, 200, 200);
-        doc.setLineWidth(0.5);
-        doc.line(30, yPosition + 20, 180, yPosition + 20);
-        doc.line(30, yPosition + 25, 180, yPosition + 25);
-        
+        // Zone signature à gauche
         doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
         doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Signature du client:', 25, yPosition + 10);
+        
+        // Rectangle de signature bien visible
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(1.5);
+        doc.rect(25, yPosition + 12, 70, 20);
+        
+        // Zone date à droite
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Date de signature:', 110, yPosition + 10);
+        
+        // Rectangle pour la date
+        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setLineWidth(1.5);
+        doc.rect(110, yPosition + 12, 50, 20);
+        
+        // Date du jour pré-remplie
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text(maintenant.toLocaleDateString('fr-FR'), 112, yPosition + 24);
+        yPosition += 40;
+        
+        
+        // Note légale compacte
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setFontSize(8);
         doc.setFont('helvetica', 'italic');
-        doc.text('Signature du client et date:', 30, yPosition + 15);
-        yPosition += 45;
+        doc.text('En signant, le client confirme avoir pris connaissance des conditions générales.', 25, yPosition + 5);
+        yPosition += 15;
+        
+        // Section validation interne compacte
+        doc.setFillColor(240, 240, 240);
+        doc.rect(20, yPosition, 170, 20, 'F');
+        
+        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.text('VALIDATION INTERNE', 25, yPosition + 8);
+        
+        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Visa:', 25, yPosition + 16);
+        doc.text('Date:', 100, yPosition + 16);
+        
+        // Lignes pour la validation
+        doc.setDrawColor(atbGris[0], atbGris[1], atbGris[2]);
+        doc.setLineWidth(0.5);
+        doc.line(45, yPosition + 17, 85, yPosition + 17);
+        doc.line(120, yPosition + 17, 180, yPosition + 17);
+        
+        yPosition += 30;
         
         // Pied de page élégant
         doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
