@@ -25,8 +25,7 @@ function App() {
     prenom: '',
     matricule: '',
     password: '',
-    confirmPassword: '',
-    emplacement: ''
+    confirmPassword: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -38,7 +37,8 @@ function App() {
     cin: '',
     numCompte: '',
     typeCarte: 'visa-electron-debit',
-    dateDemande: new Date().toISOString().split('T')[0] // Date actuelle automatique
+    dateDemande: new Date().toISOString().split('T')[0], // Date actuelle automatique
+    emplacement: ''
   });
 
   // État pour les données du stock des cartes
@@ -296,10 +296,6 @@ function App() {
       } else if (signUpData.password !== signUpData.confirmPassword) {
         newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
       }
-      
-      if (!signUpData.emplacement.trim()) {
-        newErrors.emplacement = 'Emplacement requis';
-      }
     } else {
       // Validation pour la connexion
       if (!formData.matricule.trim()) {
@@ -339,6 +335,10 @@ function App() {
       newErrors.numCompte = 'Le numéro de compte doit contenir au moins 10 chiffres';
     }
     
+    if (!demandeData.emplacement.trim()) {
+      newErrors.emplacement = 'Emplacement requis';
+    }
+    
     return newErrors;
   };
 
@@ -358,8 +358,7 @@ function App() {
           prenom: '',
           matricule: '',
           password: '',
-          confirmPassword: '',
-          emplacement: ''
+          confirmPassword: ''
         });
       } else {
         // Logique de connexion
@@ -387,7 +386,8 @@ function App() {
         cin: '',
         numCompte: '',
         typeCarte: 'visa-electron-debit',
-        dateDemande: new Date().toISOString().split('T')[0]
+        dateDemande: new Date().toISOString().split('T')[0],
+        emplacement: ''
       });
       setCurrentPage('dashboard');
       setErrors({});
@@ -558,6 +558,23 @@ function App() {
                   </div>
 
                   <div className="form-group">
+                    <label htmlFor="emplacement">Emplacement de la carte *</label>
+                    <input
+                      type="text"
+                      id="emplacement"
+                      name="emplacement"
+                      value={demandeData.emplacement}
+                      onChange={handleFormChange}
+                      className={errors.emplacement ? 'error' : ''}
+                      placeholder="Ex: A1, A2, C1, B3..."
+                      required
+                    />
+                    {errors.emplacement && <span className="error-message">{errors.emplacement}</span>}
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
                     <label htmlFor="dateDemande">Date de demande</label>
                     <input
                       type="date"
@@ -568,6 +585,10 @@ function App() {
                       readOnly
                     />
                     <small className="form-help">Date automatiquement générée</small>
+                  </div>
+
+                  <div className="form-group">
+                    {/* Champ vide pour maintenir l'alignement */}
                   </div>
                 </div>
 
@@ -1289,6 +1310,10 @@ function App() {
                     />
                     <small className="form-help">Date de demande originale (non modifiable)</small>
                   </div>
+
+                  <div className="form-group">
+                    {/* Champ vide pour maintenir l'alignement */}
+                  </div>
                 </div>
 
                 <div className="form-actions">
@@ -1508,18 +1533,7 @@ function App() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="emplacement">Emplacement  de la carte *</label>
-                    <input
-                      type="text"
-                      id="emplacement"
-                      name="emplacement"
-                      value={signUpData.emplacement}
-                      onChange={handleFormChange}
-                      className={errors.emplacement ? 'error' : ''}
-                      placeholder="Ex: A1, A2, C1, B3..."
-                      required
-                    />
-                    {errors.emplacement && <span className="error-message">{errors.emplacement}</span>}
+                    {/* Champ vide pour maintenir l'alignement */}
                   </div>
                 </div>
 
