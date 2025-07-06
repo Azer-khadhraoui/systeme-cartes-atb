@@ -59,6 +59,11 @@ function App() {
   // État pour la carte sélectionnée pour visualisation
   const [selectedCarte, setSelectedCarte] = useState(null);
 
+  // États pour la recherche et les filtres
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterEtat, setFilterEtat] = useState('tous');
+  const [filterType, setFilterType] = useState('tous');
+
   // Fonctions pour les actions des boutons
   const handleVoirCarte = (carte) => {
     setSelectedCarte(carte);
@@ -80,287 +85,40 @@ function App() {
   const handleTelechargerPDF = () => {
     if (selectedCarte) {
       try {
-        // Créer un nouveau document PDF
-        const doc = new jsPDF();
-        
-        // Configuration des couleurs ATB
-        const atbRouge = [165, 28, 48];
-        const atbRougeClair = [232, 212, 215];
-        const atbGris = [102, 102, 102];
-        const noir = [0, 0, 0];
-        const blanc = [255, 255, 255];
-        const vertSucces = [40, 167, 69];
-        const bleuInfo = [0, 123, 255];
-        const orangeAttention = [255, 193, 7];
-        
-        // En-tête élégant avec dégradé simulé
-        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.rect(0, 0, 210, 35, 'F');
-        
-        // Bande décorative
-        doc.setFillColor(atbRougeClair[0], atbRougeClair[1], atbRougeClair[2]);
-        doc.rect(0, 35, 210, 5, 'F');
-        
-        // Logo stylisé ATB
-        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
-        doc.setFontSize(24);
-        doc.setFont('helvetica', 'bold');
-        doc.text('ATB', 20, 22);
-        
-        // Nom complet de la banque
-        doc.setFontSize(16);
-        doc.setFont('helvetica', 'normal');
-        doc.text('ARAB TUNISIAN BANK', 50, 22);
-        
-        // Sous-titre élégant
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'italic');
-        doc.text('Excellence bancaire - Innovation digitale', 20, 30);
-        
-        // Titre principal avec style
-        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setFontSize(20);
-        doc.setFont('helvetica', 'bold');
-        doc.text('FICHE DE DEMANDE DE CARTE BANCAIRE', 20, 55);
-        
-        // Ligne de séparation décorative
-        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setLineWidth(2);
-        doc.line(20, 60, 190, 60);
-        
-        // Petite ligne décorative
-        doc.setDrawColor(atbRougeClair[0], atbRougeClair[1], atbRougeClair[2]);
-        doc.setLineWidth(1);
-        doc.line(20, 63, 100, 63);
-        
-        // Informations de la carte avec style
-        let yPosition = 75;
-        
-        // Date et heure de génération stylisée
-        const maintenant = new Date();
-        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.text(`Document généré le: ${maintenant.toLocaleDateString('fr-FR')} à ${maintenant.toLocaleTimeString('fr-FR')}`, 20, yPosition);
-        yPosition += 20;
-        
-        // Section Informations personnelles avec style moderne
-        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.rect(20, yPosition, 170, 8, 'F');
-        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.text(' INFORMATIONS PERSONNELLES', 25, yPosition + 6);
-        yPosition += 15;
-        
-        // Cadre élégant pour les informations personnelles
-        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setLineWidth(1);
-        doc.setFillColor(250, 250, 250);
-        doc.roundedRect(20, yPosition, 170, 35, 3, 3, 'FD');
-        yPosition += 10;
-        
-        doc.setTextColor(noir[0], noir[1], noir[2]);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'normal');
-        
-        // Informations avec icônes et style
-        doc.setFont('helvetica', 'bold');
-        doc.text('Nom complet:', 25, yPosition);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`${selectedCarte.prenom} ${selectedCarte.nom}`, 70, yPosition);
-        yPosition += 8;
-        
-        doc.setFont('helvetica', 'bold');
-        doc.text('CIN:', 25, yPosition);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`${selectedCarte.cin}`, 70, yPosition);
-        yPosition += 8;
-        
-        doc.setFont('helvetica', 'bold');
-        doc.text('Statut:', 25, yPosition);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Client ATB', 70, yPosition);
-        yPosition += 20;
-        
-        // Section Informations bancaires avec style moderne
-        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.rect(20, yPosition, 170, 8, 'F');
-        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.text(' INFORMATIONS BANCAIRES', 25, yPosition + 6);
-        yPosition += 15;
-        
-        // Cadre élégant pour les informations bancaires
-        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setLineWidth(1);
-        doc.setFillColor(250, 250, 250);
-        doc.roundedRect(20, yPosition, 170, 35, 3, 3, 'FD');
-        yPosition += 10;
-        
-        doc.setTextColor(noir[0], noir[1], noir[2]);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'normal');
-        
-        doc.setFont('helvetica', 'bold');
-        doc.text('Numéro de compte:', 25, yPosition);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`${selectedCarte.numCompte}`, 80, yPosition);
-        yPosition += 8;
-        
-        doc.setFont('helvetica', 'bold');
-        doc.text('Type de carte:', 25, yPosition);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`${selectedCarte.typeCarte}`, 80, yPosition);
-        yPosition += 8;
-        
-        doc.setFont('helvetica', 'bold');
-        doc.text('Date de demande:', 25, yPosition);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`${new Date(selectedCarte.dateDemande).toLocaleDateString('fr-FR')}`, 80, yPosition);
-        yPosition += 20;
-        
-        // Section État avec badge coloré
-        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.rect(20, yPosition, 170, 8, 'F');
-        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.text(' ÉTAT DE LA DEMANDE', 25, yPosition + 6);
-        yPosition += 15;
-        
-        // Badge d'état coloré
-        let couleurEtat, texteEtat;
-        if (selectedCarte.etat === 'délivré') {
-          couleurEtat = vertSucces;
-          texteEtat = ' DÉLIVRÉ';
-        } else if (selectedCarte.etat === 'en cours') {
-          couleurEtat = bleuInfo;
-          texteEtat = ' EN COURS';
-        } else {
-          couleurEtat = orangeAttention;
-          texteEtat = ' EN STOCK';
-        }
-        
-        doc.setFillColor(couleurEtat[0], couleurEtat[1], couleurEtat[2]);
-        doc.roundedRect(20, yPosition, 80, 12, 3, 3, 'F');
-        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text(texteEtat, 25, yPosition + 8);
-        yPosition += 20;
-        
-        // Section signature élégante
-        doc.setFillColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.rect(20, yPosition, 170, 8, 'F');
-        doc.setTextColor(blanc[0], blanc[1], blanc[2]);
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.text(' SIGNATURE DU CLIENT', 25, yPosition + 6);
-        yPosition += 15;
-        
-        // Cadre pour la signature avec dimensions optimisées
-        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setLineWidth(2);
-        doc.setFillColor(255, 255, 255);
-        doc.roundedRect(20, yPosition, 170, 35, 3, 3, 'FD');
-        
-        // Zone signature à gauche
-        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Signature du client:', 25, yPosition + 10);
-        
-        // Rectangle de signature bien visible
-        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setLineWidth(1.5);
-        doc.rect(25, yPosition + 12, 70, 20);
-        
-        // Zone date à droite
-        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Date de signature:', 110, yPosition + 10);
-        
-        // Rectangle pour la date
-        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setLineWidth(1.5);
-        doc.rect(110, yPosition + 12, 50, 20);
-        
-        // Date du jour pré-remplie
-        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'normal');
-        doc.text(maintenant.toLocaleDateString('fr-FR'), 112, yPosition + 24);
-        yPosition += 40;
-        
-        
-        // Note légale compacte
-        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
-        doc.setFontSize(8);
-        doc.setFont('helvetica', 'italic');
-        doc.text('En signant, le client confirme avoir pris connaissance des conditions générales.', 25, yPosition + 5);
-        yPosition += 15;
-        
-        // Section validation interne compacte
-        doc.setFillColor(240, 240, 240);
-        doc.rect(20, yPosition, 170, 20, 'F');
-        
-        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text('VALIDATION INTERNE', 25, yPosition + 8);
-        
-        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Visa:', 25, yPosition + 16);
-        doc.text('Date:', 100, yPosition + 16);
-        
-        // Lignes pour la validation
-        doc.setDrawColor(atbGris[0], atbGris[1], atbGris[2]);
-        doc.setLineWidth(0.5);
-        doc.line(45, yPosition + 17, 85, yPosition + 17);
-        doc.line(120, yPosition + 17, 180, yPosition + 17);
-        
-        yPosition += 30;
-        
-        // Pied de page élégant
-        doc.setDrawColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setLineWidth(2);
-        doc.line(20, yPosition, 190, yPosition);
-        
-        // Bande de pied de page
-        doc.setFillColor(atbRougeClair[0], atbRougeClair[1], atbRougeClair[2]);
-        doc.rect(0, yPosition + 5, 210, 20, 'F');
-        
-        doc.setTextColor(atbRouge[0], atbRouge[1], atbRouge[2]);
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Arab Tunisian Bank', 20, yPosition + 15);
-        
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8);
-        doc.text('Système de gestion des cartes bancaires', 20, yPosition + 20);
-        
-        // Informations de génération à droite
-        doc.setTextColor(atbGris[0], atbGris[1], atbGris[2]);
-        doc.text(`Document généré le ${maintenant.toLocaleDateString('fr-FR')}`, 130, yPosition + 15);
-        doc.text('Document confidentiel - Usage interne uniquement', 130, yPosition + 20);
-        
-        // Sauvegarder le PDF
-        const nomFichier = `ATB_Demande_Carte_${selectedCarte.nom}_${selectedCarte.prenom}_${selectedCarte.id}.pdf`;
-        doc.save(nomFichier);
-        
-        // Message de succès stylisé
-        alert(`🎉 PDF généré avec succès !\n\n📁 Fichier: ${nomFichier}\n📊 Contenu: Fiche complète de demande de carte\n🔐 Sécurisé et prêt pour signature`);
-        
+        // ...existing code...
       } catch (error) {
         console.error('Erreur lors de la génération du PDF:', error);
         alert('❌ Erreur lors de la génération du PDF. Veuillez réessayer.');
       }
     }
+  };
+
+  // Fonction pour filtrer et rechercher dans les cartes
+  const getFilteredCartes = () => {
+    return stockData.filter(carte => {
+      // Recherche textuelle
+      const searchMatch = searchTerm === '' || 
+        carte.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        carte.prenom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        carte.cin.includes(searchTerm) ||
+        carte.typeCarte.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        carte.numCompte.includes(searchTerm);
+
+      // Filtre par état
+      const etatMatch = filterEtat === 'tous' || carte.etat === filterEtat;
+
+      // Filtre par type
+      const typeMatch = filterType === 'tous' || carte.typeCarte === filterType;
+
+      return searchMatch && etatMatch && typeMatch;
+    });
+  };
+
+  // Fonction pour réinitialiser les filtres
+  const resetFilters = () => {
+    setSearchTerm('');
+    setFilterEtat('tous');
+    setFilterType('tous');
   };
 
   const handleChange = (e) => {
@@ -813,7 +571,82 @@ function App() {
               </div>
             </div>
 
+            {/* Section de recherche et filtres */}
+            <div className="search-filter-section">
+              <div className="search-container">
+                <div className="search-input-wrapper">
+                  <input
+                    type="text"
+                    placeholder="Rechercher par nom, prénom, CIN, type de carte ou numéro de compte..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                  />
+                  <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div className="filters-container">
+                <div className="filter-group">
+                  <label htmlFor="filter-etat">État :</label>
+                  <select
+                    id="filter-etat"
+                    value={filterEtat}
+                    onChange={(e) => setFilterEtat(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="tous">Tous les états</option>
+                    <option value="délivré">Délivré</option>
+                    <option value="en stock">En stock</option>
+                    <option value="en cours">En cours</option>
+                  </select>
+                </div>
+
+                <div className="filter-group">
+                  <label htmlFor="filter-type">Type de carte :</label>
+                  <select
+                    id="filter-type"
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="tous">Tous les types</option>
+                    <option value="Visa Electron Debit">Visa Electron Debit</option>
+                    <option value="C'Jeune">C'Jeune</option>
+                    <option value="Visa Classique Nationale">Visa Classique Nationale</option>
+                    <option value="Mastercard">Mastercard</option>
+                    <option value="Virtuelle E‑pay">Virtuelle E‑pay</option>
+                    <option value="Technologique (CTI)">Technologique (CTI)</option>
+                    <option value="VISA Gold">VISA Gold</option>
+                    <option value="Mastercard World">Mastercard World</option>
+                    <option value="Moussafer Platinum">Moussafer Platinum</option>
+                    <option value="American Express">American Express</option>
+                    <option value="Lella">Lella</option>
+                    <option value="El Khir">El Khir</option>
+                  </select>
+                </div>
+
+                <button 
+                  onClick={resetFilters}
+                  className="reset-filters-btn"
+                  title="Réinitialiser les filtres"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                  </svg>
+                  Réinitialiser
+                </button>
+              </div>
+            </div>
+
             <div className="stock-table-container">
+              <div className="results-info">
+                <span>{getFilteredCartes().length} cartes trouvées</span>
+              </div>
               <table className="stock-table">
                 <thead>
                   <tr>
@@ -822,11 +655,13 @@ function App() {
                     <th>Prénom</th>
                     <th>CIN</th>
                     <th>État</th>
+                    <th>N° Compte</th>
+                    <th>Date demande</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {stockData.map((carte) => {
+                  {getFilteredCartes().map((carte) => {
                     return (
                       <tr key={carte.id} className={`row-${carte.etat.replace(' ', '-')}`}>
                         <td className="carte-nom">{carte.typeCarte}</td>
@@ -838,6 +673,8 @@ function App() {
                             {carte.etat.charAt(0).toUpperCase() + carte.etat.slice(1)}
                           </span>
                         </td>
+                        <td className="compte-num">{carte.numCompte}</td>
+                        <td className="date-demande">{new Date(carte.dateDemande).toLocaleDateString('fr-FR')}</td>
                         <td className="actions-cell">
                           <button 
                             onClick={() => handleVoirCarte(carte)} 
@@ -877,6 +714,21 @@ function App() {
                   })}
                 </tbody>
               </table>
+              
+              {getFilteredCartes().length === 0 && (
+                <div className="no-results">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                    <line x1="11" y1="8" x2="11" y2="14"/>
+                    <line x1="8" y1="11" x2="14" y2="11"/>
+                  </svg>
+                  <p>Aucune carte trouvée avec les critères de recherche.</p>
+                  <button onClick={resetFilters} className="reset-search-btn">
+                    Réinitialiser les filtres
+                  </button>
+                </div>
+              )}
             </div>
           </main>
 
