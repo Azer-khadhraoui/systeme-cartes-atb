@@ -41,19 +41,47 @@ function App() {
 
   // État pour les données du stock des cartes
   const [stockData] = useState([
-    { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivré' },
-    { id: 2, typeCarte: 'C\'Jeune', nom: 'Trabelsi', prenom: 'Fatma', cin: '23456789', etat: 'en stock' },
-    { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours' },
-    { id: 4, typeCarte: 'Mastercard', nom: 'Sassi', prenom: 'Amina', cin: '45678901', etat: 'délivré' },
-    { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Mzoughi', prenom: 'Rami', cin: '56789012', etat: 'en stock' },
-    { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours' },
-    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivré' },
-    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock' },
-    { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours' },
-    { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivré' },
-    { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock' },
-    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours' }
+    { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivré', numCompte: '0123456789012', dateDemande: '2024-12-15' },
+    { id: 2, typeCarte: 'C\'Jeune', nom: 'Trabelsi', prenom: 'Fatma', cin: '23456789', etat: 'en stock', numCompte: '1234567890123', dateDemande: '2024-12-10' },
+    { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours', numCompte: '2345678901234', dateDemande: '2024-12-20' },
+    { id: 4, typeCarte: 'Mastercard', nom: 'Sassi', prenom: 'Amina', cin: '45678901', etat: 'délivré', numCompte: '3456789012345', dateDemande: '2024-12-05' },
+    { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Mzoughi', prenom: 'Rami', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18' },
+    { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours', numCompte: '5678901234567', dateDemande: '2024-12-12' },
+    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivré', numCompte: '6789012345678', dateDemande: '2024-12-08' },
+    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2024-12-22' },
+    { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours', numCompte: '8901234567890', dateDemande: '2024-12-03' },
+    { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivré', numCompte: '9012345678901', dateDemande: '2024-12-14' },
+    { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock', numCompte: '0123456789013', dateDemande: '2024-12-25' },
+    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2024-12-17' }
   ]);
+
+  // État pour la carte sélectionnée pour visualisation
+  const [selectedCarte, setSelectedCarte] = useState(null);
+
+  // Fonctions pour les actions des boutons
+  const handleVoirCarte = (carte) => {
+    setSelectedCarte(carte);
+    setCurrentPage('detail-carte');
+  };
+
+  const handleSupprimerCarte = (carte) => {
+    if (window.confirm(`Êtes-vous sûr de vouloir supprimer la carte de ${carte.prenom} ${carte.nom} ?`)) {
+      alert(`Carte supprimée : ${carte.typeCarte} de ${carte.prenom} ${carte.nom}`);
+      // Ici vous pouvez ajouter la logique de suppression réelle
+    }
+  };
+
+  const handleModifierCarte = (carte) => {
+    alert(`Modification de la carte : ${carte.typeCarte} de ${carte.prenom} ${carte.nom}`);
+    // Ici vous pouvez ajouter la logique de modification réelle
+  };
+
+  const handleTelechargerPDF = () => {
+    if (selectedCarte) {
+      alert(`Téléchargement du PDF pour ${selectedCarte.prenom} ${selectedCarte.nom}`);
+      // Ici vous pouvez ajouter la logique de génération PDF
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -514,6 +542,7 @@ function App() {
                     <th>Prénom</th>
                     <th>CIN</th>
                     <th>État</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -529,11 +558,244 @@ function App() {
                             {carte.etat.charAt(0).toUpperCase() + carte.etat.slice(1)}
                           </span>
                         </td>
+                        <td className="actions-cell">
+                          <button 
+                            onClick={() => handleVoirCarte(carte)} 
+                            className="action-btn voir-btn"
+                            title="Voir les détails"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                              <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                          </button>
+                          <button 
+                            onClick={() => handleModifierCarte(carte)} 
+                            className="action-btn modifier-btn"
+                            title="Modifier les informations"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                              <path d="M15 5l4 4"/>
+                            </svg>
+                          </button>
+                          <button 
+                            onClick={() => handleSupprimerCarte(carte)} 
+                            className="action-btn supprimer-btn"
+                            title="Supprimer la carte"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <path d="M3 6h18"/>
+                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                              <line x1="10" y1="11" x2="10" y2="17"/>
+                              <line x1="14" y1="11" x2="14" y2="17"/>
+                            </svg>
+                          </button>
+                        </td>
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
+            </div>
+          </main>
+
+          <footer className="dashboard-footer">
+            <div className="footer-content">
+              <div className="footer-left">
+                <img src={atbLogo} alt="ATB Logo" className="footer-logo" />
+                <span>Arab Tunisian Bank</span>
+              </div>
+              <div className="footer-right">
+                <span>Système de gestion des cartes v2.0</span>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    // Page de détail d'une carte
+    if (currentPage === 'detail-carte' && selectedCarte) {
+      return (
+        <div className="dashboard">
+          <header className="dashboard-header">
+            <div className="header-content">
+              <div className="logo-section">
+                <img src={atbLogo} alt="ATB Logo" className="header-logo" />
+                <span className="bank-name">Arab Tunisian Bank</span>
+              </div>
+              <div className="user-section">
+                <span className="welcome-text">Bienvenue, {user.matricule}</span>
+                <button 
+                  onClick={() => setUser(null)} 
+                  className="logout-btn"
+                >
+                  <span>Se déconnecter</span>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <main className="dashboard-main">
+            <div className="page-header">
+              <button 
+                onClick={() => setCurrentPage('stock')} 
+                className="back-btn"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M19 12H5"/>
+                  <path d="m12 19-7-7 7-7"/>
+                </svg>
+                Retour au stock
+              </button>
+              <h1 className="page-title">Détails de la carte bancaire</h1>
+            </div>
+
+            <div className="carte-detail-container">
+              <div className="carte-detail-card">
+                <div className="carte-header">
+                  <div className="carte-type">
+                    <h2>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '40px', height: '40px', marginRight: '15px', verticalAlign: 'middle'}}>
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                      </svg>
+                      {selectedCarte.typeCarte}
+                    </h2>
+                    <span className={`status-badge ${selectedCarte.etat.replace(' ', '-')}`}>
+                      {selectedCarte.etat.charAt(0).toUpperCase() + selectedCarte.etat.slice(1)}
+                    </span>
+                  </div>
+                  <div className="carte-id">
+                    <span className="id-label">ID: </span>
+                    <span className="id-value">#{selectedCarte.id}</span>
+                  </div>
+                </div>
+
+                <div className="carte-info-grid">
+                  <div className="info-section">
+                    <h3>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '20px', height: '20px'}}>
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
+                      Informations personnelles
+                    </h3>
+                    <div className="info-row">
+                      <span className="info-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '16px', height: '16px', marginRight: '8px'}}>
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                          <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Nom :
+                      </span>
+                      <span className="info-value">{selectedCarte.nom}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '16px', height: '16px', marginRight: '8px'}}>
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                          <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Prénom :
+                      </span>
+                      <span className="info-value">{selectedCarte.prenom}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '16px', height: '16px', marginRight: '8px'}}>
+                          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                          <line x1="8" y1="21" x2="16" y2="21"/>
+                          <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                        CIN :
+                      </span>
+                      <span className="info-value">{selectedCarte.cin}</span>
+                    </div>
+                  </div>
+
+                  <div className="info-section">
+                    <h3>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '20px', height: '20px'}}>
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                      </svg>
+                      Informations bancaires
+                    </h3>
+                    <div className="info-row">
+                      <span className="info-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '16px', height: '16px', marginRight: '8px'}}>
+                          <line x1="12" y1="1" x2="12" y2="23"/>
+                          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        Numéro de compte :
+                      </span>
+                      <span className="info-value">{selectedCarte.numCompte}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '16px', height: '16px', marginRight: '8px'}}>
+                          <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                          <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                        Type de carte :
+                      </span>
+                      <span className="info-value">{selectedCarte.typeCarte}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '16px', height: '16px', marginRight: '8px'}}>
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                          <line x1="16" y1="2" x2="16" y2="6"/>
+                          <line x1="8" y1="2" x2="8" y2="6"/>
+                          <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Date de demande :
+                      </span>
+                      <span className="info-value">{new Date(selectedCarte.dateDemande).toLocaleDateString('fr-FR')}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="carte-actions">
+                  <button 
+                    onClick={handleTelechargerPDF} 
+                    className="btn btn-primary pdf-btn"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <path d="M14 2v6h6"/>
+                      <path d="M16 13H8"/>
+                      <path d="M16 17H8"/>
+                      <path d="M10 9H8"/>
+                    </svg>
+                    Télécharger PDF pour signature
+                  </button>
+                  <button 
+                    onClick={() => handleModifierCarte(selectedCarte)} 
+                    className="btn btn-secondary"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                      <path d="M15 5l4 4"/>
+                    </svg>
+                    Modifier
+                  </button>
+                  <button 
+                    onClick={() => handleSupprimerCarte(selectedCarte)} 
+                    className="btn btn-danger"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M3 6h18"/>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                      <line x1="10" y1="11" x2="10" y2="17"/>
+                      <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    Supprimer
+                  </button>
+                </div>
+              </div>
             </div>
           </main>
 
