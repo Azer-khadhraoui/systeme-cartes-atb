@@ -63,6 +63,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterEtat, setFilterEtat] = useState('tous');
   const [filterType, setFilterType] = useState('tous');
+  const [filterTime, setFilterTime] = useState('tous');
 
   // Fonctions pour les actions des boutons
   const handleVoirCarte = (carte) => {
@@ -73,13 +74,13 @@ function App() {
   const handleSupprimerCarte = (carte) => {
     if (window.confirm(`Êtes-vous sûr de vouloir supprimer la carte de ${carte.prenom} ${carte.nom} ?`)) {
       alert(`Carte supprimée : ${carte.typeCarte} de ${carte.prenom} ${carte.nom}`);
-      // Ici vous pouvez ajouter la logique de suppression réelle
+      
     }
   };
 
   const handleModifierCarte = (carte) => {
     alert(`Modification de la carte : ${carte.typeCarte} de ${carte.prenom} ${carte.nom}`);
-    // Ici vous pouvez ajouter la logique de modification réelle
+    
   };
 
   const handleTelechargerPDF = () => {
@@ -110,7 +111,30 @@ function App() {
       // Filtre par type
       const typeMatch = filterType === 'tous' || carte.typeCarte === filterType;
 
-      return searchMatch && etatMatch && typeMatch;
+      // Filtre par temps (période)
+      const timeMatch = () => {
+        if (filterTime === 'tous') return true;
+        
+        const carteDate = new Date(carte.dateDemande);
+        const now = new Date();
+        const diffTime = Math.abs(now - carteDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        switch (filterTime) {
+          case '7j':
+            return diffDays <= 7;
+          case '30j':
+            return diffDays <= 30;
+          case '90j':
+            return diffDays <= 90;
+          case '1an':
+            return diffDays <= 365;
+          default:
+            return true;
+        }
+      };
+
+      return searchMatch && etatMatch && typeMatch && timeMatch();
     });
   };
 
@@ -119,6 +143,7 @@ function App() {
     setSearchTerm('');
     setFilterEtat('tous');
     setFilterType('tous');
+    setFilterTime('tous');
   };
 
   const handleChange = (e) => {
@@ -629,6 +654,22 @@ function App() {
                   </select>
                 </div>
 
+                <div className="filter-group">
+                  <label htmlFor="filter-time">Période :</label>
+                  <select
+                    id="filter-time"
+                    value={filterTime}
+                    onChange={(e) => setFilterTime(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="tous">Toutes les périodes</option>
+                    <option value="7j">7 derniers jours</option>
+                    <option value="30j">30 derniers jours</option>
+                    <option value="90j">90 derniers jours</option>
+                    <option value="1an">1 an</option>
+                  </select>
+                </div>
+
                 <button 
                   onClick={resetFilters}
                   className="reset-filters-btn"
@@ -653,9 +694,7 @@ function App() {
                     <th>Type de carte</th>
                     <th>Nom</th>
                     <th>Prénom</th>
-                    <th>CIN</th>
                     <th>État</th>
-                    <th>N° Compte</th>
                     <th>Date demande</th>
                     <th>Actions</th>
                   </tr>
@@ -667,13 +706,11 @@ function App() {
                         <td className="carte-nom">{carte.typeCarte}</td>
                         <td className="user-nom">{carte.nom}</td>
                         <td className="user-prenom">{carte.prenom}</td>
-                        <td className="user-cin">{carte.cin}</td>
                         <td>
                           <span className={`status-badge ${carte.etat.replace(' ', '-')}`}>
                             {carte.etat.charAt(0).toUpperCase() + carte.etat.slice(1)}
                           </span>
                         </td>
-                        <td className="compte-num">{carte.numCompte}</td>
                         <td className="date-demande">{new Date(carte.dateDemande).toLocaleDateString('fr-FR')}</td>
                         <td className="actions-cell">
                           <button 
