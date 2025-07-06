@@ -59,6 +59,22 @@ function App() {
   // État pour la carte sélectionnée pour visualisation
   const [selectedCarte, setSelectedCarte] = useState(null);
 
+  // État pour la carte en cours de modification
+  const [carteToEdit, setCarteToEdit] = useState(null);
+
+  // États pour le formulaire de modification
+  const [editData, setEditData] = useState({
+    nom: '',
+    prenom: '',
+    cin: '',
+    numCompte: '',
+    typeCarte: '',
+    etat: '',
+    dateDemande: ''
+  });
+
+  const [editErrors, setEditErrors] = useState({});
+
   // États pour la recherche et les filtres
   const [searchTerm, setSearchTerm] = useState('');
   const [filterEtat, setFilterEtat] = useState('tous');
@@ -79,8 +95,18 @@ function App() {
   };
 
   const handleModifierCarte = (carte) => {
-    alert(`Modification de la carte : ${carte.typeCarte} de ${carte.prenom} ${carte.nom}`);
-    
+    setCarteToEdit(carte);
+    setEditData({
+      nom: carte.nom,
+      prenom: carte.prenom,
+      cin: carte.cin,
+      numCompte: carte.numCompte,
+      typeCarte: carte.typeCarte,
+      etat: carte.etat,
+      dateDemande: carte.dateDemande
+    });
+    setEditErrors({});
+    setCurrentPage('modifier-carte');
   };
 
   const handleTelechargerPDF = () => {
@@ -146,7 +172,69 @@ function App() {
     setFilterTime('tous');
   };
 
-  const handleChange = (e) => {
+  // Fonction pour gérer les changements dans le formulaire de modification
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user starts typing
+    if (editErrors[name]) {
+      setEditErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  // Fonction pour valider le formulaire de modification
+  const validateEditForm = () => {
+    const newErrors = {};
+    
+    if (!editData.nom.trim()) {
+      newErrors.nom = 'Nom requis';
+    }
+    
+    if (!editData.prenom.trim()) {
+      newErrors.prenom = 'Prénom requis';
+    }
+    
+    if (!editData.cin.trim()) {
+      newErrors.cin = 'CIN requis';
+    } else if (editData.cin.length !== 8) {
+      newErrors.cin = 'Le CIN doit contenir 8 chiffres';
+    }
+    
+    if (!editData.numCompte.trim()) {
+      newErrors.numCompte = 'Numéro de compte requis';
+    } else if (editData.numCompte.length < 10) {
+      newErrors.numCompte = 'Le numéro de compte doit contenir au moins 10 chiffres';
+    }
+    
+    return newErrors;
+  };
+
+  // Fonction pour soumettre les modifications
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = validateEditForm();
+    
+    if (Object.keys(newErrors).length === 0) {
+      // Simulation de modification (pas de changement réel)
+      alert(`✅ Simulation de modification réussie !\n\nClient: ${editData.prenom} ${editData.nom}\nCIN: ${editData.cin}\nCompte: ${editData.numCompte}\nType: ${editData.typeCarte}\nÉtat: ${editData.etat}\n\n⚠️ Note: Aucune modification réelle n'a été effectuée (mode démonstration)`);
+      
+      // Retour à la page de consultation du stock
+      setCurrentPage('stock');
+      setCarteToEdit(null);
+      setEditErrors({});
+    } else {
+      setEditErrors(newErrors);
+    }
+  };
+
+  // Fonction pour gérer les changements dans tous les formulaires
+  const handleFormChange = (e) => {
     const { name, value } = e.target;
     if (isSignUp) {
       setSignUpData(prev => ({
@@ -368,7 +456,7 @@ function App() {
                       id="nomClient"
                       name="nomClient"
                       value={demandeData.nomClient}
-                      onChange={handleChange}
+                      onChange={handleFormChange}
                       className={errors.nomClient ? 'error' : ''}
                       placeholder="Entrez le nom du client"
                       required
@@ -383,7 +471,7 @@ function App() {
                       id="prenomClient"
                       name="prenomClient"
                       value={demandeData.prenomClient}
-                      onChange={handleChange}
+                      onChange={handleFormChange}
                       className={errors.prenomClient ? 'error' : ''}
                       placeholder="Entrez le prénom du client"
                       required
@@ -400,7 +488,7 @@ function App() {
                       id="cin"
                       name="cin"
                       value={demandeData.cin}
-                      onChange={handleChange}
+                      onChange={handleFormChange}
                       className={errors.cin ? 'error' : ''}
                       placeholder="12345678"
                       maxLength="8"
@@ -417,7 +505,7 @@ function App() {
                       id="numCompte"
                       name="numCompte"
                       value={demandeData.numCompte}
-                      onChange={handleChange}
+                      onChange={handleFormChange}
                       className={errors.numCompte ? 'error' : ''}
                       placeholder="1234567890123"
                       minLength="10"
@@ -434,7 +522,7 @@ function App() {
                       id="typeCarte"
                       name="typeCarte"
                       value={demandeData.typeCarte}
-                      onChange={handleChange}
+                      onChange={handleFormChange}
                       className="select-field"
                       required
                     >
@@ -983,6 +1071,218 @@ function App() {
       );
     }
 
+    // Page de modification d'une carte
+    if (currentPage === 'modifier-carte' && carteToEdit) {
+      return (
+        <div className="dashboard">
+          <header className="dashboard-header">
+            <div className="header-content">
+              <div className="logo-section">
+                <img src={atbLogo} alt="ATB Logo" className="header-logo" />
+                <span className="bank-name">Arab Tunisian Bank</span>
+              </div>
+              <div className="user-section">
+                <span className="welcome-text">Bienvenue, {user.matricule}</span>
+                <button 
+                  onClick={() => setUser(null)} 
+                  className="logout-btn"
+                >
+                  <span>Se déconnecter</span>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <main className="dashboard-main">
+            <div className="page-header">
+              <button 
+                onClick={() => setCurrentPage('stock')} 
+                className="back-btn"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M19 12H5"/>
+                  <path d="m12 19-7-7 7-7"/>
+                </svg>
+                Retour au stock
+              </button>
+              <h1 className="page-title">Modifier la carte bancaire</h1>
+              <p>Modifiez les informations de la carte de {carteToEdit.prenom} {carteToEdit.nom}</p>
+            </div>
+
+            <div className="form-container">
+              <div className="form-header">
+                <h1 className="form-title">Modification de Carte</h1>
+                <p className="form-description">Modifiez les informations nécessaires</p>
+              </div>
+
+              <form onSubmit={handleEditSubmit} className="demande-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="nom">Nom du client *</label>
+                    <input
+                      type="text"
+                      id="nom"
+                      name="nom"
+                      value={editData.nom}
+                      onChange={handleEditChange}
+                      className={editErrors.nom ? 'error' : ''}
+                      placeholder="Entrez le nom du client"
+                      required
+                    />
+                    {editErrors.nom && <span className="error-message">{editErrors.nom}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="prenom">Prénom du client *</label>
+                    <input
+                      type="text"
+                      id="prenom"
+                      name="prenom"
+                      value={editData.prenom}
+                      onChange={handleEditChange}
+                      className={editErrors.prenom ? 'error' : ''}
+                      placeholder="Entrez le prénom du client"
+                      required
+                    />
+                    {editErrors.prenom && <span className="error-message">{editErrors.prenom}</span>}
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="cin">CIN *</label>
+                    <input
+                      type="text"
+                      id="cin"
+                      name="cin"
+                      value={editData.cin}
+                      onChange={handleEditChange}
+                      className={editErrors.cin ? 'error' : ''}
+                      placeholder="12345678"
+                      maxLength="8"
+                      pattern="[0-9]{8}"
+                      required
+                    />
+                    {editErrors.cin && <span className="error-message">{editErrors.cin}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="numCompte">Numéro de compte *</label>
+                    <input
+                      type="text"
+                      id="numCompte"
+                      name="numCompte"
+                      value={editData.numCompte}
+                      onChange={handleEditChange}
+                      className={editErrors.numCompte ? 'error' : ''}
+                      placeholder="1234567890123"
+                      minLength="10"
+                      required
+                    />
+                    {editErrors.numCompte && <span className="error-message">{editErrors.numCompte}</span>}
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="typeCarte">Type de carte *</label>
+                    <select
+                      id="typeCarte"
+                      name="typeCarte"
+                      value={editData.typeCarte}
+                      onChange={handleEditChange}
+                      className="select-field"
+                      required
+                    >
+                      <option value="Visa Electron Debit">Visa Electron Debit</option>
+                      <option value="C'Jeune">C'Jeune</option>
+                      <option value="Visa Classique Nationale">Visa Classique Nationale</option>
+                      <option value="Mastercard">Mastercard</option>
+                      <option value="Virtuelle E‑pay">Virtuelle E‑pay</option>
+                      <option value="Technologique (CTI)">Technologique (CTI)</option>
+                      <option value="VISA Gold">VISA Gold</option>
+                      <option value="Mastercard World">Mastercard World</option>
+                      <option value="Moussafer Platinum">Moussafer Platinum</option>
+                      <option value="American Express">American Express</option>
+                      <option value="Lella">Lella</option>
+                      <option value="El Khir">El Khir</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="etat">État de la carte *</label>
+                    <select
+                      id="etat"
+                      name="etat"
+                      value={editData.etat}
+                      onChange={handleEditChange}
+                      className="select-field"
+                      required
+                    >
+                      <option value="en cours">En cours</option>
+                      <option value="en stock">En stock</option>
+                      <option value="délivré">Délivré</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="dateDemande">Date de demande</label>
+                    <input
+                      type="date"
+                      id="dateDemande"
+                      name="dateDemande"
+                      value={editData.dateDemande}
+                      className="date-field"
+                      readOnly
+                    />
+                    <small className="form-help">Date de demande originale (non modifiable)</small>
+                  </div>
+
+                  <div className="form-group">
+                    <label>ID de la carte</label>
+                    <input
+                      type="text"
+                      value={`#${carteToEdit.id}`}
+                      className="date-field"
+                      readOnly
+                    />
+                    <small className="form-help">Identifiant unique de la carte</small>
+                  </div>
+                </div>
+
+                <div className="form-actions">
+                  <button 
+                    type="button" 
+                    onClick={() => setCurrentPage('stock')}
+                    className="btn-secondary"
+                  >
+                    Annuler
+                  </button>
+                  <button type="submit" className="btn-primary">
+                    Sauvegarder les modifications
+                  </button>
+                </div>
+              </form>
+            </div>
+          </main>
+
+          <footer className="dashboard-footer">
+            <div className="footer-content">
+              <div className="footer-left">
+                <img src={atbLogo} alt="ATB Logo" className="footer-logo" />
+                <span>Arab Tunisian Bank</span>
+              </div>
+              <div className="footer-right">
+                <span>Système de gestion des cartes v2.0</span>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
     // Dashboard principal
     return (
       <div className="dashboard">
@@ -1127,7 +1427,7 @@ function App() {
                     id="nom"
                     name="nom"
                     value={signUpData.nom}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     className={errors.nom ? 'error' : ''}
                     placeholder="Entrez votre nom"
                   />
@@ -1141,7 +1441,7 @@ function App() {
                     id="prenom"
                     name="prenom"
                     value={signUpData.prenom}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     className={errors.prenom ? 'error' : ''}
                     placeholder="Entrez votre prénom"
                   />
@@ -1155,7 +1455,7 @@ function App() {
                     id="matricule"
                     name="matricule"
                     value={signUpData.matricule}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     className={errors.matricule ? 'error' : ''}
                     placeholder="Entrez votre matricule"
                   />
@@ -1169,7 +1469,7 @@ function App() {
                     id="password"
                     name="password"
                     value={signUpData.password}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     className={errors.password ? 'error' : ''}
                     placeholder="Entrez votre mot de passe"
                   />
@@ -1204,7 +1504,7 @@ function App() {
                     id="confirmPassword"
                     name="confirmPassword"
                     value={signUpData.confirmPassword}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     className={errors.confirmPassword ? 'error' : ''}
                     placeholder="Confirmez votre mot de passe"
                   />
@@ -1221,7 +1521,7 @@ function App() {
                     id="matricule"
                     name="matricule"
                     value={formData.matricule}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     className={errors.matricule ? 'error' : ''}
                     placeholder="Entrez votre matricule"
                   />
@@ -1235,7 +1535,7 @@ function App() {
                     id="password"
                     name="password"
                     value={formData.password}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     className={errors.password ? 'error' : ''}
                     placeholder="Entrez votre mot de passe"
                   />
