@@ -25,7 +25,8 @@ function App() {
     prenom: '',
     matricule: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    emplacement: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -42,18 +43,18 @@ function App() {
 
   // État pour les données du stock des cartes
   const [stockData] = useState([
-    { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivré', numCompte: '0123456789012', dateDemande: '2024-12-15' },
-    { id: 2, typeCarte: 'C\'Jeune', nom: 'Trabelsi', prenom: 'Fatma', cin: '23456789', etat: 'en stock', numCompte: '1234567890123', dateDemande: '2024-12-10' },
-    { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours', numCompte: '2345678901234', dateDemande: '2024-12-20' },
-    { id: 4, typeCarte: 'Mastercard', nom: 'Sassi', prenom: 'Amina', cin: '45678901', etat: 'délivré', numCompte: '3456789012345', dateDemande: '2024-12-05' },
-    { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Mzoughi', prenom: 'Rami', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18' },
-    { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours', numCompte: '5678901234567', dateDemande: '2024-12-12' },
-    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivré', numCompte: '6789012345678', dateDemande: '2024-12-08' },
-    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2024-12-22' },
-    { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours', numCompte: '8901234567890', dateDemande: '2024-12-03' },
-    { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivré', numCompte: '9012345678901', dateDemande: '2024-12-14' },
-    { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock', numCompte: '0123456789013', dateDemande: '2024-12-25' },
-    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2024-12-17' }
+    { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivré', numCompte: '0123456789012', dateDemande: '2024-12-15', emplacement: 'A1' },
+    { id: 2, typeCarte: 'C\'Jeune', nom: 'Trabelsi', prenom: 'Fatma', cin: '23456789', etat: 'en stock', numCompte: '1234567890123', dateDemande: '2024-12-10', emplacement: 'B2' },
+    { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours', numCompte: '2345678901234', dateDemande: '2024-12-20', emplacement: 'C1' },
+    { id: 4, typeCarte: 'Mastercard', nom: 'Sassi', prenom: 'Amina', cin: '45678901', etat: 'délivré', numCompte: '3456789012345', dateDemande: '2024-12-05', emplacement: 'A3' },
+    { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Mzoughi', prenom: 'Rami', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18', emplacement: 'B1' },
+    { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours', numCompte: '5678901234567', dateDemande: '2024-12-12', emplacement: 'C3' },
+    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivré', numCompte: '6789012345678', dateDemande: '2024-12-08', emplacement: 'A2' },
+    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2024-12-22', emplacement: 'B3' },
+    { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours', numCompte: '8901234567890', dateDemande: '2024-12-03', emplacement: 'C2' },
+    { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivré', numCompte: '9012345678901', dateDemande: '2024-12-14', emplacement: 'A4' },
+    { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock', numCompte: '0123456789013', dateDemande: '2024-12-25', emplacement: 'B4' },
+    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2024-12-17', emplacement: 'C4' }
   ]);
 
   // État pour la carte sélectionnée pour visualisation
@@ -70,7 +71,8 @@ function App() {
     numCompte: '',
     typeCarte: '',
     etat: '',
-    dateDemande: ''
+    dateDemande: '',
+    emplacement: ''
   });
 
   const [editErrors, setEditErrors] = useState({});
@@ -103,7 +105,8 @@ function App() {
       numCompte: carte.numCompte,
       typeCarte: carte.typeCarte,
       etat: carte.etat,
-      dateDemande: carte.dateDemande
+      dateDemande: carte.dateDemande,
+      emplacement: carte.emplacement || ''
     });
     setEditErrors({});
     setCurrentPage('modifier-carte');
@@ -212,6 +215,10 @@ function App() {
       newErrors.numCompte = 'Le numéro de compte doit contenir au moins 10 chiffres';
     }
     
+    if (!editData.emplacement.trim()) {
+      newErrors.emplacement = 'Emplacement requis';
+    }
+    
     return newErrors;
   };
 
@@ -289,6 +296,10 @@ function App() {
       } else if (signUpData.password !== signUpData.confirmPassword) {
         newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
       }
+      
+      if (!signUpData.emplacement.trim()) {
+        newErrors.emplacement = 'Emplacement requis';
+      }
     } else {
       // Validation pour la connexion
       if (!formData.matricule.trim()) {
@@ -347,7 +358,8 @@ function App() {
           prenom: '',
           matricule: '',
           password: '',
-          confirmPassword: ''
+          confirmPassword: '',
+          emplacement: ''
         });
       } else {
         // Logique de connexion
@@ -1012,6 +1024,16 @@ function App() {
                       </span>
                       <span className="info-value">{new Date(selectedCarte.dateDemande).toLocaleDateString('fr-FR')}</span>
                     </div>
+                    <div className="info-row">
+                      <span className="info-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{width: '16px', height: '16px', marginRight: '8px'}}>
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                          <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        Emplacement :
+                      </span>
+                      <span className="info-value">{selectedCarte.emplacement || 'Non défini'}</span>
+                    </div>
                   </div>
                 </div>
 
@@ -1227,17 +1249,19 @@ function App() {
                 </div>
 
                 <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="dateDemande">Date de demande</label>
+                  <div className="form-group emplacement-field">
+                    <label htmlFor="emplacement">Emplacement de la carte *</label>
                     <input
-                      type="date"
-                      id="dateDemande"
-                      name="dateDemande"
-                      value={editData.dateDemande}
-                      className="date-field"
-                      readOnly
+                      type="text"
+                      id="emplacement"
+                      name="emplacement"
+                      value={editData.emplacement}
+                      onChange={handleEditChange}
+                      className={`emplacement-input ${editErrors.emplacement ? 'error' : ''}`}
+                      placeholder="Ex: A1, A2, C1, B3..."
+                      required
                     />
-                    <small className="form-help">Date de demande originale (non modifiable)</small>
+                    {editErrors.emplacement && <span className="error-message">{editErrors.emplacement}</span>}
                   </div>
 
                   <div className="form-group">
@@ -1249,6 +1273,21 @@ function App() {
                       readOnly
                     />
                     <small className="form-help">Identifiant unique de la carte</small>
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="dateDemande">Date de demande</label>
+                    <input
+                      type="date"
+                      id="dateDemande"
+                      name="dateDemande"
+                      value={editData.dateDemande}
+                      className="date-field"
+                      readOnly
+                    />
+                    <small className="form-help">Date de demande originale (non modifiable)</small>
                   </div>
                 </div>
 
@@ -1404,7 +1443,7 @@ function App() {
   // Sinon, afficher le formulaire de connexion
   return (
     <div className="App">
-      <div className="login-container">
+      <div className={`login-container ${isSignUp ? 'signup-container' : ''}`}>
         <div className={`login-card ${isSignUp ? 'signup-mode' : 'login-mode'}`}>
           <div className="login-header">
             <div className="atb-logo">
@@ -1418,98 +1457,124 @@ function App() {
           
           <form onSubmit={handleSubmit} className="login-form">
             {isSignUp ? (
-              // Formulaire d'inscription
+              // Formulaire d'inscription avec disposition en largeur
               <>
-                <div className="form-group">
-                  <label htmlFor="nom">Nom</label>
-                  <input
-                    type="text"
-                    id="nom"
-                    name="nom"
-                    value={signUpData.nom}
-                    onChange={handleFormChange}
-                    className={errors.nom ? 'error' : ''}
-                    placeholder="Entrez votre nom"
-                  />
-                  {errors.nom && <span className="error-message">{errors.nom}</span>}
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="nom">Nom *</label>
+                    <input
+                      type="text"
+                      id="nom"
+                      name="nom"
+                      value={signUpData.nom}
+                      onChange={handleFormChange}
+                      className={errors.nom ? 'error' : ''}
+                      placeholder="Entrez votre nom"
+                      required
+                    />
+                    {errors.nom && <span className="error-message">{errors.nom}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="prenom">Prénom *</label>
+                    <input
+                      type="text"
+                      id="prenom"
+                      name="prenom"
+                      value={signUpData.prenom}
+                      onChange={handleFormChange}
+                      className={errors.prenom ? 'error' : ''}
+                      placeholder="Entrez votre prénom"
+                      required
+                    />
+                    {errors.prenom && <span className="error-message">{errors.prenom}</span>}
+                  </div>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="prenom">Prénom</label>
-                  <input
-                    type="text"
-                    id="prenom"
-                    name="prenom"
-                    value={signUpData.prenom}
-                    onChange={handleFormChange}
-                    className={errors.prenom ? 'error' : ''}
-                    placeholder="Entrez votre prénom"
-                  />
-                  {errors.prenom && <span className="error-message">{errors.prenom}</span>}
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="matricule">Matricule *</label>
+                    <input
+                      type="text"
+                      id="matricule"
+                      name="matricule"
+                      value={signUpData.matricule}
+                      onChange={handleFormChange}
+                      className={errors.matricule ? 'error' : ''}
+                      placeholder="Entrez votre matricule"
+                      required
+                    />
+                    {errors.matricule && <span className="error-message">{errors.matricule}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="emplacement">Emplacement  de la carte *</label>
+                    <input
+                      type="text"
+                      id="emplacement"
+                      name="emplacement"
+                      value={signUpData.emplacement}
+                      onChange={handleFormChange}
+                      className={errors.emplacement ? 'error' : ''}
+                      placeholder="Ex: A1, A2, C1, B3..."
+                      required
+                    />
+                    {errors.emplacement && <span className="error-message">{errors.emplacement}</span>}
+                  </div>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="matricule">Matricule</label>
-                  <input
-                    type="text"
-                    id="matricule"
-                    name="matricule"
-                    value={signUpData.matricule}
-                    onChange={handleFormChange}
-                    className={errors.matricule ? 'error' : ''}
-                    placeholder="Entrez votre matricule"
-                  />
-                  {errors.matricule && <span className="error-message">{errors.matricule}</span>}
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="password">Mot de passe *</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={signUpData.password}
+                      onChange={handleFormChange}
+                      className={errors.password ? 'error' : ''}
+                      placeholder="Entrez votre mot de passe"
+                      required
+                    />
+                    {errors.password && <span className="error-message">{errors.password}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="confirmPassword">Confirmer le mot de passe *</label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={signUpData.confirmPassword}
+                      onChange={handleFormChange}
+                      className={errors.confirmPassword ? 'error' : ''}
+                      placeholder="Confirmez votre mot de passe"
+                      required
+                    />
+                    {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                  </div>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="password">Mot de passe</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={signUpData.password}
-                    onChange={handleFormChange}
-                    className={errors.password ? 'error' : ''}
-                    placeholder="Entrez votre mot de passe"
-                  />
-                  {errors.password && <span className="error-message">{errors.password}</span>}
-                  
-                  {/* Indicateur de force du mot de passe */}
-                  {signUpData.password && (
-                    <div className="password-strength">
-                      <div className="strength-bar">
-                        <div 
-                          className="strength-fill"
-                          style={{
-                            width: `${(getPasswordStrength(signUpData.password).score / 5) * 100}%`,
-                            backgroundColor: getPasswordStrength(signUpData.password).color
-                          }}
-                        ></div>
-                      </div>
-                      <span 
-                        className="strength-label"
-                        style={{ color: getPasswordStrength(signUpData.password).color }}
-                      >
-                        {getPasswordStrength(signUpData.password).label}
-                      </span>
+                {signUpData.password && (
+                  <div className="password-strength-full">
+                    <label>Force du mot de passe</label>
+                    <div className="strength-bar">
+                      <div 
+                        className="strength-fill"
+                        style={{
+                          width: `${(getPasswordStrength(signUpData.password).score / 5) * 100}%`,
+                          backgroundColor: getPasswordStrength(signUpData.password).color
+                        }}
+                      ></div>
                     </div>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={signUpData.confirmPassword}
-                    onChange={handleFormChange}
-                    className={errors.confirmPassword ? 'error' : ''}
-                    placeholder="Confirmez votre mot de passe"
-                  />
-                  {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
-                </div>
+                    <span 
+                      className="strength-label"
+                      style={{ color: getPasswordStrength(signUpData.password).color }}
+                    >
+                      {getPasswordStrength(signUpData.password).label}
+                    </span>
+                  </div>
+                )}
               </>
             ) : (
               // Formulaire de connexion
