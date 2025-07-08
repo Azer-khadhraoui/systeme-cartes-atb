@@ -46,15 +46,15 @@ function App() {
     { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivrée', numCompte: '0123456789012', dateDemande: '2024-12-15', emplacement: 'A1' },
     { id: 2, typeCarte: 'C\'Jeune', nom: 'Khadhraoui', prenom: 'Azer', cin: '23456789', etat: 'en stock', numCompte: '1234567890123', dateDemande: '2024-12-10', emplacement: 'B2' },
     { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours', numCompte: '2345678901234', dateDemande: '2024-12-20', emplacement: 'C1' },
-    { id: 4, typeCarte: 'Mastercard', nom: 'khribi', prenom: 'Adem', cin: '45678901', etat: 'délivrée', numCompte: '3456789012345', dateDemande: '2024-12-05', emplacement: 'A3' },
+    { id: 4, typeCarte: 'Mastercard', nom: 'khribi', prenom: 'Adem', cin: '45678901', etat: 'délivrée', numCompte: '3456789012345', dateDemande: '2025-7-05', emplacement: 'A3' },
     { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Khadhraoui', prenom: 'Lazher', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18', emplacement: 'B1' },
     { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours', numCompte: '5678901234567', dateDemande: '2024-12-12', emplacement: 'C3' },
-    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivrée', numCompte: '6789012345678', dateDemande: '2024-12-08', emplacement: 'A2' },
-    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2024-12-22', emplacement: 'B3' },
+    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivrée', numCompte: '6789012345678', dateDemande: '2025-5-08', emplacement: 'A2' },
+    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2025-7-6', emplacement: 'B3' },
     { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours', numCompte: '8901234567890', dateDemande: '2024-12-03', emplacement: 'C2' },
     { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivrée', numCompte: '9012345678901', dateDemande: '2024-12-14', emplacement: 'A4' },
     { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock', numCompte: '0123456789013', dateDemande: '2024-12-25', emplacement: 'B4' },
-    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2024-12-17', emplacement: 'C4' }
+    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2025-5-17', emplacement: 'C4' }
   ]);
 
   // État pour la carte sélectionnée pour visualisation
@@ -103,9 +103,9 @@ function App() {
     return accountRegex.test(accountNumber);
   };
 
-  // Validation du matricule (format ATB: lettres et chiffres)
+  // Validation du matricule (exactement 6 chiffres)
   const validateMatricule = (matricule) => {
-    const matriculeRegex = /^[A-Za-z0-9]{4,15}$/;
+    const matriculeRegex = /^[0-9]{6}$/;
     return matriculeRegex.test(matricule);
   };
 
@@ -139,8 +139,8 @@ function App() {
         // Supprimer les chiffres et caractères spéciaux, garder lettres, espaces, accents, apostrophes, tirets
         return value.replace(/[^a-zA-ZÀ-ÿ\s'-]/g, '').slice(0, 50);
       case 'matricule':
-        // Supprimer les caractères spéciaux, garder lettres et chiffres
-        return value.replace(/[^A-Za-z0-9]/g, '').slice(0, 15);
+        // Supprimer tous les caractères non numériques et limiter à 6 chiffres
+        return value.replace(/\D/g, '').slice(0, 6);
       case 'emplacement':
         // Format lettre + chiffres, conversion en majuscules
         return value.replace(/[^A-Za-z0-9]/g, '').slice(0, 4).toUpperCase();
@@ -681,7 +681,7 @@ function App() {
       if (!signUpData.matricule.trim()) {
         newErrors.matricule = 'Matricule requis';
       } else if (!validateMatricule(signUpData.matricule)) {
-        newErrors.matricule = 'Matricule invalide (4-15 caractères alphanumériques)';
+        newErrors.matricule = 'Matricule invalide (exactement 6 chiffres requis)';
       }
       
       if (!signUpData.password) {
@@ -690,8 +690,8 @@ function App() {
         const passwordCheck = validatePassword(signUpData.password);
         if (!passwordCheck.length) {
           newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères';
-        } else if (!passwordCheck.lowercase || !passwordCheck.uppercase || !passwordCheck.numbers) {
-          newErrors.password = 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre';
+        } else if (!passwordCheck.lowercase || !passwordCheck.uppercase || !passwordCheck.numbers || !passwordCheck.special) {
+          newErrors.password = 'Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial';
         }
       }
       
@@ -705,7 +705,7 @@ function App() {
       if (!formData.matricule.trim()) {
         newErrors.matricule = 'Matricule requis';
       } else if (!validateMatricule(formData.matricule)) {
-        newErrors.matricule = 'Format de matricule invalide';
+        newErrors.matricule = 'Matricule invalide (exactement 6 chiffres requis)';
       }
       
       if (!formData.password) {
@@ -1986,12 +1986,13 @@ function App() {
                       value={signUpData.matricule}
                       onChange={(e) => handleInputChange(e, 'signUp', 'matricule')}
                       className={errors.matricule ? 'error' : ''}
-                      placeholder="Entrez votre matricule (ex: ATB1234)"
+                      placeholder="123456 (6 chiffres)"
                       required
-                      minLength="4"
-                      maxLength="15"
-                      pattern="[A-Za-z0-9]{4,15}"
-                      title="Le matricule doit contenir entre 4 et 15 caractères alphanumériques"
+                      minLength="6"
+                      maxLength="6"
+                      pattern="[0-9]{6}"
+                      title="Le matricule doit contenir exactement 6 chiffres"
+                      inputMode="numeric"
                     />
                     {errors.matricule && <span className="error-message">{errors.matricule}</span>}
                   </div>
@@ -2012,6 +2013,9 @@ function App() {
                       minLength="8"
                       title="Le mot de passe doit contenir au moins 8 caractères avec majuscules, minuscules et chiffres"
                     />
+                    <div className="password-help">
+                      Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial
+                    </div>
                     {errors.password && <span className="error-message">{errors.password}</span>}
                   </div>
 
@@ -2066,12 +2070,13 @@ function App() {
                     value={formData.matricule}
                     onChange={(e) => handleInputChange(e, 'login', 'matricule')}
                     className={errors.matricule ? 'error' : ''}
-                    placeholder="Entrez votre matricule"
+                    placeholder="123456 (6 chiffres)"
                     required
-                    minLength="4"
-                    maxLength="15"
-                    pattern="[A-Za-z0-9]{4,15}"
-                    title="Le matricule doit contenir entre 4 et 15 caractères alphanumériques"
+                    minLength="6"
+                    maxLength="6"
+                    pattern="[0-9]{6}"
+                    title="Le matricule doit contenir exactement 6 chiffres"
+                    inputMode="numeric"
                   />
                   {errors.matricule && <span className="error-message">{errors.matricule}</span>}
                 </div>
@@ -2090,6 +2095,9 @@ function App() {
                     minLength="8"
                     title="Le mot de passe doit contenir au moins 8 caractères"
                   />
+                  <div className="password-help">
+                    Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial
+                  </div>
                   {errors.password && <span className="error-message">{errors.password}</span>}
                 </div>
               </>
