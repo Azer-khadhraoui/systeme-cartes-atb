@@ -46,15 +46,15 @@ function App() {
     { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivrée', numCompte: '0123456789012', dateDemande: '2024-12-15', emplacement: 'A1' },
     { id: 2, typeCarte: 'C\'Jeune', nom: 'Khadhraoui', prenom: 'Azer', cin: '23456789', etat: 'en stock', numCompte: '1234567890123', dateDemande: '2024-12-10', emplacement: 'B2' },
     { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours', numCompte: '2345678901234', dateDemande: '2024-12-20', emplacement: 'C1' },
-    { id: 4, typeCarte: 'Mastercard', nom: 'khribi', prenom: 'Adem', cin: '45678901', etat: 'délivrée', numCompte: '3456789012345', dateDemande: '2025-7-05', emplacement: 'A3' },
+    { id: 4, typeCarte: 'Mastercard', nom: 'khribi', prenom: 'Adem', cin: '45678901', etat: 'délivrée', numCompte: '3456789012345', dateDemande: '2025-07-05', emplacement: 'A3' },
     { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Khadhraoui', prenom: 'Lazher', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18', emplacement: 'B1' },
     { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours', numCompte: '5678901234567', dateDemande: '2024-12-12', emplacement: 'C3' },
-    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivrée', numCompte: '6789012345678', dateDemande: '2025-5-08', emplacement: 'A2' },
-    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2025-7-6', emplacement: 'B3' },
+    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivrée', numCompte: '6789012345678', dateDemande: '2025-05-08', emplacement: 'A2' },
+    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2025-07-06', emplacement: 'B3' },
     { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours', numCompte: '8901234567890', dateDemande: '2024-12-03', emplacement: 'C2' },
     { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivrée', numCompte: '9012345678901', dateDemande: '2024-12-14', emplacement: 'A4' },
     { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock', numCompte: '0123456789013', dateDemande: '2024-12-25', emplacement: 'B4' },
-    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2025-5-17', emplacement: 'C4' }
+    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2025-05-17', emplacement: 'C4' }
   ]);
 
   // État pour la carte sélectionnée pour visualisation
