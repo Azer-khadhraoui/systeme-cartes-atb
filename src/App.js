@@ -46,10 +46,10 @@ function App() {
     { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivrée', numCompte: '0123456789012', dateDemande: '2024-12-15', emplacement: 'A1' },
     { id: 2, typeCarte: 'C\'Jeune', nom: 'Khadhraoui', prenom: 'Azer', cin: '23456789', etat: 'en stock', numCompte: '1234567890123', dateDemande: '2024-12-10', emplacement: 'B2' },
     { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours', numCompte: '2345678901234', dateDemande: '2024-12-20', emplacement: 'C1' },
-    { id: 4, typeCarte: 'Mastercard', nom: 'Sassi', prenom: 'Amina', cin: '45678901', etat: 'délivrée', numCompte: '3456789012345', dateDemande: '2024-12-05', emplacement: 'A3' },
-    { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Mzoughi', prenom: 'Rami', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18', emplacement: 'B1' },
+    { id: 4, typeCarte: 'Mastercard', nom: 'khribi', prenom: 'Adem', cin: '45678901', etat: 'délivrée', numCompte: '3456789012345', dateDemande: '2024-12-05', emplacement: 'A3' },
+    { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Khadhraoui', prenom: 'Lazher', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18', emplacement: 'B1' },
     { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours', numCompte: '5678901234567', dateDemande: '2024-12-12', emplacement: 'C3' },
-    { id: 7, typeCarte: 'VISA Gold', nom: 'Khadhraoui', prenom: 'Lazher', cin: '78901234', etat: 'délivrée', numCompte: '6789012345678', dateDemande: '2024-12-08', emplacement: 'A2' },
+    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivrée', numCompte: '6789012345678', dateDemande: '2024-12-08', emplacement: 'A2' },
     { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2024-12-22', emplacement: 'B3' },
     { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours', numCompte: '8901234567890', dateDemande: '2024-12-03', emplacement: 'C2' },
     { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivrée', numCompte: '9012345678901', dateDemande: '2024-12-14', emplacement: 'A4' },
@@ -82,6 +82,156 @@ function App() {
   const [filterEtat, setFilterEtat] = useState('tous');
   const [filterType, setFilterType] = useState('tous');
   const [filterTime, setFilterTime] = useState('tous');
+
+  // ========== FONCTIONS DE VALIDATION ET CONTROLE DE SAISIE ==========
+  
+  // Validation des noms et prénoms (lettres, espaces, accents)
+  const validateName = (name) => {
+    const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]{2,50}$/;
+    return nameRegex.test(name.trim());
+  };
+
+  // Validation du CIN (exactement 8 chiffres)
+  const validateCIN = (cin) => {
+    const cinRegex = /^[0-9]{8}$/;
+    return cinRegex.test(cin);
+  };
+
+  // Validation du numéro de compte (10 à 20 chiffres)
+  const validateAccountNumber = (accountNumber) => {
+    const accountRegex = /^[0-9]{10,20}$/;
+    return accountRegex.test(accountNumber);
+  };
+
+  // Validation du matricule (format ATB: lettres et chiffres)
+  const validateMatricule = (matricule) => {
+    const matriculeRegex = /^[A-Za-z0-9]{4,15}$/;
+    return matriculeRegex.test(matricule);
+  };
+
+  // Validation de l'emplacement (format: lettre + chiffre, ex: A1, B2, C10)
+  const validateEmplacement = (emplacement) => {
+    const emplacementRegex = /^[A-Za-z][0-9]{1,3}$/;
+    return emplacementRegex.test(emplacement.trim());
+  };
+
+  // Validation du mot de passe
+  const validatePassword = (password) => {
+    return {
+      length: password.length >= 8,
+      lowercase: /[a-z]/.test(password),
+      uppercase: /[A-Z]/.test(password),
+      numbers: /\d/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+  };
+
+  // Fonction pour formater automatiquement les champs
+  const formatInput = (value, type) => {
+    switch (type) {
+      case 'cin':
+        // Supprimer tous les caractères non numériques et limiter à 8 chiffres
+        return value.replace(/\D/g, '').slice(0, 8);
+      case 'account':
+        // Supprimer tous les caractères non numériques et limiter à 20 chiffres
+        return value.replace(/\D/g, '').slice(0, 20);
+      case 'name':
+        // Supprimer les chiffres et caractères spéciaux, garder lettres, espaces, accents, apostrophes, tirets
+        return value.replace(/[^a-zA-ZÀ-ÿ\s'-]/g, '').slice(0, 50);
+      case 'matricule':
+        // Supprimer les caractères spéciaux, garder lettres et chiffres
+        return value.replace(/[^A-Za-z0-9]/g, '').slice(0, 15);
+      case 'emplacement':
+        // Format lettre + chiffres, conversion en majuscules
+        return value.replace(/[^A-Za-z0-9]/g, '').slice(0, 4).toUpperCase();
+      default:
+        return value;
+    }
+  };
+
+  // Fonction pour gérer les changements avec validation en temps réel
+  const handleInputChange = (e, formType, inputType = null) => {
+    const { name, value } = e.target;
+    let formattedValue = value;
+
+    // Formatage automatique selon le type de champ
+    if (inputType) {
+      formattedValue = formatInput(value, inputType);
+    }
+
+    // Mise à jour des données selon le formulaire
+    switch (formType) {
+      case 'signUp':
+        setSignUpData(prev => ({ ...prev, [name]: formattedValue }));
+        break;
+      case 'login':
+        setFormData(prev => ({ ...prev, [name]: formattedValue }));
+        break;
+      case 'demande':
+        setDemandeData(prev => ({ ...prev, [name]: formattedValue }));
+        break;
+      case 'edit':
+        setEditData(prev => ({ ...prev, [name]: formattedValue }));
+        break;
+      default:
+        break;
+    }
+
+    // Validation en temps réel et suppression des erreurs
+    if (errors[name]) {
+      const newErrors = { ...errors };
+      
+      // Validation spécifique par type de champ
+      switch (name) {
+        case 'nom':
+        case 'prenom':
+        case 'nomClient':
+        case 'prenomClient':
+          if (validateName(formattedValue)) {
+            delete newErrors[name];
+          }
+          break;
+        case 'cin':
+          if (validateCIN(formattedValue)) {
+            delete newErrors[name];
+          }
+          break;
+        case 'numCompte':
+          if (validateAccountNumber(formattedValue)) {
+            delete newErrors[name];
+          }
+          break;
+        case 'matricule':
+          if (validateMatricule(formattedValue)) {
+            delete newErrors[name];
+          }
+          break;
+        case 'emplacement':
+          if (validateEmplacement(formattedValue)) {
+            delete newErrors[name];
+          }
+          break;
+        case 'password':
+          if (formattedValue.length >= 8) {
+            delete newErrors[name];
+          }
+          break;
+        case 'confirmPassword':
+          const currentPassword = formType === 'signUp' ? signUpData.password : '';
+          if (formattedValue === currentPassword && formattedValue.length >= 8) {
+            delete newErrors[name];
+          }
+          break;
+        default:
+          if (formattedValue.trim().length > 0) {
+            delete newErrors[name];
+          }
+          break;
+      }
+      
+      setErrors(newErrors);
+    }
+  };
 
   // Fonctions pour les actions des boutons
   const handleVoirCarte = (carte) => {
@@ -125,6 +275,7 @@ function App() {
         // Configuration des couleurs ATB
         const atbRouge = [165, 28, 48];
         const atbGris = [102, 102, 102];
+        // eslint-disable-next-line no-unused-vars
         const atbBleu = [0, 51, 102];
         const atbVert = [46, 125, 50]; // Vert professionnel ATB
         const noir = [0, 0, 0];
@@ -406,11 +557,11 @@ function App() {
 
   // Fonction pour gérer les changements dans le formulaire de modification
   const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name } = e.target;
+    
+    // Utiliser la nouvelle fonction avec formatage automatique
+    handleInputChange(e, 'edit', getInputType(name));
+    
     // Clear error when user starts typing
     if (editErrors[name]) {
       setEditErrors(prev => ({
@@ -426,26 +577,32 @@ function App() {
     
     if (!editData.nom.trim()) {
       newErrors.nom = 'Nom requis';
+    } else if (!validateName(editData.nom)) {
+      newErrors.nom = 'Nom invalide (2-50 caractères, lettres uniquement)';
     }
     
     if (!editData.prenom.trim()) {
       newErrors.prenom = 'Prénom requis';
+    } else if (!validateName(editData.prenom)) {
+      newErrors.prenom = 'Prénom invalide (2-50 caractères, lettres uniquement)';
     }
     
     if (!editData.cin.trim()) {
       newErrors.cin = 'CIN requis';
-    } else if (editData.cin.length !== 8) {
-      newErrors.cin = 'Le CIN doit contenir 8 chiffres';
+    } else if (!validateCIN(editData.cin)) {
+      newErrors.cin = 'Le CIN doit contenir exactement 8 chiffres';
     }
     
     if (!editData.numCompte.trim()) {
       newErrors.numCompte = 'Numéro de compte requis';
-    } else if (editData.numCompte.length < 10) {
-      newErrors.numCompte = 'Le numéro de compte doit contenir au moins 10 chiffres';
+    } else if (!validateAccountNumber(editData.numCompte)) {
+      newErrors.numCompte = 'Le numéro de compte doit contenir entre 10 et 20 chiffres';
     }
     
     if (!editData.emplacement.trim()) {
       newErrors.emplacement = 'Emplacement requis';
+    } else if (!validateEmplacement(editData.emplacement)) {
+      newErrors.emplacement = 'Format d\'emplacement invalide (ex: A1, B2, C10)';
     }
     
     return newErrors;
@@ -469,31 +626,38 @@ function App() {
     }
   };
 
-  // Fonction pour gérer les changements dans tous les formulaires
+  // Fonction pour gérer les changements dans tous les formulaires (ancienne version - gardée pour compatibilité)
   const handleFormChange = (e) => {
     const { name, value } = e.target;
+    
+    // Utiliser la nouvelle fonction avec formatage automatique
     if (isSignUp) {
-      setSignUpData(prev => ({
-        ...prev,
-        [name]: value
-      }));
+      handleInputChange(e, 'signUp', getInputType(name));
     } else if (currentPage === 'nouvelle-demande') {
-      setDemandeData(prev => ({
-        ...prev,
-        [name]: value
-      }));
+      handleInputChange(e, 'demande', getInputType(name));
     } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
+      handleInputChange(e, 'login', getInputType(name));
     }
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+  };
+
+  // Fonction helper pour déterminer le type d'input
+  const getInputType = (fieldName) => {
+    switch (fieldName) {
+      case 'nom':
+      case 'prenom':
+      case 'nomClient':
+      case 'prenomClient':
+        return 'name';
+      case 'cin':
+        return 'cin';
+      case 'numCompte':
+        return 'account';
+      case 'matricule':
+        return 'matricule';
+      case 'emplacement':
+        return 'emplacement';
+      default:
+        return null;
     }
   };
 
@@ -504,20 +668,31 @@ function App() {
       // Validation pour l'inscription
       if (!signUpData.nom.trim()) {
         newErrors.nom = 'Nom requis';
+      } else if (!validateName(signUpData.nom)) {
+        newErrors.nom = 'Nom invalide (2-50 caractères, lettres uniquement)';
       }
       
       if (!signUpData.prenom.trim()) {
         newErrors.prenom = 'Prénom requis';
+      } else if (!validateName(signUpData.prenom)) {
+        newErrors.prenom = 'Prénom invalide (2-50 caractères, lettres uniquement)';
       }
       
       if (!signUpData.matricule.trim()) {
         newErrors.matricule = 'Matricule requis';
+      } else if (!validateMatricule(signUpData.matricule)) {
+        newErrors.matricule = 'Matricule invalide (4-15 caractères alphanumériques)';
       }
       
       if (!signUpData.password) {
         newErrors.password = 'Mot de passe requis';
-      } else if (signUpData.password.length < 6) {
-        newErrors.password = 'Le mot de passe doit contenir au moins 6 caractères';
+      } else {
+        const passwordCheck = validatePassword(signUpData.password);
+        if (!passwordCheck.length) {
+          newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères';
+        } else if (!passwordCheck.lowercase || !passwordCheck.uppercase || !passwordCheck.numbers) {
+          newErrors.password = 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre';
+        }
       }
       
       if (!signUpData.confirmPassword) {
@@ -529,12 +704,14 @@ function App() {
       // Validation pour la connexion
       if (!formData.matricule.trim()) {
         newErrors.matricule = 'Matricule requis';
+      } else if (!validateMatricule(formData.matricule)) {
+        newErrors.matricule = 'Format de matricule invalide';
       }
       
       if (!formData.password) {
         newErrors.password = 'Mot de passe requis';
-      } else if (formData.password.length < 6) {
-        newErrors.password = 'Le mot de passe doit contenir au moins 6 caractères';
+      } else if (formData.password.length < 8) {
+        newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères';
       }
     }
     
@@ -546,26 +723,32 @@ function App() {
     
     if (!demandeData.nomClient.trim()) {
       newErrors.nomClient = 'Nom du client requis';
+    } else if (!validateName(demandeData.nomClient)) {
+      newErrors.nomClient = 'Nom invalide (2-50 caractères, lettres uniquement)';
     }
     
     if (!demandeData.prenomClient.trim()) {
       newErrors.prenomClient = 'Prénom du client requis';
+    } else if (!validateName(demandeData.prenomClient)) {
+      newErrors.prenomClient = 'Prénom invalide (2-50 caractères, lettres uniquement)';
     }
     
     if (!demandeData.cin.trim()) {
       newErrors.cin = 'CIN requis';
-    } else if (demandeData.cin.length !== 8) {
-      newErrors.cin = 'Le CIN doit contenir 8 chiffres';
+    } else if (!validateCIN(demandeData.cin)) {
+      newErrors.cin = 'Le CIN doit contenir exactement 8 chiffres';
     }
     
     if (!demandeData.numCompte.trim()) {
       newErrors.numCompte = 'Numéro de compte requis';
-    } else if (demandeData.numCompte.length < 10) {
-      newErrors.numCompte = 'Le numéro de compte doit contenir au moins 10 chiffres';
+    } else if (!validateAccountNumber(demandeData.numCompte)) {
+      newErrors.numCompte = 'Le numéro de compte doit contenir entre 10 et 20 chiffres';
     }
     
     if (!demandeData.emplacement.trim()) {
       newErrors.emplacement = 'Emplacement requis';
+    } else if (!validateEmplacement(demandeData.emplacement)) {
+      newErrors.emplacement = 'Format d\'emplacement invalide (ex: A1, B2, C10)';
     }
     
     return newErrors;
@@ -701,10 +884,14 @@ function App() {
                       id="nomClient"
                       name="nomClient"
                       value={demandeData.nomClient}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'demande', 'name')}
                       className={errors.nomClient ? 'error' : ''}
                       placeholder="Entrez le nom du client"
                       required
+                      minLength="2"
+                      maxLength="50"
+                      pattern="[a-zA-ZÀ-ÿ\s'-]{2,50}"
+                      title="Le nom doit contenir entre 2 et 50 caractères (lettres uniquement)"
                     />
                     {errors.nomClient && <span className="error-message">{errors.nomClient}</span>}
                   </div>
@@ -716,10 +903,14 @@ function App() {
                       id="prenomClient"
                       name="prenomClient"
                       value={demandeData.prenomClient}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'demande', 'name')}
                       className={errors.prenomClient ? 'error' : ''}
                       placeholder="Entrez le prénom du client"
                       required
+                      minLength="2"
+                      maxLength="50"
+                      pattern="[a-zA-ZÀ-ÿ\s'-]{2,50}"
+                      title="Le prénom doit contenir entre 2 et 50 caractères (lettres uniquement)"
                     />
                     {errors.prenomClient && <span className="error-message">{errors.prenomClient}</span>}
                   </div>
@@ -733,11 +924,14 @@ function App() {
                       id="cin"
                       name="cin"
                       value={demandeData.cin}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'demande', 'cin')}
                       className={errors.cin ? 'error' : ''}
-                      placeholder="12345678"
+                      placeholder="12345678 (8 chiffres)"
                       maxLength="8"
+                      minLength="8"
                       pattern="[0-9]{8}"
+                      title="Le CIN doit contenir exactement 8 chiffres"
+                      inputMode="numeric"
                       required
                     />
                     {errors.cin && <span className="error-message">{errors.cin}</span>}
@@ -750,10 +944,14 @@ function App() {
                       id="numCompte"
                       name="numCompte"
                       value={demandeData.numCompte}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'demande', 'account')}
                       className={errors.numCompte ? 'error' : ''}
-                      placeholder="1234567890123"
+                      placeholder="1234567890123 (10-20 chiffres)"
                       minLength="10"
+                      maxLength="20"
+                      pattern="[0-9]{10,20}"
+                      title="Le numéro de compte doit contenir entre 10 et 20 chiffres"
+                      inputMode="numeric"
                       required
                     />
                     {errors.numCompte && <span className="error-message">{errors.numCompte}</span>}
@@ -793,10 +991,15 @@ function App() {
                       id="emplacement"
                       name="emplacement"
                       value={demandeData.emplacement}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'demande', 'emplacement')}
                       className={errors.emplacement ? 'error' : ''}
-                      placeholder="Ex: A1, A2, C1, B3..."
+                      placeholder="Ex: A1, B2, C10 (lettre + chiffres)"
                       required
+                      minLength="2"
+                      maxLength="4"
+                      pattern="[A-Za-z][0-9]{1,3}"
+                      title="Format: une lettre suivie de 1 à 3 chiffres (ex: A1, B2, C10)"
+                      style={{ textTransform: 'uppercase' }}
                     />
                     {errors.emplacement && <span className="error-message">{errors.emplacement}</span>}
                   </div>
@@ -1396,10 +1599,14 @@ function App() {
                       id="nom"
                       name="nom"
                       value={editData.nom}
-                      onChange={handleEditChange}
+                      onChange={(e) => handleInputChange(e, 'edit', 'name')}
                       className={editErrors.nom ? 'error' : ''}
                       placeholder="Entrez le nom du client"
                       required
+                      minLength="2"
+                      maxLength="50"
+                      pattern="[a-zA-ZÀ-ÿ\s'-]{2,50}"
+                      title="Le nom doit contenir entre 2 et 50 caractères (lettres uniquement)"
                     />
                     {editErrors.nom && <span className="error-message">{editErrors.nom}</span>}
                   </div>
@@ -1411,10 +1618,14 @@ function App() {
                       id="prenom"
                       name="prenom"
                       value={editData.prenom}
-                      onChange={handleEditChange}
+                      onChange={(e) => handleInputChange(e, 'edit', 'name')}
                       className={editErrors.prenom ? 'error' : ''}
                       placeholder="Entrez le prénom du client"
                       required
+                      minLength="2"
+                      maxLength="50"
+                      pattern="[a-zA-ZÀ-ÿ\s'-]{2,50}"
+                      title="Le prénom doit contenir entre 2 et 50 caractères (lettres uniquement)"
                     />
                     {editErrors.prenom && <span className="error-message">{editErrors.prenom}</span>}
                   </div>
@@ -1428,11 +1639,14 @@ function App() {
                       id="cin"
                       name="cin"
                       value={editData.cin}
-                      onChange={handleEditChange}
+                      onChange={(e) => handleInputChange(e, 'edit', 'cin')}
                       className={editErrors.cin ? 'error' : ''}
-                      placeholder="12345678"
+                      placeholder="12345678 (8 chiffres)"
                       maxLength="8"
+                      minLength="8"
                       pattern="[0-9]{8}"
+                      title="Le CIN doit contenir exactement 8 chiffres"
+                      inputMode="numeric"
                       required
                     />
                     {editErrors.cin && <span className="error-message">{editErrors.cin}</span>}
@@ -1445,10 +1659,14 @@ function App() {
                       id="numCompte"
                       name="numCompte"
                       value={editData.numCompte}
-                      onChange={handleEditChange}
+                      onChange={(e) => handleInputChange(e, 'edit', 'account')}
                       className={editErrors.numCompte ? 'error' : ''}
-                      placeholder="1234567890123"
+                      placeholder="1234567890123 (10-20 chiffres)"
                       minLength="10"
+                      maxLength="20"
+                      pattern="[0-9]{10,20}"
+                      title="Le numéro de compte doit contenir entre 10 et 20 chiffres"
+                      inputMode="numeric"
                       required
                     />
                     {editErrors.numCompte && <span className="error-message">{editErrors.numCompte}</span>}
@@ -1506,10 +1724,15 @@ function App() {
                       id="emplacement"
                       name="emplacement"
                       value={editData.emplacement}
-                      onChange={handleEditChange}
+                      onChange={(e) => handleInputChange(e, 'edit', 'emplacement')}
                       className={`emplacement-input ${editErrors.emplacement ? 'error' : ''}`}
-                      placeholder="Ex: A1, A2, C1, B3..."
+                      placeholder="Ex: A1, B2, C10 (lettre + chiffres)"
                       required
+                      minLength="2"
+                      maxLength="4"
+                      pattern="[A-Za-z][0-9]{1,3}"
+                      title="Format: une lettre suivie de 1 à 3 chiffres (ex: A1, B2, C10)"
+                      style={{ textTransform: 'uppercase' }}
                     />
                     {editErrors.emplacement && <span className="error-message">{editErrors.emplacement}</span>}
                   </div>
@@ -1721,10 +1944,14 @@ function App() {
                       id="nom"
                       name="nom"
                       value={signUpData.nom}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'signUp', 'name')}
                       className={errors.nom ? 'error' : ''}
                       placeholder="Entrez votre nom"
                       required
+                      minLength="2"
+                      maxLength="50"
+                      pattern="[a-zA-ZÀ-ÿ\s'-]{2,50}"
+                      title="Le nom doit contenir entre 2 et 50 caractères (lettres uniquement)"
                     />
                     {errors.nom && <span className="error-message">{errors.nom}</span>}
                   </div>
@@ -1736,10 +1963,14 @@ function App() {
                       id="prenom"
                       name="prenom"
                       value={signUpData.prenom}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'signUp', 'name')}
                       className={errors.prenom ? 'error' : ''}
                       placeholder="Entrez votre prénom"
                       required
+                      minLength="2"
+                      maxLength="50"
+                      pattern="[a-zA-ZÀ-ÿ\s'-]{2,50}"
+                      title="Le prénom doit contenir entre 2 et 50 caractères (lettres uniquement)"
                     />
                     {errors.prenom && <span className="error-message">{errors.prenom}</span>}
                   </div>
@@ -1753,10 +1984,14 @@ function App() {
                       id="matricule"
                       name="matricule"
                       value={signUpData.matricule}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'signUp', 'matricule')}
                       className={errors.matricule ? 'error' : ''}
-                      placeholder="Entrez votre matricule"
+                      placeholder="Entrez votre matricule (ex: ATB1234)"
                       required
+                      minLength="4"
+                      maxLength="15"
+                      pattern="[A-Za-z0-9]{4,15}"
+                      title="Le matricule doit contenir entre 4 et 15 caractères alphanumériques"
                     />
                     {errors.matricule && <span className="error-message">{errors.matricule}</span>}
                   </div>
@@ -1770,10 +2005,12 @@ function App() {
                       id="password"
                       name="password"
                       value={signUpData.password}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'signUp', 'password')}
                       className={errors.password ? 'error' : ''}
                       placeholder="Entrez votre mot de passe"
                       required
+                      minLength="8"
+                      title="Le mot de passe doit contenir au moins 8 caractères avec majuscules, minuscules et chiffres"
                     />
                     {errors.password && <span className="error-message">{errors.password}</span>}
                   </div>
@@ -1785,10 +2022,12 @@ function App() {
                       id="confirmPassword"
                       name="confirmPassword"
                       value={signUpData.confirmPassword}
-                      onChange={handleFormChange}
+                      onChange={(e) => handleInputChange(e, 'signUp', 'confirmPassword')}
                       className={errors.confirmPassword ? 'error' : ''}
                       placeholder="Confirmez votre mot de passe"
                       required
+                      minLength="8"
+                      title="Doit être identique au mot de passe"
                     />
                     {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
                   </div>
@@ -1825,9 +2064,14 @@ function App() {
                     id="matricule"
                     name="matricule"
                     value={formData.matricule}
-                    onChange={handleFormChange}
+                    onChange={(e) => handleInputChange(e, 'login', 'matricule')}
                     className={errors.matricule ? 'error' : ''}
                     placeholder="Entrez votre matricule"
+                    required
+                    minLength="4"
+                    maxLength="15"
+                    pattern="[A-Za-z0-9]{4,15}"
+                    title="Le matricule doit contenir entre 4 et 15 caractères alphanumériques"
                   />
                   {errors.matricule && <span className="error-message">{errors.matricule}</span>}
                 </div>
@@ -1839,9 +2083,12 @@ function App() {
                     id="password"
                     name="password"
                     value={formData.password}
-                    onChange={handleFormChange}
+                    onChange={(e) => handleInputChange(e, 'login', 'password')}
                     className={errors.password ? 'error' : ''}
                     placeholder="Entrez votre mot de passe"
+                    required
+                    minLength="8"
+                    title="Le mot de passe doit contenir au moins 8 caractères"
                   />
                   {errors.password && <span className="error-message">{errors.password}</span>}
                 </div>

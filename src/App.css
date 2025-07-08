@@ -1552,10 +1552,10 @@ body {
   border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
-.status-badge.délivrée {
-  background: rgba(46, 125, 50, 0.1);
-  color: #2E7D32;
-  border: 1px solid rgba(46, 125, 50, 0.3);
+.status-badge.délivré {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
 .status-badge.en-stock {
@@ -1583,8 +1583,8 @@ body {
   border-left: 4px solid #F44336;
 }
 
-.row-délivrée {
-  border-left: 4px solid #2E7D32;
+.row-délivré {
+  border-left: 4px solid #4CAF50;
 }
 
 .row-en-stock {
@@ -2033,8 +2033,8 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.status-badge.délivrée {
-  background: linear-gradient(135deg, #2E7D32, #388E3C);
+.status-badge.délivré {
+  background: linear-gradient(135deg, #28a745, #20c997);
   color: white;
 }
 
