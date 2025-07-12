@@ -754,28 +754,95 @@ function App() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
     
     if (Object.keys(newErrors).length === 0) {
       if (isSignUp) {
-        // Logique d'inscription
-        console.log('Tentative d\'inscription :', signUpData);
-        alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
-        setIsSignUp(false); // Retour à la page de connexion
-        // Reset form
-        setSignUpData({
-          nom: '',
-          prenom: '',
-          matricule: '',
-          password: '',
-          confirmPassword: ''
-        });
+        // Logique d'inscription avec appel API
+        try {
+          console.log('Tentative d\'inscription :', signUpData);
+          
+          // Préparer les données pour l'API
+          const employeeData = {
+            nom: signUpData.nom,
+            prenom: signUpData.prenom,
+            matricule: signUpData.matricule,
+            password: signUpData.password
+          };
+
+          // Appel à l'API backend
+          const response = await fetch('http://localhost:5000/api/employees/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(employeeData)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            alert(`✅ Inscription réussie !\n\nBienvenue ${result.data.prenom} ${result.data.nom}\nMatricule: ${result.data.matricule}\n\nVous pouvez maintenant vous connecter.`);
+            setIsSignUp(false); // Retour à la page de connexion
+            
+            // Reset form
+            setSignUpData({
+              nom: '',
+              prenom: '',
+              matricule: '',
+              password: '',
+              confirmPassword: ''
+            });
+          } else {
+            // Afficher l'erreur retournée par l'API
+            alert(`❌ Erreur lors de l'inscription:\n${result.message}`);
+          }
+        } catch (error) {
+          console.error('Erreur de connexion au serveur:', error);
+          alert('❌ Erreur de connexion au serveur.\nVérifiez que le backend est démarré sur le port 5000.');
+        }
       } else {
-        // Logique de connexion
-        console.log('Tentative de connexion :', formData);
-        setUser({ matricule: formData.matricule });
+        // Logique de connexion avec appel API
+        try {
+          console.log('Tentative de connexion :', formData);
+          
+          // Appel à l'API backend pour la connexion
+          const response = await fetch('http://localhost:5000/api/employees/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              matricule: formData.matricule,
+              password: formData.password
+            })
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            // Connexion réussie
+            setUser({ 
+              matricule: result.data.matricule,
+              nom: result.data.nom,
+              prenom: result.data.prenom 
+            });
+            
+            // Reset form
+            setFormData({
+              matricule: '',
+              password: ''
+            });
+          } else {
+            // Afficher l'erreur retournée par l'API
+            alert(`❌ Erreur de connexion:\n${result.message}`);
+          }
+        } catch (error) {
+          console.error('Erreur de connexion au serveur:', error);
+          alert('❌ Erreur de connexion au serveur.\nVérifiez que le backend est démarré sur le port 5000.');
+        }
       }
     } else {
       setErrors(newErrors);
@@ -853,7 +920,7 @@ function App() {
                 >
                   ← Retour au dashboard
                 </button>
-                <span className="welcome-text">Bienvenue, {user.matricule}</span>
+                <span className="welcome-text">Bienvenue, {user.prenom} {user.nom}</span>
                 <button 
                   onClick={() => setUser(null)} 
                   className="logout-btn"
@@ -1077,7 +1144,7 @@ function App() {
                 >
                   ← Retour au dashboard
                 </button>
-                <span className="welcome-text">Bienvenue, {user.matricule}</span>
+                <span className="welcome-text">Bienvenue, {user.prenom} {user.nom}</span>
                 <button 
                   onClick={() => setUser(null)} 
                   className="logout-btn"
@@ -1358,7 +1425,7 @@ function App() {
                 >
                   ← Retour au stock
                 </button>
-                <span className="welcome-text">Bienvenue, {user.matricule}</span>
+                <span className="welcome-text">Bienvenue, {user.prenom} {user.nom}</span>
                 <button 
                   onClick={() => setUser(null)} 
                   className="logout-btn"
@@ -1563,7 +1630,7 @@ function App() {
                 >
                   ← Retour au stock
                 </button>
-                <span className="welcome-text">Bienvenue, {user.matricule}</span>
+                <span className="welcome-text">Bienvenue, {user.prenom} {user.nom}</span>
                 <button 
                   onClick={() => setUser(null)} 
                   className="logout-btn"
@@ -1809,7 +1876,7 @@ function App() {
               <span className="bank-name">Arab Tunisian Bank</span>
             </div>
             <div className="user-section">
-              <span className="welcome-text">Bienvenue, {user.matricule}</span>
+              <span className="welcome-text">Bienvenue, {user.prenom} {user.nom}</span>
               <button 
                 onClick={() => setUser(null)} 
                 className="logout-btn"
