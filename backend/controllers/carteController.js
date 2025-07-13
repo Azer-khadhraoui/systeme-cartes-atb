@@ -76,7 +76,7 @@ const createCarte = async (req, res) => {
       numCompte,
       emp: emplacement.toUpperCase(),
       date: dateDemande,
-      etat: 'en_stock'
+      etat: 'en_cours'
     });
 
     res.status(201).json({

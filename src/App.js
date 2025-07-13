@@ -243,6 +243,11 @@ function App() {
           alert(`Carte supprimée avec succès : ${carte.type} de ${carte.prenom} ${carte.nom}`);
           // Actualiser la liste des cartes
           refreshCartes();
+          // Si on est sur la page de détail, retourner au stock
+          if (currentPage === 'detail-carte') {
+            setCurrentPage('stock');
+            setSelectedCarte(null);
+          }
         } else {
           alert(`Erreur lors de la suppression : ${result.message}`);
         }
