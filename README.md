@@ -23,61 +23,46 @@ Un système de gestion complet permettant aux employés de l'Arab Tunisian Bank 
 
 ### 📱 **Aperçu de l'Application ATB**
 
-![ATB Demo Preview](https://img.shields.io/badge/🎥_Cliquer_pour_voir-Démonstration_ATB-A51C30?style=for-the-badge&logo=play&logoColor=white)
+[![ATB Demo](https://img.shields.io/badge/🎥_VOIR_LA_DÉMO-Vidéo_Complète_95Mo-A51C30?style=for-the-badge&logo=play&logoColor=white)](https://github.com/Azer-khadhraoui/systeme-cartes-atb/blob/master/atb_app.mp4?raw=true)
 
-**[▶️ REGARDER LA DÉMONSTRATION COMPLÈTE](./atb_app.mp4)**
-
-*🎯 **Vidéo complète** - Toutes les fonctionnalités en action (95 Mo)*
+**[📥 TÉLÉCHARGER LA VIDÉO (95 Mo)](https://github.com/Azer-khadhraoui/systeme-cartes-atb/raw/master/atb_app.mp4)**
 
 </div>
 
-<!-- Lecteur vidéo HTML5 avec fallback -->
-<details>
-<summary><strong>🎬 Voir la vidéo intégrée (cliquer pour développer)</strong></summary>
-
-```html
-<!-- Si votre navigateur supporte les vidéos, vous verrez la vidéo ci-dessous -->
-```
-
-<video width="100%" controls poster="src/atb.png">
-  <source src="./atb_app.mp4" type="video/mp4">
-  <p>🚫 Votre navigateur ne supporte pas les vidéos HTML5.</p>
-  <p>📥 <a href="./atb_app.mp4">Cliquez ici pour télécharger la vidéo</a> (95 Mo)</p>
-</video>
-
-</details>
+> ⚠️ **Note GitHub :** En raison de la taille (95 Mo), la vidéo peut afficher "View raw" sur GitHub. Cliquez sur **"Download"** pour la télécharger directement.
 
 **📹 Contenu de la démonstration :**
 - ✨ **Interface utilisateur** moderne et responsive  
-- 🔐 **Processus d'authentification** complet
+- 🔐 **Processus d'authentification** complet (connexion/inscription)
 - 📋 **Création de demandes** de cartes bancaires
-- 📊 **Gestion du stock** avec filtres avancés
-- 📄 **Génération de PDF** professionnels
-- 🎨 **Design ATB** avec animations fluides
+- 📊 **Gestion du stock** avec filtres et recherche avancés
+- 📄 **Génération de PDF** professionnels avec design ATB
+- 🎨 **Design ATB** avec animations fluides et responsive
+- 🔄 **Fonctionnalité "Se souvenir de moi"** démonstrée
 
-**📱 Plateformes testées :**
-- 💻 **Desktop** : Chrome, Firefox, Edge
-- 📱 **Mobile** : iOS Safari, Android Chrome  
-- 🖥️ **Tablet** : iPad, Android
+**📱 Plateformes démontrées :**
+- 💻 **Desktop** : Navigation complète, toutes fonctionnalités
+- 📱 **Mobile** : Interface responsive, touch-friendly  
+- 🖥️ **Tablet** : Adaptation automatique de l'interface
 
 ### 📥 Options d'accès à la vidéo
 
 <div align="center">
 
-| 🎯 Option | 📄 Description | 🔗 Accès |
-|-----------|----------------|-----------|
-| **🌐 Visualisation directe** | Voir dans le navigateur | **[👀 Ouvrir atb_app.mp4](./atb_app.mp4)** |
-| **📥 Téléchargement** | Sauvegarder localement | **[⬇️ Download (95 Mo)](./atb_app.mp4)** |
-| **💻 Via Git Clone** | Accès complet au projet | `git clone` puis ouvrir le fichier |
+| 🎯 Méthode | 📄 Description | 🔗 Lien Direct |
+|------------|-----------------|-----------------|
+| **📥 Téléchargement rapide** | Download direct (recommandé) | **[⬇️ atb_app.mp4](https://github.com/Azer-khadhraoui/systeme-cartes-atb/raw/master/atb_app.mp4)** |
+| **🌐 GitHub LFS** | Via interface GitHub | **[👀 Voir sur GitHub](https://github.com/Azer-khadhraoui/systeme-cartes-atb/blob/master/atb_app.mp4)** |
+| **💻 Git Clone** | Accès local complet | `git clone` + lecture locale |
 
 </div>
 
 ```bash
-# 🚀 Méthode recommandée : Cloner le repository
+# 🚀 Méthode recommandée pour développeurs
 git clone https://github.com/Azer-khadhraoui/systeme-cartes-atb.git
 cd systeme-cartes-atb
 
-# 📱 Ouvrir la vidéo selon votre OS
+# 📱 Lecture de la vidéo selon votre système
 # Windows
 start atb_app.mp4
 # macOS  
@@ -86,7 +71,18 @@ open atb_app.mp4
 xdg-open atb_app.mp4
 ```
 
-> 💡 **Astuce :** Pour une expérience optimale, téléchargez la vidéo localement car GitHub peut avoir des limitations pour les gros fichiers (95 Mo).
+<!-- Lecteur vidéo pour les navigateurs qui supportent -->
+<details>
+<summary><strong>🎬 Tentative d'affichage intégré (peut ne pas fonctionner sur GitHub)</strong></summary>
+
+<video width="100%" controls poster="src/atb.png">
+  <source src="./atb_app.mp4" type="video/mp4">
+  <p>🚫 Affichage impossible dans GitHub. Utilisez les liens de téléchargement ci-dessus.</p>
+</video>
+
+</details>
+
+---
 
 ## ⚡ Fonctionnalités Principales
 
