@@ -237,13 +237,13 @@ function App() {
   const handleModifierCarte = (carte) => {
     setCarteToEdit(carte);
     setEditData({
-      nom: carte.nom,
-      prenom: carte.prenom,
-      cin: carte.cin,
-      numCompte: carte.numCompte,
-      typeCarte: carte.typeCarte,
-      etat: carte.etat,
-      dateDemande: carte.dateDemande,
+      nom: carte.nom || '',
+      prenom: carte.prenom || '',
+      cin: String(carte.cin || ''), // Convertir en chaîne
+      numCompte: String(carte.numCompte || ''), // Convertir en chaîne
+      typeCarte: carte.typeCarte || '',
+      etat: carte.etat || '',
+      dateDemande: carte.dateDemande || '',
       emplacement: carte.emplacement || ''
     });
     setEditErrors({});
@@ -568,33 +568,40 @@ function App() {
   const validateEditForm = () => {
     const newErrors = {};
     
-    if (!editData.nom.trim()) {
+    // Convertir les valeurs en chaînes pour la validation
+    const nom = String(editData.nom || '');
+    const prenom = String(editData.prenom || '');
+    const cin = String(editData.cin || '');
+    const numCompte = String(editData.numCompte || '');
+    const emplacement = String(editData.emplacement || '');
+    
+    if (!nom.trim()) {
       newErrors.nom = 'Nom requis';
-    } else if (!validateName(editData.nom)) {
+    } else if (!validateName(nom)) {
       newErrors.nom = 'Nom invalide (2-50 caractères, lettres uniquement)';
     }
     
-    if (!editData.prenom.trim()) {
+    if (!prenom.trim()) {
       newErrors.prenom = 'Prénom requis';
-    } else if (!validateName(editData.prenom)) {
+    } else if (!validateName(prenom)) {
       newErrors.prenom = 'Prénom invalide (2-50 caractères, lettres uniquement)';
     }
     
-    if (!editData.cin.trim()) {
+    if (!cin.trim()) {
       newErrors.cin = 'CIN requis';
-    } else if (!validateCIN(editData.cin)) {
+    } else if (!validateCIN(cin)) {
       newErrors.cin = 'Le CIN doit contenir exactement 8 chiffres';
     }
     
-    if (!editData.numCompte.trim()) {
+    if (!numCompte.trim()) {
       newErrors.numCompte = 'Numéro de compte requis';
-    } else if (!validateAccountNumber(editData.numCompte)) {
+    } else if (!validateAccountNumber(numCompte)) {
       newErrors.numCompte = 'Le numéro de compte doit contenir entre 10 et 20 chiffres';
     }
     
-    if (!editData.emplacement.trim()) {
+    if (!emplacement.trim()) {
       newErrors.emplacement = 'Emplacement requis';
-    } else if (!validateEmplacement(editData.emplacement)) {
+    } else if (!validateEmplacement(emplacement)) {
       newErrors.emplacement = 'Format d\'emplacement invalide (ex: A1, B2, C10)';
     }
     
@@ -602,18 +609,51 @@ function App() {
   };
 
   // Fonction pour soumettre les modifications
-  const handleEditSubmit = (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateEditForm();
     
     if (Object.keys(newErrors).length === 0) {
-      // Simulation de modification (pas de changement réel)
-      alert(`✅ Simulation de modification réussie !\n\nClient: ${editData.prenom} ${editData.nom}\nCIN: ${editData.cin}\nCompte: ${editData.numCompte}\nType: ${editData.typeCarte}\nÉtat: ${editData.etat}\n\n⚠️ Note: Aucune modification réelle n'a été effectuée (mode démonstration)`);
-      
-      // Retour à la page de consultation du stock
-      setCurrentPage('stock');
-      setCarteToEdit(null);
-      setEditErrors({});
+      try {
+        console.log('Modification de la carte :', editData);
+        
+        // Appel à l'API backend pour modifier la carte
+        const response = await fetch(`http://localhost:5000/api/cartes/${carteToEdit.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nom: editData.nom,
+            prenom: editData.prenom,
+            cin: editData.cin,
+            typeCarte: editData.typeCarte,
+            numCompte: editData.numCompte,
+            emplacement: editData.emplacement,
+            etat: editData.etat
+          })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(`✅ Carte modifiée avec succès !\n\nClient: ${editData.prenom} ${editData.nom}\nCIN: ${editData.cin}\nCompte: ${editData.numCompte}\nType: ${editData.typeCarte}\nÉtat: ${editData.etat}\nEmplacement: ${editData.emplacement}`);
+          
+          // Actualiser les données des cartes
+          await refreshCartes();
+          
+          // Retour à la page de consultation du stock
+          setCurrentPage('stock');
+          setCarteToEdit(null);
+          setEditErrors({});
+        } else {
+          // Afficher l'erreur retournée par l'API
+          alert(`❌ Erreur lors de la modification de la carte:\n${result.message}`);
+        }
+      } catch (error) {
+        console.error('Erreur de connexion au serveur:', error);
+        alert('❌ Erreur de connexion au serveur.\nVérifiez que le backend est démarré sur le port 5000.');
+      }
     } else {
       setEditErrors(newErrors);
     }
@@ -1928,17 +1968,6 @@ function App() {
                       style={{ textTransform: 'uppercase' }}
                     />
                     {editErrors.emplacement && <span className="error-message">{editErrors.emplacement}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label>ID de la carte</label>
-                    <input
-                      type="text"
-                      value={`#${carteToEdit.id}`}
-                      className="date-field"
-                      readOnly
-                    />
-                    <small className="form-help">Identifiant unique de la carte</small>
                   </div>
                 </div>
 

@@ -229,6 +229,128 @@ const updateCarteEtat = async (req, res) => {
   }
 };
 
+// Contrôleur pour mettre à jour une carte complète
+const updateCarte = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nom, prenom, cin, typeCarte, numCompte, emplacement, etat } = req.body;
+
+    // Validation des données
+    if (!nom || !prenom || !cin || !typeCarte || !numCompte || !emplacement || !etat) {
+      return res.status(400).json({
+        success: false,
+        message: 'Tous les champs sont requis'
+      });
+    }
+
+    // Validation du nom et prénom (lettres, espaces, accents)
+    const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]{2,50}$/;
+    if (!nameRegex.test(nom) || !nameRegex.test(prenom)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Le nom et le prénom doivent contenir entre 2 et 50 caractères (lettres uniquement)'
+      });
+    }
+
+    // Validation du CIN (8 chiffres)
+    const cinRegex = /^[0-9]{8}$/;
+    if (!cinRegex.test(cin)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Le CIN doit contenir exactement 8 chiffres'
+      });
+    }
+
+    // Validation du numéro de compte (10 à 20 chiffres)
+    const compteRegex = /^[0-9]{10,20}$/;
+    if (!compteRegex.test(numCompte)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Le numéro de compte doit contenir entre 10 et 20 chiffres'
+      });
+    }
+
+    // Validation de l'emplacement (format: lettre + chiffre)
+    const empRegex = /^[A-Za-z][0-9]{1,3}$/;
+    if (!empRegex.test(emplacement)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Format d\'emplacement invalide (ex: A1, B2, C10)'
+      });
+    }
+
+    // Mapping des types de cartes
+    const typeMapping = {
+      'visa-electron-debit': 'Visa Electron Debit',
+      'c-jeune': 'C\'Jeune',
+      'visa-classique-nationale': 'Visa Classique Nationale',
+      'mastercard': 'Mastercard',
+      'virtuelle-e-pay': 'Virtuelle E‑pay',
+      'technologique-cti': 'Technologique (CTI)',
+      'visa-gold': 'VISA Gold',
+      'mastercard-world': 'Mastercard World',
+      'moussafer-platinum': 'Moussafer Platinum',
+      'american-express': 'American Express',
+      'lella': 'Lella',
+      'el-khir': 'El Khir'
+    };
+
+    const type = typeMapping[typeCarte] || typeCarte;
+
+    // Mapping des états
+    const etatMapping = {
+      'en cours': 'en_cours',
+      'en stock': 'en_stock',
+      'délivrée': 'delivree'
+    };
+
+    const etatBD = etatMapping[etat] || etat.replace(' ', '_');
+
+    const updateData = {
+      nom,
+      prenom,
+      cin,
+      type,
+      numCompte,
+      emp: emplacement.toUpperCase(),
+      etat: etatBD
+    };
+
+    await Carte.update(id, updateData);
+    
+    res.json({
+      success: true,
+      message: 'Carte mise à jour avec succès',
+      data: {
+        id: parseInt(id),
+        ...updateData
+      }
+    });
+
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de la carte:', error);
+    
+    if (error.message === 'Carte non trouvée') {
+      return res.status(404).json({
+        success: false,
+        message: error.message
+      });
+    }
+
+    if (error.message.includes('invalide') || error.message.includes('doit contenir')) {
+      return res.status(400).json({
+        success: false,
+        message: error.message
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Erreur interne du serveur'
+    });
+  }
+};
+
 // Contrôleur pour obtenir les statistiques
 const getStatistics = async (req, res) => {
   try {
@@ -254,5 +376,6 @@ module.exports = {
   getCartesByEtat,
   getCarteById,
   updateCarteEtat,
+  updateCarte,
   getStatistics
 };

@@ -6,6 +6,7 @@ const {
   getCartesByEtat,
   getCarteById,
   updateCarteEtat,
+  updateCarte,
   getStatistics
 } = require('../controllers/carteController');
 
@@ -28,6 +29,10 @@ router.get('/etat/:etat', getCartesByEtat);
 // Route pour obtenir une carte par ID
 // GET /api/cartes/:id
 router.get('/:id', getCarteById);
+
+// Route pour mettre à jour une carte complète
+// PUT /api/cartes/:id
+router.put('/:id', updateCarte);
 
 // Route pour mettre à jour l'état d'une carte
 // PUT /api/cartes/:id/etat
