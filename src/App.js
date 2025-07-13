@@ -862,6 +862,8 @@ function App() {
             password: signUpData.password
           };
 
+          console.log('Données envoyées:', employeeData);
+
           // Appel à l'API backend
           const response = await fetch('http://localhost:5000/api/employees/register', {
             method: 'POST',
@@ -871,7 +873,11 @@ function App() {
             body: JSON.stringify(employeeData)
           });
 
+          console.log('Response status:', response.status);
+          console.log('Response headers:', response.headers);
+
           const result = await response.json();
+          console.log('Response data:', result);
 
           if (response.ok) {
             alert(`✅ Inscription réussie !\n\nBienvenue ${result.data.prenom} ${result.data.nom}\nMatricule: ${result.data.matricule}\n\nVous pouvez maintenant vous connecter.`);
@@ -887,11 +893,14 @@ function App() {
             });
           } else {
             // Afficher l'erreur retournée par l'API
-            alert(`❌ Erreur lors de l'inscription:\n${result.message}`);
+            console.error('Erreur API:', result);
+            alert(`❌ Erreur lors de l'inscription:\n${result.message || 'Erreur inconnue'}`);
           }
         } catch (error) {
-          console.error('Erreur de connexion au serveur:', error);
-          alert('❌ Erreur de connexion au serveur.\nVérifiez que le backend est démarré sur le port 5000.');
+          console.error('Erreur complète:', error);
+          console.error('Erreur de connexion au serveur:', error.message);
+          console.error('Stack trace:', error.stack);
+          alert(`❌ Erreur de connexion au serveur.\nDétails: ${error.message}\nVérifiez que le backend est démarré sur le port 5000.`);
         }
       } else {
         // Logique de connexion avec appel API
