@@ -370,6 +370,59 @@ const getStatistics = async (req, res) => {
   }
 };
 
+// Contrôleur pour supprimer une carte
+const deleteCarte = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Vérifier que l'ID est un nombre valide
+    if (!id || isNaN(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'ID de carte invalide'
+      });
+    }
+
+    // Vérifier que la carte existe avant de la supprimer
+    const carte = await Carte.findById(id);
+    if (!carte) {
+      return res.status(404).json({
+        success: false,
+        message: 'Carte non trouvée'
+      });
+    }
+
+    // Supprimer la carte
+    await Carte.delete(id);
+    
+    res.json({
+      success: true,
+      message: 'Carte supprimée avec succès',
+      data: {
+        id: parseInt(id),
+        nom: carte.nom,
+        prenom: carte.prenom,
+        cin: carte.cin
+      }
+    });
+
+  } catch (error) {
+    console.error('Erreur lors de la suppression de la carte:', error);
+    
+    if (error.message === 'Carte non trouvée') {
+      return res.status(404).json({
+        success: false,
+        message: error.message
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Erreur interne du serveur'
+    });
+  }
+};
+
 module.exports = {
   createCarte,
   getAllCartes,
@@ -377,5 +430,6 @@ module.exports = {
   getCarteById,
   updateCarteEtat,
   updateCarte,
-  getStatistics
+  getStatistics,
+  deleteCarte
 };

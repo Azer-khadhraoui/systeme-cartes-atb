@@ -227,10 +227,29 @@ function App() {
     setCurrentPage('detail-carte');
   };
 
-  const handleSupprimerCarte = (carte) => {
+  const handleSupprimerCarte = async (carte) => {
     if (window.confirm(`Êtes-vous sûr de vouloir supprimer la carte de ${carte.prenom} ${carte.nom} ?`)) {
-      alert(`Carte supprimée : ${carte.typeCarte} de ${carte.prenom} ${carte.nom}`);
-      
+      try {
+        const response = await fetch(`http://localhost:5000/api/cartes/${carte.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert(`Carte supprimée avec succès : ${carte.type} de ${carte.prenom} ${carte.nom}`);
+          // Actualiser la liste des cartes
+          refreshCartes();
+        } else {
+          alert(`Erreur lors de la suppression : ${result.message}`);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la suppression:', error);
+        alert('Erreur de connexion lors de la suppression');
+      }
     }
   };
 

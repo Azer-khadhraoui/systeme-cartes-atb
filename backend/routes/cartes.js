@@ -7,7 +7,8 @@ const {
   getCarteById,
   updateCarteEtat,
   updateCarte,
-  getStatistics
+  getStatistics,
+  deleteCarte
 } = require('../controllers/carteController');
 
 // Route pour créer une nouvelle demande de carte
@@ -37,5 +38,9 @@ router.put('/:id', updateCarte);
 // Route pour mettre à jour l'état d'une carte
 // PUT /api/cartes/:id/etat
 router.put('/:id/etat', updateCarteEtat);
+
+// Route pour supprimer une carte
+// DELETE /api/cartes/:id
+router.delete('/:id', deleteCarte);
 
 module.exports = router;
