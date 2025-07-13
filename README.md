@@ -17,6 +17,48 @@ Un système de gestion complet permettant aux employés de l'Arab Tunisian Bank 
 - ✅ **Génération de PDF** professionnels
 - ✅ **CRUD complet** avec validation avancée
 
+## 🎬 Démonstration Vidéo
+
+[![Démonstration ATB](https://img.shields.io/badge/🎥_Démonstration-Vidéo_ATB-A51C30?style=for-the-badge&logo=play&logoColor=white)](./atb_app.mp4)
+
+> **📹 Vidéo de démonstration complète** (95 Mo) : `atb_app.mp4`
+> 
+> **🎯 Contenu de la démonstration :**
+> - ✨ **Interface utilisateur** moderne et responsive
+> - 🔐 **Processus d'authentification** complet
+> - 📋 **Création de demandes** de cartes
+> - 📊 **Gestion du stock** avec filtres avancés
+> - 📄 **Génération de PDF** professionnels
+> - 🎨 **Design ATB** avec animations fluides
+> 
+> **📱 Plateformes testées :**
+> - 💻 Desktop (Chrome, Firefox, Edge)
+> - 📱 Mobile (iOS Safari, Android Chrome)
+> - 🖥️ Tablet (iPad, Android)
+
+### 📥 Comment visionner la démonstration
+
+**Option 1 : Téléchargement direct**
+```bash
+# Cloner le repository avec la vidéo
+git clone https://github.com/Azer-khadhraoui/systeme-cartes-atb.git
+cd systeme-cartes-atb
+
+# Ouvrir la vidéo
+# Windows
+start atb_app.mp4
+# macOS  
+open atb_app.mp4
+# Linux
+xdg-open atb_app.mp4
+```
+
+**Option 2 : Streaming en ligne**
+> ⚠️ **Note technique :** En raison de la taille du fichier (95 Mo), GitHub peut avoir des limitations d'affichage direct. Pour une visualisation optimale, nous recommandons le téléchargement local ou l'hébergement sur une plateforme vidéo.
+
+**Option 3 : Plateforme alternative**
+> 📹 **Version hébergée :** [Lien vers la vidéo externe] *(à ajouter si hébergée sur YouTube, Vimeo, etc.)*
+
 ## ⚡ Fonctionnalités Principales
 
 ### 🔐 **Authentification & Sécurité**
@@ -119,6 +161,7 @@ npm start
 - **Frontend** : http://localhost:3000
 - **Backend API** : http://localhost:5000
 - **Test localStorage** : `test-remember-me.html`
+- **🎬 Démonstration** : Voir `atb_app.mp4` pour un guide complet d'utilisation
 
 ## 🎨 Interface & Design
 
@@ -141,12 +184,16 @@ npm start
 
 ## 📋 Utilisation
 
+> 🎬 **Voir la démonstration vidéo** `atb_app.mp4` pour un aperçu complet de toutes les fonctionnalités en action !
+
 ### **Workflow Standard**
 1. **Connexion** employé avec matricule/mot de passe
 2. **Nouvelle demande** : Saisie infos client + type carte + emplacement
 3. **Consultation stock** : Liste avec filtres et recherche
 4. **Modification état** : En stock → En cours → Délivrée
 5. **Génération PDF** : Document officiel pour le client
+
+> 📹 **Démonstration pratique :** Chaque étape est illustrée dans la vidéo de démonstration
 
 ### **Types de Cartes Supportés**
 - Visa Electron Debit, C'Jeune, Visa Classique Nationale
@@ -208,6 +255,7 @@ npm run build
 - **Types de cartes** : 12 produits bancaires
 - **Validations** : 15+ règles métier
 - **Responsive** : Mobile/Tablet/Desktop
+- **🎬 Démonstration** : Vidéo complète (95 Mo) `atb_app.mp4`
 
 ## 🤝 Contribution
 
