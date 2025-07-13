@@ -850,26 +850,56 @@ function App() {
   };
 
   // Fonction pour soumettre la demande de carte
-  const handleDemandeSubmit = (e) => {
+  const handleDemandeSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateDemandeForm();
     
     if (Object.keys(newErrors).length === 0) {
-      console.log('Nouvelle demande de carte :', demandeData);
-      alert(`Demande de carte soumise avec succès !\n\nClient: ${demandeData.prenomClient} ${demandeData.nomClient}\nCIN: ${demandeData.cin}\nCompte: ${demandeData.numCompte}\nType: ${demandeData.typeCarte}\nDate: ${demandeData.dateDemande}`);
-      
-      // Reset form et retour au dashboard
-      setDemandeData({
-        nomClient: '',
-        prenomClient: '',
-        cin: '',
-        numCompte: '',
-        typeCarte: 'visa-electron-debit',
-        dateDemande: new Date().toISOString().split('T')[0],
-        emplacement: ''
-      });
-      setCurrentPage('dashboard');
-      setErrors({});
+      try {
+        console.log('Nouvelle demande de carte :', demandeData);
+        
+        // Appel à l'API backend pour créer la demande
+        const response = await fetch('http://localhost:5000/api/cartes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nomClient: demandeData.nomClient,
+            prenomClient: demandeData.prenomClient,
+            cin: demandeData.cin,
+            numCompte: demandeData.numCompte,
+            typeCarte: demandeData.typeCarte,
+            emplacement: demandeData.emplacement,
+            dateDemande: demandeData.dateDemande
+          })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(`✅ Demande de carte créée avec succès !\n\nClient: ${demandeData.prenomClient} ${demandeData.nomClient}\nCIN: ${demandeData.cin}\nCompte: ${demandeData.numCompte}\nType: ${result.data.type}\nEmplacement: ${result.data.emp}\nDate: ${demandeData.dateDemande}\n\nLa carte est maintenant en stock.`);
+          
+          // Reset form et retour au dashboard
+          setDemandeData({
+            nomClient: '',
+            prenomClient: '',
+            cin: '',
+            numCompte: '',
+            typeCarte: 'visa-electron-debit',
+            dateDemande: new Date().toISOString().split('T')[0],
+            emplacement: ''
+          });
+          setCurrentPage('dashboard');
+          setErrors({});
+        } else {
+          // Afficher l'erreur retournée par l'API
+          alert(`❌ Erreur lors de la création de la demande:\n${result.message}`);
+        }
+      } catch (error) {
+        console.error('Erreur de connexion au serveur:', error);
+        alert('❌ Erreur de connexion au serveur.\nVérifiez que le backend est démarré sur le port 5000.');
+      }
     } else {
       setErrors(newErrors);
     }

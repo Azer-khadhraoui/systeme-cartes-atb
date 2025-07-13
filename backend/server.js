@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const { testConnection } = require('./config/database');
 const employeeRoutes = require('./routes/employees');
+const carteRoutes = require('./routes/cartes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/employees', employeeRoutes);
+app.use('/api/cartes', carteRoutes);
 
 // Route de test de l'API
 app.get('/api/health', (req, res) => {
