@@ -115,6 +115,8 @@ xdg-open atb_app.mp4
 
 ## 🏗️ Architecture Technique
 
+> 📊 **[Voir les Diagrammes Détaillés](./docs/)** : Classes, Cas d'utilisation, Workflows complets
+
 ### **Frontend** (React 19.1.0)
 ```
 src/
@@ -149,6 +151,13 @@ employes (id, nom, prenom, matricule, password)
 -- Table des cartes  
 cartes (id, nom, prenom, cin, numCompte, type, etat, date, emp)
 ```
+
+### **📊 Documentation Architecturale**
+| 📄 Document | 🎯 Description | 🔗 Lien |
+|-------------|-----------------|----------|
+| **Diagramme de Classes** | Architecture MVC, Relations, Modèles | **[📊 Voir les Classes](./docs/diagramme-classe.md)** |
+| **Cas d'Utilisation** | 17 Workflows, Acteurs, Séquences | **[👥 Voir les Cas d'Usage](./docs/diagramme-utilisation.md)** |
+| **Vue d'Ensemble** | Architecture globale, Patterns, Métriques | **[🏗️ Voir l'Architecture](./docs/)** |
 
 ## � Installation & Démarrage
 
