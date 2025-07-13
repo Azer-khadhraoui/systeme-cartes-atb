@@ -118,7 +118,7 @@ classDiagram
     App --> PDFGenerator : uses
     App --> AuthService : uses
     App --> ValidationService : uses
-    Employee ||--o{ Carte : creates
+    Employee --> Carte : creates
 ```
 
 ## 📋 Détails des Classes
