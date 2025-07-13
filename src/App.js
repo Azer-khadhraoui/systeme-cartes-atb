@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import atbLogo from './atb.png';
 import jsPDF from 'jspdf';
@@ -42,20 +42,8 @@ function App() {
   });
 
   // État pour les données du stock des cartes
-  const [stockData] = useState([
-    { id: 1, typeCarte: 'Visa Electron Debit', nom: 'Ben Ahmed', prenom: 'Mohamed', cin: '12345678', etat: 'délivrée', numCompte: '0123456789012', dateDemande: '2024-12-15', emplacement: 'A1' },
-    { id: 2, typeCarte: 'C\'Jeune', nom: 'Khadhraoui', prenom: 'Azer', cin: '23456789', etat: 'en stock', numCompte: '1234567890123', dateDemande: '2024-12-10', emplacement: 'B2' },
-    { id: 3, typeCarte: 'Visa Classique Nationale', nom: 'Hamdi', prenom: 'Karim', cin: '34567890', etat: 'en cours', numCompte: '2345678901234', dateDemande: '2024-12-20', emplacement: 'C1' },
-    { id: 4, typeCarte: 'Mastercard', nom: 'khribi', prenom: 'Adem', cin: '45678901', etat: 'délivrée', numCompte: '3456789012345', dateDemande: '2025-07-05', emplacement: 'A3' },
-    { id: 5, typeCarte: 'Virtuelle E‑pay', nom: 'Khadhraoui', prenom: 'Lazher', cin: '56789012', etat: 'en stock', numCompte: '4567890123456', dateDemande: '2024-12-18', emplacement: 'B1' },
-    { id: 6, typeCarte: 'Technologique (CTI)', nom: 'Ferchichi', prenom: 'Lilia', cin: '67890123', etat: 'en cours', numCompte: '5678901234567', dateDemande: '2024-12-12', emplacement: 'C3' },
-    { id: 7, typeCarte: 'VISA Gold', nom: 'Gharbi', prenom: 'Sami', cin: '78901234', etat: 'délivrée', numCompte: '6789012345678', dateDemande: '2025-05-08', emplacement: 'A2' },
-    { id: 8, typeCarte: 'Mastercard World', nom: 'Bouaziz', prenom: 'Nour', cin: '89012345', etat: 'en stock', numCompte: '7890123456789', dateDemande: '2025-07-06', emplacement: 'B3' },
-    { id: 9, typeCarte: 'Moussafer Platinum', nom: 'Chedly', prenom: 'Youssef', cin: '90123456', etat: 'en cours', numCompte: '8901234567890', dateDemande: '2024-12-03', emplacement: 'C2' },
-    { id: 10, typeCarte: 'American Express', nom: 'Jebali', prenom: 'Salma', cin: '01234567', etat: 'délivrée', numCompte: '9012345678901', dateDemande: '2024-12-14', emplacement: 'A4' },
-    { id: 11, typeCarte: 'Lella', nom: 'Mzali', prenom: 'Ines', cin: '11223344', etat: 'en stock', numCompte: '0123456789013', dateDemande: '2024-12-25', emplacement: 'B4' },
-    { id: 12, typeCarte: 'El Khir', nom: 'Khemiri', prenom: 'Omar', cin: '22334455', etat: 'en cours', numCompte: '1234567890124', dateDemande: '2025-05-17', emplacement: 'C4' }
-  ]);
+  const [stockData, setStockData] = useState([]);
+  const [isLoadingStock, setIsLoadingStock] = useState(true);
 
   // État pour la carte sélectionnée pour visualisation
   const [selectedCarte, setSelectedCarte] = useState(null);
@@ -505,6 +493,11 @@ function App() {
 
   // Fonction pour filtrer et rechercher dans les cartes
   const getFilteredCartes = () => {
+    // Vérification de sécurité pour s'assurer que stockData est un tableau
+    if (!Array.isArray(stockData)) {
+      return [];
+    }
+    
     return stockData.filter(carte => {
       // Recherche textuelle
       const searchMatch = searchTerm === '' || 
@@ -880,6 +873,9 @@ function App() {
         if (response.ok) {
           alert(`✅ Demande de carte créée avec succès !\n\nClient: ${demandeData.prenomClient} ${demandeData.nomClient}\nCIN: ${demandeData.cin}\nCompte: ${demandeData.numCompte}\nType: ${result.data.type}\nEmplacement: ${result.data.emp}\nDate: ${demandeData.dateDemande}\n\nLa carte est maintenant en stock.`);
           
+          // Actualiser les données des cartes
+          await refreshCartes();
+          
           // Reset form et retour au dashboard
           setDemandeData({
             nomClient: '',
@@ -930,6 +926,84 @@ function App() {
     ];
     
     return strengthLevels[score];
+  };
+
+  // Charger les données des cartes au montage du composant
+  useEffect(() => {
+    const loadCartes = async () => {
+      try {
+        setIsLoadingStock(true);
+        const response = await fetch('http://localhost:5000/api/cartes');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && Array.isArray(result.data)) {
+            // Transformer les données de la base vers le format frontend
+            const cartesTransformees = result.data.map(carte => ({
+              id: carte.id,
+              typeCarte: carte.type,
+              nom: carte.nom,
+              prenom: carte.prenom,
+              cin: carte.cin,
+              etat: carte.etat.replace('_', ' '), // Convertir en_stock -> en stock
+              numCompte: carte.numCompte,
+              dateDemande: carte.date,
+              emplacement: carte.emp
+            }));
+            setStockData(cartesTransformees);
+          } else {
+            console.error('Format de réponse inattendu:', result);
+            setStockData([]);
+          }
+        } else {
+          console.error('Erreur lors de la récupération des cartes');
+          setStockData([]);
+        }
+      } catch (error) {
+        console.error('Erreur réseau:', error);
+        setStockData([]);
+      } finally {
+        setIsLoadingStock(false);
+      }
+    };
+
+    loadCartes();
+  }, []);
+
+  // Fonction pour actualiser les données des cartes
+  const refreshCartes = async () => {
+    try {
+      setIsLoadingStock(true);
+      const response = await fetch('http://localhost:5000/api/cartes');
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && Array.isArray(result.data)) {
+          // Transformer les données de la base vers le format frontend
+          const cartesTransformees = result.data.map(carte => ({
+            id: carte.id,
+            typeCarte: carte.type,
+            nom: carte.nom,
+            prenom: carte.prenom,
+            cin: carte.cin,
+            etat: carte.etat.replace('_', ' '), // Convertir en_stock -> en stock
+            numCompte: carte.numCompte,
+            dateDemande: carte.date,
+            emplacement: carte.emp
+          }));
+          setStockData(cartesTransformees);
+        } else {
+          console.error('Format de réponse inattendu:', result);
+          setStockData([]);
+        }
+      } else {
+        console.error('Erreur lors de la récupération des cartes');
+        setStockData([]);
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'actualisation:', error);
+      setStockData([]);
+    } finally {
+      setIsLoadingStock(false);
+    }
   };
 
   // Si l'utilisateur est connecté, afficher la page appropriée
@@ -1154,10 +1228,12 @@ function App() {
 
     // Page de consultation du stock
     if (currentPage === 'stock') {
-      const totalCartes = stockData.length;
-      const cartesDelivrees = stockData.filter(carte => carte.etat === 'délivrée').length;
-      const cartesEnStock = stockData.filter(carte => carte.etat === 'en stock').length;
-      const cartesEnCours = stockData.filter(carte => carte.etat === 'en cours').length;
+      // Protection contre les erreurs si stockData n'est pas un tableau
+      const safeStockData = Array.isArray(stockData) ? stockData : [];
+      const totalCartes = safeStockData.length;
+      const cartesDelivrees = safeStockData.filter(carte => carte.etat === 'délivrée').length;
+      const cartesEnStock = safeStockData.filter(carte => carte.etat === 'en stock').length;
+      const cartesEnCours = safeStockData.filter(carte => carte.etat === 'en cours').length;
 
       return (
         <div className="dashboard">
@@ -1341,7 +1417,26 @@ function App() {
             <div className="stock-table-container">
               <div className="results-info">
                 <span>{getFilteredCartes().length} cartes trouvées</span>
+                <button 
+                  onClick={refreshCartes}
+                  className="refresh-btn"
+                  disabled={isLoadingStock}
+                  title="Actualiser les données"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                  </svg>
+                  {isLoadingStock ? 'Actualisation...' : 'Actualiser'}
+                </button>
               </div>
+              
+              {isLoadingStock ? (
+                <div className="loading-container">
+                  <div className="loading-spinner"></div>
+                  <p>Chargement des données des cartes...</p>
+                </div>
+              ) : (
               <table className="stock-table">
                 <thead>
                   <tr>
@@ -1405,8 +1500,9 @@ function App() {
                   })}
                 </tbody>
               </table>
+              )}
               
-              {getFilteredCartes().length === 0 && (
+              {!isLoadingStock && getFilteredCartes().length === 0 && (
                 <div className="no-results">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <circle cx="11" cy="11" r="8"/>
@@ -1674,7 +1770,7 @@ function App() {
           <main className="dashboard-main">
             <div className="page-header">
               <h1 className="page-title">Modifier la carte bancaire</h1>
-              <p>Modifiez les informations de la carte de {carteToEdit.prenom} {carteToEdit.nom}</p>
+                           <p>Modifiez les informations de la carte de {carteToEdit.prenom} {carteToEdit.nom}</p>
             </div>
 
             <div className="form-container">
