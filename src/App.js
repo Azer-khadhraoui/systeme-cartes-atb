@@ -556,13 +556,13 @@ function App() {
     }
     
     return stockData.filter(carte => {
-      // Recherche textuelle
+      // Recherche textuelle (avec conversion sécurisée des types)
       const searchMatch = searchTerm === '' || 
         carte.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
         carte.prenom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        carte.cin.includes(searchTerm) ||
+        String(carte.cin).includes(searchTerm) ||
         carte.typeCarte.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        carte.numCompte.includes(searchTerm);
+        String(carte.numCompte).includes(searchTerm);
 
       // Filtre par état
       const etatMatch = filterEtat === 'tous' || carte.etat === filterEtat;
@@ -2219,17 +2219,6 @@ function App() {
                 <div className="button-arrow">→</div>
               </button>
               <div className="card-glow stock-glow"></div>
-            </div>
-          </div>
-
-          <div className="stats-section">
-            <div className="stat-item">
-              <div className="stat-number">247</div>
-              <div className="stat-label">Demandes traitées</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">1,350</div>
-              <div className="stat-label">Cartes en stock</div>
             </div>
           </div>
         </main>
