@@ -243,15 +243,10 @@ function App() {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('atbUser');
-    
-    // Si "Se souvenir de moi" n'est pas activé, effacer aussi les identifiants
-    if (!rememberMe) {
-      localStorage.removeItem('atbMatricule');
-      localStorage.removeItem('atbPassword');
-      setFormData({ matricule: '', password: '' });
-      setRememberMe(false);
-    }
-    // Sinon, garder les identifiants dans les champs et localStorage
+    localStorage.removeItem('atbMatricule');
+    localStorage.removeItem('atbPassword');
+    setFormData({ matricule: '', password: '' });
+    setRememberMe(false);
   };
 
   // Fonctions pour les actions des boutons
@@ -300,7 +295,7 @@ function App() {
       numCompte: String(carte.numCompte || ''), // Convertir en chaîne
       typeCarte: carte.typeCarte || '',
       etat: carte.etat || '',
-      dateDemande: carte.dateDemande ? new Date(carte.dateDemande).toISOString().split('T')[0] : '',
+      dateDemande: carte.dateDemande || '',
       emplacement: carte.emplacement || ''
     });
     setEditErrors({});
@@ -935,13 +930,11 @@ function App() {
               localStorage.removeItem('atbPassword');
             }
             
-            // Reset form seulement si "Se souvenir de moi" n'est pas activé
-            if (!rememberMe) {
-              setFormData({
-                matricule: '',
-                password: ''
-              });
-            }
+            // Reset form
+            setFormData({
+              matricule: '',
+              password: ''
+            });
           } else {
             // Afficher l'erreur retournée par l'API
             alert(`❌ Erreur de connexion:\n${result.message}`);

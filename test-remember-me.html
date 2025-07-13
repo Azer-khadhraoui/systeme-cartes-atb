@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Se souvenir de moi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #a51c30;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 3px;
+            margin: 5px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        button {
+            background-color: #a51c30;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #8b1629;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Test de la fonctionnalité "Se souvenir de moi"</h1>
+        
+        <div class="test-section">
+            <div class="test-title">📋 État actuel du localStorage :</div>
+            <div id="localStorage-status"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">🧪 Tests disponibles :</div>
+            <button onclick="testSaveCredentials()">Simuler sauvegarde des identifiants</button>
+            <button onclick="testLoadCredentials()">Simuler chargement des identifiants</button>
+            <button onclick="testClearCredentials()">Effacer les identifiants</button>
+            <button onclick="refreshStatus()">Actualiser l'état</button>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">📝 Résultats des tests :</div>
+            <div id="test-results"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">ℹ️ Instructions - Nouvelle logique :</div>
+            <div class="info">
+                <p><strong>📋 Comportement "Se souvenir de moi" :</strong></p>
+                <p><strong>✅ Case cochée :</strong></p>
+                <ul>
+                    <li>✓ Auto-connexion au démarrage</li>
+                    <li>✓ Matricule et mot de passe restent après déconnexion</li>
+                    <li>✓ Données sauvegardées dans localStorage</li>
+                </ul>
+                <p><strong>❌ Case non cochée :</strong></p>
+                <ul>
+                    <li>✓ Pas d'auto-connexion</li>
+                    <li>✓ Champs vidés à la déconnexion</li>
+                    <li>✓ localStorage nettoyé</li>
+                </ul>
+                <hr>
+                <p><strong>🧪 Test à effectuer :</strong></p>
+                <p><strong>1.</strong> Connectez-vous AVEC la case cochée → Déconnectez → Les champs doivent rester remplis</p>
+                <p><strong>2.</strong> Connectez-vous SANS la case cochée → Déconnectez → Les champs doivent se vider</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function refreshStatus() {
+            const statusDiv = document.getElementById('localStorage-status');
+            const user = localStorage.getItem('atbUser');
+            const matricule = localStorage.getItem('atbMatricule');
+            const password = localStorage.getItem('atbPassword');
+            
+            let status = '';
+            
+            if (user) {
+                const userData = JSON.parse(user);
+                status += `<div class="success">✅ Utilisateur sauvegardé : ${userData.prenom} ${userData.nom} (${userData.matricule})</div>`;
+            } else {
+                status += `<div class="warning">❌ Aucun utilisateur sauvegardé</div>`;
+            }
+            
+            if (matricule) {
+                status += `<div class="success">✅ Matricule sauvegardé : ${matricule}</div>`;
+            } else {
+                status += `<div class="warning">❌ Aucun matricule sauvegardé</div>`;
+            }
+            
+            if (password) {
+                status += `<div class="success">✅ Mot de passe sauvegardé : ${'*'.repeat(password.length)}</div>`;
+            } else {
+                status += `<div class="warning">❌ Aucun mot de passe sauvegardé</div>`;
+            }
+            
+            statusDiv.innerHTML = status;
+        }
+
+        function testSaveCredentials() {
+            const testUser = {
+                matricule: '123456',
+                nom: 'Test',
+                prenom: 'Utilisateur'
+            };
+            
+            localStorage.setItem('atbUser', JSON.stringify(testUser));
+            localStorage.setItem('atbMatricule', '123456');
+            localStorage.setItem('atbPassword', 'motdepasse123');
+            
+            addTestResult('🧪 Test de sauvegarde effectué avec succès', 'success');
+            refreshStatus();
+        }
+
+        function testLoadCredentials() {
+            const user = localStorage.getItem('atbUser');
+            const matricule = localStorage.getItem('atbMatricule');
+            const password = localStorage.getItem('atbPassword');
+            
+            if (user && matricule && password) {
+                const userData = JSON.parse(user);
+                addTestResult(`🧪 Chargement réussi : ${userData.prenom} ${userData.nom} - Matricule: ${matricule}`, 'success');
+            } else {
+                addTestResult('🧪 Aucune donnée à charger', 'warning');
+            }
+        }
+
+        function testClearCredentials() {
+            localStorage.removeItem('atbUser');
+            localStorage.removeItem('atbMatricule');
+            localStorage.removeItem('atbPassword');
+            
+            addTestResult('🧪 Identifiants effacés avec succès', 'info');
+            refreshStatus();
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('test-results');
+            const timestamp = new Date().toLocaleTimeString();
+            resultsDiv.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
+        }
+
+        // Initialiser l'affichage
+        refreshStatus();
+    </script>
+</body>
+</html>
