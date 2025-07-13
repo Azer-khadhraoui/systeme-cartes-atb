@@ -381,12 +381,12 @@ function App() {
         // Première ligne
         doc.text('Type de carte:', 20, yPos);
         doc.setFont('helvetica', 'normal');
-        doc.text(selectedCarte.typeCarte, 65, yPos);
+        doc.text(String(selectedCarte.typeCarte || ''), 65, yPos);
         
         doc.setFont('helvetica', 'bold');
         doc.text('ID Carte:', 120, yPos);
         doc.setFont('helvetica', 'normal');
-        doc.text(`#${selectedCarte.id}`, 145, yPos);
+        doc.text(`#${String(selectedCarte.id || '')}`, 145, yPos);
         
         yPos += 10;
         doc.setFont('helvetica', 'bold');
@@ -410,13 +410,13 @@ function App() {
         doc.roundedRect(63, yPos - 4, 35, 7, 2, 2, 'F');
         doc.setTextColor(etatColor[0], etatColor[1], etatColor[2]);
         doc.setFont('helvetica', 'bold');
-        doc.text(selectedCarte.etat.toUpperCase(), 65, yPos);
+        doc.text(String(selectedCarte.etat || '').toUpperCase(), 65, yPos);
         
         doc.setTextColor(noir[0], noir[1], noir[2]);
         doc.setFont('helvetica', 'bold');
         doc.text('Emplacement:', 120, yPos);
         doc.setFont('helvetica', 'normal');
-        doc.text(selectedCarte.emplacement || 'Non défini', 160, yPos);
+        doc.text(String(selectedCarte.emplacement || 'Non défini'), 160, yPos);
         
         yPos += 10;
         doc.setFont('helvetica', 'bold');
@@ -450,18 +450,18 @@ function App() {
         // Informations client
         doc.text('Nom complet:', 20, yPos);
         doc.setFont('helvetica', 'normal');
-        doc.text(`${selectedCarte.prenom} ${selectedCarte.nom}`, 65, yPos);
+        doc.text(`${String(selectedCarte.prenom || '')} ${String(selectedCarte.nom || '')}`, 65, yPos);
         
         doc.setFont('helvetica', 'bold');
         doc.text('CIN:', 120, yPos);
         doc.setFont('helvetica', 'normal');
-        doc.text(selectedCarte.cin, 140, yPos);
+        doc.text(String(selectedCarte.cin || ''), 140, yPos);
         
         yPos += 10;
         doc.setFont('helvetica', 'bold');
         doc.text('N° de compte:', 20, yPos);
         doc.setFont('helvetica', 'normal');
-        doc.text(selectedCarte.numCompte, 65, yPos);
+        doc.text(String(selectedCarte.numCompte || ''), 65, yPos);
         
         // ======= SECTION SIGNATURE =======
         yPos += 30;
@@ -534,7 +534,7 @@ function App() {
         doc.text('© 2025 Arab Tunisian Bank - Tous droits réservés', 20, yPos + 17);
         
         // Télécharger le PDF
-        const fileName = `ATB_Carte_${selectedCarte.typeCarte.replace(/[^a-zA-Z0-9]/g, '_')}_${selectedCarte.nom}_${selectedCarte.prenom}_${new Date().toISOString().split('T')[0]}.pdf`;
+        const fileName = `ATB_Carte_${String(selectedCarte.typeCarte || '').replace(/[^a-zA-Z0-9]/g, '_')}_${String(selectedCarte.nom || '')}_${String(selectedCarte.prenom || '')}_${new Date().toISOString().split('T')[0]}.pdf`;
         doc.save(fileName);
         
         alert('✅ PDF généré avec succès !\n\n📄 Document professionnel créé avec:\n• Design ATB moderne\n• Informations complètes\n• Section signature\n• Références et contacts');
