@@ -260,6 +260,15 @@ function App() {
 
   const handleModifierCarte = (carte) => {
     setCarteToEdit(carte);
+    
+    // Formatter la date pour le champ input[type="date"]
+    let dateFormatted = '';
+    if (carte.dateDemande) {
+      // Convertir la date ISO en format yyyy-mm-dd
+      const date = new Date(carte.dateDemande);
+      dateFormatted = date.toISOString().split('T')[0];
+    }
+    
     setEditData({
       nom: carte.nom || '',
       prenom: carte.prenom || '',
@@ -267,7 +276,7 @@ function App() {
       numCompte: String(carte.numCompte || ''), // Convertir en chaîne
       typeCarte: carte.typeCarte || '',
       etat: carte.etat || '',
-      dateDemande: carte.dateDemande || '',
+      dateDemande: dateFormatted,
       emplacement: carte.emplacement || ''
     });
     setEditErrors({});
@@ -1002,17 +1011,35 @@ function App() {
           const result = await response.json();
           if (result.success && Array.isArray(result.data)) {
             // Transformer les données de la base vers le format frontend
-            const cartesTransformees = result.data.map(carte => ({
-              id: carte.id,
-              typeCarte: carte.type,
-              nom: carte.nom,
-              prenom: carte.prenom,
-              cin: carte.cin,
-              etat: carte.etat.replace('_', ' '), // Convertir en_stock -> en stock
-              numCompte: carte.numCompte,
-              dateDemande: carte.date,
-              emplacement: carte.emp
-            }));
+            const cartesTransformees = result.data.map(carte => {
+              // Mapping des états de la base vers le frontend
+              let etatFrontend;
+              switch (carte.etat) {
+                case 'en_stock':
+                  etatFrontend = 'en stock';
+                  break;
+                case 'en_cours':
+                  etatFrontend = 'en cours';
+                  break;
+                case 'delivree':
+                  etatFrontend = 'délivrée';
+                  break;
+                default:
+                  etatFrontend = carte.etat;
+              }
+              
+              return {
+                id: carte.id,
+                typeCarte: carte.type,
+                nom: carte.nom,
+                prenom: carte.prenom,
+                cin: carte.cin,
+                etat: etatFrontend,
+                numCompte: carte.numCompte,
+                dateDemande: carte.date,
+                emplacement: carte.emp
+              };
+            });
             setStockData(cartesTransformees);
           } else {
             console.error('Format de réponse inattendu:', result);
@@ -1042,17 +1069,35 @@ function App() {
         const result = await response.json();
         if (result.success && Array.isArray(result.data)) {
           // Transformer les données de la base vers le format frontend
-          const cartesTransformees = result.data.map(carte => ({
-            id: carte.id,
-            typeCarte: carte.type,
-            nom: carte.nom,
-            prenom: carte.prenom,
-            cin: carte.cin,
-            etat: carte.etat.replace('_', ' '), // Convertir en_stock -> en stock
-            numCompte: carte.numCompte,
-            dateDemande: carte.date,
-            emplacement: carte.emp
-          }));
+          const cartesTransformees = result.data.map(carte => {
+            // Mapping des états de la base vers le frontend
+            let etatFrontend;
+            switch (carte.etat) {
+              case 'en_stock':
+                etatFrontend = 'en stock';
+                break;
+              case 'en_cours':
+                etatFrontend = 'en cours';
+                break;
+              case 'delivree':
+                etatFrontend = 'délivrée';
+                break;
+              default:
+                etatFrontend = carte.etat;
+            }
+            
+            return {
+              id: carte.id,
+              typeCarte: carte.type,
+              nom: carte.nom,
+              prenom: carte.prenom,
+              cin: carte.cin,
+              etat: etatFrontend,
+              numCompte: carte.numCompte,
+              dateDemande: carte.date,
+              emplacement: carte.emp
+            };
+          });
           setStockData(cartesTransformees);
         } else {
           console.error('Format de réponse inattendu:', result);
