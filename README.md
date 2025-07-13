@@ -23,17 +23,29 @@ Un système de gestion complet permettant aux employés de l'Arab Tunisian Bank 
 
 ### 📱 **Aperçu de l'Application ATB**
 
-<!-- Vidéo de démonstration -->
-<video width="100%" controls>
-  <source src="./atb_app.mp4" type="video/mp4">
-  <p>Votre navigateur ne supporte pas les vidéos HTML5. 
-     <a href="./atb_app.mp4">Télécharger la vidéo</a>
-  </p>
-</video>
+![ATB Demo Preview](https://img.shields.io/badge/🎥_Cliquer_pour_voir-Démonstration_ATB-A51C30?style=for-the-badge&logo=play&logoColor=white)
 
-*🎯 **Démonstration complète** - Toutes les fonctionnalités en action (95 Mo)*
+**[▶️ REGARDER LA DÉMONSTRATION COMPLÈTE](./atb_app.mp4)**
+
+*🎯 **Vidéo complète** - Toutes les fonctionnalités en action (95 Mo)*
 
 </div>
+
+<!-- Lecteur vidéo HTML5 avec fallback -->
+<details>
+<summary><strong>🎬 Voir la vidéo intégrée (cliquer pour développer)</strong></summary>
+
+```html
+<!-- Si votre navigateur supporte les vidéos, vous verrez la vidéo ci-dessous -->
+```
+
+<video width="100%" controls poster="src/atb.png">
+  <source src="./atb_app.mp4" type="video/mp4">
+  <p>🚫 Votre navigateur ne supporte pas les vidéos HTML5.</p>
+  <p>📥 <a href="./atb_app.mp4">Cliquez ici pour télécharger la vidéo</a> (95 Mo)</p>
+</video>
+
+</details>
 
 **📹 Contenu de la démonstration :**
 - ✨ **Interface utilisateur** moderne et responsive  
@@ -48,20 +60,24 @@ Un système de gestion complet permettant aux employés de l'Arab Tunisian Bank 
 - 📱 **Mobile** : iOS Safari, Android Chrome  
 - 🖥️ **Tablet** : iPad, Android
 
-### 📥 Accès direct à la vidéo
+### 📥 Options d'accès à la vidéo
 
 <div align="center">
 
-[![Télécharger la Vidéo](https://img.shields.io/badge/📥_Télécharger-Vidéo_ATB_(95Mo)-A51C30?style=for-the-badge&logo=download&logoColor=white)](./atb_app.mp4)
+| 🎯 Option | 📄 Description | 🔗 Accès |
+|-----------|----------------|-----------|
+| **🌐 Visualisation directe** | Voir dans le navigateur | **[👀 Ouvrir atb_app.mp4](./atb_app.mp4)** |
+| **📥 Téléchargement** | Sauvegarder localement | **[⬇️ Download (95 Mo)](./atb_app.mp4)** |
+| **💻 Via Git Clone** | Accès complet au projet | `git clone` puis ouvrir le fichier |
 
 </div>
 
 ```bash
-# Cloner pour accéder à la vidéo
+# 🚀 Méthode recommandée : Cloner le repository
 git clone https://github.com/Azer-khadhraoui/systeme-cartes-atb.git
 cd systeme-cartes-atb
 
-# Lire la vidéo localement
+# 📱 Ouvrir la vidéo selon votre OS
 # Windows
 start atb_app.mp4
 # macOS  
@@ -70,7 +86,7 @@ open atb_app.mp4
 xdg-open atb_app.mp4
 ```
 
-> 💡 **Note :** GitHub peut avoir des limitations pour l'affichage direct des gros fichiers vidéo. Le téléchargement local est recommandé pour une expérience optimale.
+> 💡 **Astuce :** Pour une expérience optimale, téléchargez la vidéo localement car GitHub peut avoir des limitations pour les gros fichiers (95 Mo).
 
 ## ⚡ Fonctionnalités Principales
 
