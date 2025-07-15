@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import atbLogo from './atb.png';
+import singeImg from './singe.png';
 import jsPDF from 'jspdf';
 
 function App() {
@@ -135,6 +136,15 @@ function App() {
       numbers: /\d/.test(password),
       special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
     };
+  };
+
+  // Fonction pour créer l'icône de mot de passe
+  const createPasswordIcon = (isVisible) => {
+    if (isVisible) {
+      return <img src={singeImg} alt="Masquer" className="password-icon singe" />;
+    } else {
+      return <span className="password-icon eye">👁️</span>;
+    }
   };
 
   // Fonction pour formater automatiquement les champs
@@ -723,7 +733,7 @@ function App() {
 
   // Fonction pour gérer les changements dans tous les formulaires (ancienne version - gardée pour compatibilité)
   const handleFormChange = (e) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
     
     // Utiliser la nouvelle fonction avec formatage automatique
     if (isSignUp) {
@@ -2355,9 +2365,7 @@ function App() {
                         onClick={() => setShowSignUpPassword(!showSignUpPassword)}
                         title={showSignUpPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                       >
-                        <span className={`eye-icon ${showSignUpPassword ? 'visible' : 'hidden'}`}>
-                          {showSignUpPassword ? "�" : "👁️"}
-                        </span>
+                        {createPasswordIcon(showSignUpPassword)}
                       </button>
                     </div>
                     <div className="password-help">
@@ -2387,9 +2395,7 @@ function App() {
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         title={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                       >
-                        <span className={`eye-icon ${showConfirmPassword ? 'visible' : 'hidden'}`}>
-                          {showConfirmPassword ? "�" : "👁️"}
-                        </span>
+                        {createPasswordIcon(showConfirmPassword)}
                       </button>
                     </div>
                     {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
@@ -2461,9 +2467,7 @@ function App() {
                       onClick={() => setShowPassword(!showPassword)}
                       title={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                     >
-                      <span className={`eye-icon ${showPassword ? 'visible' : 'hidden'}`}>
-                        {showPassword ? "�" : "👁️"}
-                      </span>
+                      {createPasswordIcon(showPassword)}
                     </button>
                   </div>
                   <div className="password-help">

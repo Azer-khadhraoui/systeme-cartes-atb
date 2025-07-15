@@ -325,6 +325,32 @@ body {
   transform: translateY(-50%) scale(0.95);
 }
 
+/* Styles pour les icônes de mot de passe */
+.password-icon.eye {
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.password-icon.singe {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+}
+
+.password-icon.singe:hover {
+  transform: scale(1.2);
+}
+
+.password-toggle:hover .password-icon.eye {
+  transform: scale(1.1);
+}
+
+.password-toggle:hover .password-icon.singe {
+  transform: scale(1.3);
+}
+
 /* Animation pour les icônes œil */
 .eye-icon {
   display: inline-block;
