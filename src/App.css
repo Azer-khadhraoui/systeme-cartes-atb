@@ -279,6 +279,95 @@ body {
   font-weight: 400;
 }
 
+/* Conteneur pour champ de mot de passe avec icône œil */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  padding-right: 50px; /* Espace pour le bouton œil */
+}
+
+/* Bouton pour afficher/masquer le mot de passe */
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--atb-gray);
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  color: var(--atb-bordeaux);
+  background-color: rgba(165, 28, 48, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.password-toggle:focus {
+  outline: 2px solid var(--atb-bordeaux);
+  outline-offset: 2px;
+}
+
+.password-toggle:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* Animation pour les icônes œil */
+.eye-icon {
+  display: inline-block;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.eye-icon.visible {
+  animation: eyeOpen 0.3s ease-out;
+}
+
+.eye-icon.hidden {
+  animation: eyeClose 0.3s ease-out;
+}
+
+@keyframes eyeOpen {
+  0% {
+    transform: scale(0.8) rotate(-10deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes eyeClose {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+}
+
 .error-message {
   color: var(--atb-red);
   font-size: 13px;

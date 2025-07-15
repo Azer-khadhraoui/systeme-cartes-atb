@@ -48,6 +48,11 @@ function App() {
   // État pour la case "Se souvenir de moi"
   const [rememberMe, setRememberMe] = useState(false);
 
+  // États pour afficher/masquer les mots de passe
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   // État pour le formulaire de demande de carte
   const [demandeData, setDemandeData] = useState({
     nomClient: '',
@@ -2331,18 +2336,30 @@ function App() {
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="password">Mot de passe *</label>
-                    <input
-                      type="password"
-                      id="password"
-                      name="password"
-                      value={signUpData.password}
-                      onChange={(e) => handleInputChange(e, 'signUp', 'password')}
-                      className={errors.password ? 'error' : ''}
-                      placeholder="Entrez votre mot de passe"
-                      required
-                      minLength="8"
-                      title="Le mot de passe doit contenir au moins 8 caractères avec majuscules, minuscules et chiffres"
-                    />
+                    <div className="password-input-container">
+                      <input
+                        type={showSignUpPassword ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        value={signUpData.password}
+                        onChange={(e) => handleInputChange(e, 'signUp', 'password')}
+                        className={errors.password ? 'error' : ''}
+                        placeholder="Entrez votre mot de passe"
+                        required
+                        minLength="8"
+                        title="Le mot de passe doit contenir au moins 8 caractères avec majuscules, minuscules et chiffres"
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle"
+                        onClick={() => setShowSignUpPassword(!showSignUpPassword)}
+                        title={showSignUpPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                      >
+                        <span className={`eye-icon ${showSignUpPassword ? 'visible' : 'hidden'}`}>
+                          {showSignUpPassword ? "�" : "👁️"}
+                        </span>
+                      </button>
+                    </div>
                     <div className="password-help">
                       Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial
                     </div>
@@ -2351,18 +2368,30 @@ function App() {
 
                   <div className="form-group">
                     <label htmlFor="confirmPassword">Confirmer le mot de passe *</label>
-                    <input
-                      type="password"
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      value={signUpData.confirmPassword}
-                      onChange={(e) => handleInputChange(e, 'signUp', 'confirmPassword')}
-                      className={errors.confirmPassword ? 'error' : ''}
-                      placeholder="Confirmez votre mot de passe"
-                      required
-                      minLength="8"
-                      title="Doit être identique au mot de passe"
-                    />
+                    <div className="password-input-container">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={signUpData.confirmPassword}
+                        onChange={(e) => handleInputChange(e, 'signUp', 'confirmPassword')}
+                        className={errors.confirmPassword ? 'error' : ''}
+                        placeholder="Confirmez votre mot de passe"
+                        required
+                        minLength="8"
+                        title="Doit être identique au mot de passe"
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        title={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                      >
+                        <span className={`eye-icon ${showConfirmPassword ? 'visible' : 'hidden'}`}>
+                          {showConfirmPassword ? "�" : "👁️"}
+                        </span>
+                      </button>
+                    </div>
                     {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
                   </div>
                 </div>
@@ -2413,18 +2442,30 @@ function App() {
 
                 <div className="form-group">
                   <label htmlFor="password">Mot de passe</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={(e) => handleInputChange(e, 'login', 'password')}
-                    className={errors.password ? 'error' : ''}
-                    placeholder="Entrez votre mot de passe"
-                    required
-                    minLength="8"
-                    title="Le mot de passe doit contenir au moins 8 caractères"
-                  />
+                  <div className="password-input-container">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={(e) => handleInputChange(e, 'login', 'password')}
+                      className={errors.password ? 'error' : ''}
+                      placeholder="Entrez votre mot de passe"
+                      required
+                      minLength="8"
+                      title="Le mot de passe doit contenir au moins 8 caractères"
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      title={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                    >
+                      <span className={`eye-icon ${showPassword ? 'visible' : 'hidden'}`}>
+                        {showPassword ? "�" : "👁️"}
+                      </span>
+                    </button>
+                  </div>
                   <div className="password-help">
                     Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial
                   </div>
