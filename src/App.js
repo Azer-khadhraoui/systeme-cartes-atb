@@ -49,7 +49,7 @@ function App() {
   // État pour la case "Se souvenir de moi"
   const [rememberMe, setRememberMe] = useState(false);
 
-  // États pour afficher/masquer les mots de passe
+  // États pourd afficher/masquer les mots de passe
   const [showPassword, setShowPassword] = useState(false);
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
